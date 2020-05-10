@@ -1,0 +1,3 @@
+package com.hamidjonhamidov.cvforkhamidjon.repository.main
+
+interface MainRepository
