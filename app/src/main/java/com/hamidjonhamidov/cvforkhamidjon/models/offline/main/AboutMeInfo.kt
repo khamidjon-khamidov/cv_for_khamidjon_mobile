@@ -1,17 +1,16 @@
-package com.hamidjonhamidov.cvforkhamidjon.models.offline
+package com.hamidjonhamidov.cvforkhamidjon.models.offline.main
 
 import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.android.parcel.IgnoredOnParcel
 import kotlinx.android.parcel.Parcelize
+import kotlinx.android.parcel.RawValue
 
 @Parcelize
 @Entity(tableName = "about_me")
-data class AboutMeInfo(
-
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "pk") var pk: Int = -1,
+data class AboutMeInfo constructor(
 
     @ColumnInfo(name = "dateOfBirth") var dateOfBirth: String = "Couldn't Load",
 
@@ -21,11 +20,18 @@ data class AboutMeInfo(
 
     @ColumnInfo(name = "phone") var phone: String = "Couldn't Load",
 
-    @ColumnInfo(name = "pictureLinke") var pictureLinke: String = "Couldn't Load",
+    @ColumnInfo(name = "education") var education: @RawValue List<Education> = listOf(),
+
+    @ColumnInfo(name = "pictureLinke") var pictureLink: String = "Couldn't Load",
 
     @ColumnInfo(name = "description") var description: String = "Couldn't Load"
 
 ) : Parcelable {
+
+    @IgnoredOnParcel
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "pk") var pk: Int = -1
+
 
 
     override fun equals(other: Any?): Boolean {
@@ -34,35 +40,38 @@ data class AboutMeInfo(
 
         other as AboutMeInfo
 
-        if (pk != other.pk) return false
         if (dateOfBirth != other.dateOfBirth) return false
         if (address != other.address) return false
         if (email != other.email) return false
         if (phone != other.phone) return false
-        if (pictureLinke != other.pictureLinke) return false
+        if (education != other.education) return false
+        if (pictureLink != other.pictureLink) return false
         if (description != other.description) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        var result = pk
-        result = 31 * result + dateOfBirth.hashCode()
+        var result = dateOfBirth.hashCode()
         result = 31 * result + address.hashCode()
         result = 31 * result + email.hashCode()
         result = 31 * result + phone.hashCode()
-        result = 31 * result + pictureLinke.hashCode()
+        result = 31 * result + education.hashCode()
+        result = 31 * result + pictureLink.hashCode()
         result = 31 * result + description.hashCode()
         return result
     }
 
-    override fun toString() =
-        "AboutMeInfo(pk=$pk, dateOfBirth='$dateOfBirth', address='$address', email='$email', phone='$phone', pictureLinke='$pictureLinke', description='$description')"
-
+    override fun toString(): String {
+        return "AboutMeInfo(dateOfBirth='$dateOfBirth', address='$address', email='$email', phone='$phone', education=$education, pictureLink='$pictureLink', description='$description')"
+    }
 
 
 }
-
+data class Education(
+    val name: String,
+    val link: String
+)
 
 
 
