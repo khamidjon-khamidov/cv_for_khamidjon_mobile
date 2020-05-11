@@ -9,7 +9,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 @Entity(tableName = "skills")
-data class Skill(
+data class SkillModel(
 
     @ColumnInfo(name = "id") var id: String = "",
     @ColumnInfo(name = "name") var name: String = "",
@@ -25,7 +25,7 @@ data class Skill(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as Skill
+        other as SkillModel
 
         if (id != other.id) return false
         if (name != other.name) return false

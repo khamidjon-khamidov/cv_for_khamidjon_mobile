@@ -14,20 +14,20 @@ package com.hamidjonhamidov.cvforkhamidjon.data_requests.persistence.main
 * hasn't changed after concersition
  */
 import androidx.room.*
-import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.Skill
+import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.SkillModel
 
 
 @Dao
 interface SkillsDao {
 
-    @Insert
-    fun insert(skill: Skill)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(skillModel: SkillModel)
 
     @Query("SELECT * FROM skills")
-    fun getSkills(): List<Skill>
+    suspend fun getSkills(): List<SkillModel>
 
     @Transaction
-    open fun insertMany(skillsList: List<Skill>) {
+    open suspend fun insertMany(skillsList: List<SkillModel>) {
         skillsList.forEach { insert(it) }
     }
 
@@ -35,13 +35,13 @@ interface SkillsDao {
     fun deleteAll()
 
     @Transaction
-    open fun insertManyAndReplace(skillsList: List<Skill>){
+    open suspend fun insertManyAndReplace(skillsList: List<SkillModel>) {
         deleteAll()
         insertMany(skillsList)
     }
 
     @Transaction
-    open fun insertManyReplaceGet(skillsList: List<Skill>): List<Skill> {
+    open suspend fun insertManyReplaceGet(skillsList: List<SkillModel>): List<SkillModel> {
         insertManyAndReplace(skillsList)
         return getSkills()
     }

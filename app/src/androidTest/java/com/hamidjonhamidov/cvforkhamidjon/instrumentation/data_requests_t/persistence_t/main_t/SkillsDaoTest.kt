@@ -6,7 +6,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.hamidjonhamidov.cvforkhamidjon.data_requests.persistence.AppDatabase
 import com.hamidjonhamidov.cvforkhamidjon.data_requests.persistence.main.SkillsDao
-import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.Skill
+import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.SkillModel
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -16,8 +16,8 @@ import org.junit.runner.RunWith
 
 /*
 ********************** REQUIREMENTS *****************
-* 1) when user inserts new skill, it should be inserted
-* 2) when user give many skills, they all should be inserted
+* 1) when new skill comes to db, it should be inserted
+* 2) when many skills comes to db, they all should be inserted
 * 3) all skills should be returned when asked
 * 4) all skills should be deleted when requested
 * 5) when new skills are required to be replaced with old ones,
@@ -32,21 +32,21 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class SkillsDaoTest  {
 
-    val SKILL1 = Skill(
+    val SKILL1 = SkillModel(
         "1",
         "name 1",
         1,
         listOf("1", "2", "3")
     )
 
-    val SKILL2 = Skill(
+    val SKILL2 = SkillModel(
         "2",
         "name 2",
         1,
         listOf("21", "22", "23")
     )
 
-    val SKILL3 = Skill(
+    val SKILL3 = SkillModel(
         "3",
         "name 3",
         1,
@@ -74,11 +74,11 @@ class SkillsDaoTest  {
 
         // act
         SUT.insert(SKILL1)
-        val skills: List<Skill> =  SUT.getSkills()
+        val skillModels: List<SkillModel> =  SUT.getSkills()
 
         // assert
-        assertEquals(skills.size, 1)
-        assertEquals(skills[0], SKILL1)
+        assertEquals(skillModels.size, 1)
+        assertEquals(skillModels[0], SKILL1)
     }
 
     @Test
@@ -88,11 +88,11 @@ class SkillsDaoTest  {
 
         // act
         SUT.insertMany(skillsList)
-        val skills: List<Skill> =  SUT.getSkills()
+        val skillModels: List<SkillModel> =  SUT.getSkills()
 
         // assert
-        assertEquals(skills.size, 3)
-        assertEquals(skills, skillsList)
+        assertEquals(skillModels.size, 3)
+        assertEquals(skillModels, skillsList)
     }
 
     @Test
@@ -132,14 +132,14 @@ class SkillsDaoTest  {
 
         // act
         SUT.insertMany(skillsList1)
-        val returnedList: List<Skill> = SUT.insertManyReplaceGet(skillsList2)
+        val returnedList: List<SkillModel> = SUT.insertManyReplaceGet(skillsList2)
 
         // assert
         assertEquals(returnedList, skillsList2)
     }
 
     @Test
-    fun insertGetSkills_skillsList_checkNotChanged(){
+    fun insertGetSkills_skillsList_checkNotChanged() = runBlocking {
         // arrange
         val skill = SKILL1
 

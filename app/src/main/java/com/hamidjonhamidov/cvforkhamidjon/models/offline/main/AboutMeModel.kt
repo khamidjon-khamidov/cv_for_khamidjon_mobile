@@ -10,15 +10,15 @@ import kotlinx.android.parcel.RawValue
 
 @Parcelize
 @Entity(tableName = "about_me")
-data class AboutMeInfo constructor(
+data class AboutMeInfo(
 
-    @ColumnInfo(name = "dateOfBirth") var dateOfBirth: String = "Couldn't Load",
+    @ColumnInfo(name = "dateOfBirth") var dateOfBirth: String = "14 Sep 1998",
 
-    @ColumnInfo(name = "address") var address: String = "Couldn't Load",
+    @ColumnInfo(name = "address") var address: String = "133B Granville Road, London",
 
-    @ColumnInfo(name = "email") var email: String = "Couldn't Load",
+    @ColumnInfo(name = "email") var email: String = "hamidovhamid1998@mail.ru",
 
-    @ColumnInfo(name = "phone") var phone: String = "Couldn't Load",
+    @ColumnInfo(name = "phone") var phone: String = "07565 336207",
 
     @ColumnInfo(name = "education") var education: @RawValue List<Education> = listOf(),
 
@@ -29,8 +29,8 @@ data class AboutMeInfo constructor(
 ) : Parcelable {
 
     @IgnoredOnParcel
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "pk") var pk: Int = -1
+    @PrimaryKey
+    @ColumnInfo(name = "pk") var pk: Int = 1
 
 
 
