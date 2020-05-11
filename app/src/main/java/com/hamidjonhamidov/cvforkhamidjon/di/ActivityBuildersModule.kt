@@ -17,7 +17,8 @@ abstract class ActivityBuildersModule{
     @ContributesAndroidInjector(
         modules = [
             MainModule::class,
-            MainFragmentModule::class,
+//            MainFragmentModule::class,
+            MainNavHostModule::class,
             MainViewModelModule::class,
             MainRepositoryModule::class
         ]
