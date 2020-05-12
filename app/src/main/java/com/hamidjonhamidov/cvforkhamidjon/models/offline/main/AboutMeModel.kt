@@ -12,19 +12,26 @@ import kotlinx.android.parcel.RawValue
 @Entity(tableName = "about_me")
 data class AboutMeInfo(
 
-    @ColumnInfo(name = "dateOfBirth") var dateOfBirth: String = "14 Sep 1998",
+    @ColumnInfo(name = "dateOfBirth")
+    var dateOfBirth: String = "14 Sep 1998",
 
-    @ColumnInfo(name = "address") var address: String = "133B Granville Road, London",
+    @ColumnInfo(name = "address")
+    var address: String = "133B Granville Road, London",
 
-    @ColumnInfo(name = "email") var email: String = "hamidovhamid1998@mail.ru",
+    @ColumnInfo(name = "email")
+    var email: String = "hamidovhamid1998@mail.ru",
 
-    @ColumnInfo(name = "phone") var phone: String = "07565 336207",
+    @ColumnInfo(name = "phone")
+    var phone: String = "07565 336207",
 
-    @ColumnInfo(name = "education") var education: @RawValue List<Education> = listOf(),
+    @ColumnInfo(name = "education")
+    var education: @RawValue List<Education> = listOf(),
 
-    @ColumnInfo(name = "pictureLinke") var pictureLink: String = "Couldn't Load",
+    @ColumnInfo(name = "pictureLinke")
+    var pictureLink: String = "Couldn't Load",
 
-    @ColumnInfo(name = "description") var description: String = "Couldn't Load"
+    @ColumnInfo(name = "description")
+    var description: String = "Couldn't Load"
 
 ) : Parcelable {
 

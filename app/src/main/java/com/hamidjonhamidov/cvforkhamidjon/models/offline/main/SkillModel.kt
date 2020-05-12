@@ -11,10 +11,18 @@ import kotlinx.android.parcel.Parcelize
 @Entity(tableName = "skills")
 data class SkillModel(
 
-    @ColumnInfo(name = "id") var id: String = "",
-    @ColumnInfo(name = "name") var name: String = "",
-    @ColumnInfo(name = "percentage") var percentage: Int = 0,
-    @ColumnInfo(name = "list") var skillsList: List<String> = listOf()
+    @ColumnInfo(name = "id")
+    var id: String = "",
+
+    @ColumnInfo(name = "name")
+    var name: String = "",
+
+    @ColumnInfo(name = "percentage")
+    var percentage: Int = 0,
+
+    @ColumnInfo(name = "list")
+    var skillsList: List<String> = listOf()
+
 ) : Parcelable {
 
     @IgnoredOnParcel
