@@ -4,6 +4,8 @@ import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.parcel.RawValue
 
@@ -50,9 +52,21 @@ data class AchievementModel(
 
 }
 data class Honor(
+
+    @SerializedName("itemId")
+    @Expose
     var itemId: Int,
+
+    @SerializedName("itemTitle")
+    @Expose
     var itemTitle: String,
+
+    @SerializedName("itemDescription")
+    @Expose
     var itemDescription: String,
+
+    @SerializedName("itemLink")
+    @Expose
     var itemLink: String
 )
 

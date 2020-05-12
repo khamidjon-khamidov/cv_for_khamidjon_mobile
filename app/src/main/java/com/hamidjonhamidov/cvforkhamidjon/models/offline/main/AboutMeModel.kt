@@ -4,6 +4,8 @@ import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.IgnoredOnParcel
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.parcel.RawValue
@@ -38,8 +40,6 @@ data class AboutMeInfo(
     @IgnoredOnParcel
     @PrimaryKey
     @ColumnInfo(name = "pk") var pk: Int = 1
-
-
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -76,7 +76,12 @@ data class AboutMeInfo(
 
 }
 data class Education(
+    @SerializedName("name")
+    @Expose
     val name: String,
+
+    @SerializedName("link")
+    @Expose
     val link: String
 )
 

@@ -50,6 +50,4 @@ data class SkillModel(
         result = 31 * result + skillsList.hashCode()
         return result
     }
-
-
 }
