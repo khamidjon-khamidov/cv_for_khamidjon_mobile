@@ -7,14 +7,14 @@ import com.hamidjonhamidov.cvforkhamidjon.data_requests.persistence.main.AboutMe
 import com.hamidjonhamidov.cvforkhamidjon.data_requests.persistence.main.AchievementsDao
 import com.hamidjonhamidov.cvforkhamidjon.data_requests.persistence.main.ProjectsDao
 import com.hamidjonhamidov.cvforkhamidjon.data_requests.persistence.main.SkillsDao
-import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.AboutMeInfo
+import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.AboutMeModel
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.AchievementModel
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.ProjectModel
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.SkillModel
 
 @Database(
     entities = [
-        AboutMeInfo::class,
+        AboutMeModel::class,
         SkillModel::class,
         AchievementModel::class,
         ProjectModel::class

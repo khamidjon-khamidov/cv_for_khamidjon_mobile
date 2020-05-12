@@ -1,4 +1,4 @@
-package com.hamidjonhamidov.cvforkhamidjon.util
+package com.hamidjonhamidov.cvforkhamidjon.util.glide
 
 import android.widget.ImageView
 

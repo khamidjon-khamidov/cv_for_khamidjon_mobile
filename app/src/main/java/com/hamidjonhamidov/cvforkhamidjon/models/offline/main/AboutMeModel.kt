@@ -12,7 +12,7 @@ import kotlinx.android.parcel.RawValue
 
 @Parcelize
 @Entity(tableName = "about_me")
-data class AboutMeInfo(
+data class AboutMeModel(
 
     @ColumnInfo(name = "dateOfBirth")
     var dateOfBirth: String = "14 Sep 1998",
@@ -45,7 +45,7 @@ data class AboutMeInfo(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as AboutMeInfo
+        other as AboutMeModel
 
         if (dateOfBirth != other.dateOfBirth) return false
         if (address != other.address) return false

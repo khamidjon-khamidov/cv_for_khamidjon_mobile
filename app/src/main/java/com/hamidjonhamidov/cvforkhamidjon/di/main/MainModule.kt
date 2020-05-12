@@ -2,6 +2,7 @@ package com.hamidjonhamidov.cvforkhamidjon.di.main
 
 import com.hamidjonhamidov.cvforkhamidjon.fragment_builders.main.MainNavHostFragment
 import dagger.Module
+import dagger.Provides
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 
@@ -10,6 +11,5 @@ import kotlinx.coroutines.InternalCoroutinesApi
 @Module
 abstract class MainModule {
 
-//    abstract fun pleaseInject(mainNavHostFragment: MainNavHostFragment)
 
 }

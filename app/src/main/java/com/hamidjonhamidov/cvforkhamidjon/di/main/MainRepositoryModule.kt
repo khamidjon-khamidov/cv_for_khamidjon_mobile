@@ -2,6 +2,7 @@ package com.hamidjonhamidov.cvforkhamidjon.di.main
 
 import com.hamidjonhamidov.cvforkhamidjon.data_requests.api.main.MainApiService
 import com.hamidjonhamidov.cvforkhamidjon.data_requests.persistence.AppDatabase
+import com.hamidjonhamidov.cvforkhamidjon.repository.Repository
 import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepository
 import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImpl
 import dagger.Module
@@ -19,10 +20,19 @@ object MainRepositoryModule {
             .build()
             .create(MainApiService::class.java)
 
+    @JvmSuppressWildcards
+    @MainScope
+    @Provides
+    fun getBaseRepository() = Repository()
 
     @JvmStatic
     @MainScope
     @Provides
-    fun provideMainRepository(apiService: MainApiService, appDatabase: AppDatabase): MainRepository =
-        MainRepositoryImpl(apiService, appDatabase)
+    fun provideMainRepository(
+        apiService: MainApiService,
+        appDatabase: AppDatabase,
+        repository: Repository
+    ): MainRepository =
+
+        MainRepositoryImpl(apiService, appDatabase, repository)
 }

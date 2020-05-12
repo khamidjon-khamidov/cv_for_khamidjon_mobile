@@ -1,30 +1,30 @@
 package com.hamidjonhamidov.cvforkhamidjon.data_requests.persistence.main
 
 import androidx.room.*
-import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.AboutMeInfo
+import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.AboutMeModel
 
 @Dao
 interface AboutMeDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(aboutMeInfo: AboutMeInfo)
+    suspend fun insert(aboutMeModel: AboutMeModel)
 
     @Query("DELETE FROM about_me")
     suspend fun deleteAll()
 
     @Query("SELECT * FROM about_me")
-    suspend fun getAboutMe(): List<AboutMeInfo>
+    suspend fun getAboutMe(): List<AboutMeModel>
 
     @Transaction
-    open suspend fun replaceAboutMe(aboutMeInfo: AboutMeInfo){
+    open suspend fun replaceAboutMe(aboutMeModel: AboutMeModel){
         deleteAll()
-        insert(aboutMeInfo)
+        insert(aboutMeModel)
     }
 
     @Transaction
-    open suspend fun replaceAboutMeAndGet(aboutMeInfo: AboutMeInfo): List<AboutMeInfo>{
+    open suspend fun replaceAboutMeAndGet(aboutMeModel: AboutMeModel): List<AboutMeModel>{
         deleteAll()
-        insert(aboutMeInfo)
+        insert(aboutMeModel)
         return getAboutMe()
     }
 }

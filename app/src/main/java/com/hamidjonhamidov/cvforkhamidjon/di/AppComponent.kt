@@ -5,6 +5,7 @@ import com.hamidjonhamidov.cvforkhamidjon.BaseApplication
 import com.hamidjonhamidov.cvforkhamidjon.di.main.MainFragmentModule
 import com.hamidjonhamidov.cvforkhamidjon.di.main.MainRepositoryModule
 import com.hamidjonhamidov.cvforkhamidjon.fragment_builders.main.MainNavHostFragment
+import com.hamidjonhamidov.cvforkhamidjon.util.NetworkConnection
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjectionModule
@@ -26,6 +27,7 @@ import javax.inject.Singleton
 )
 interface AppComponent {
 
+    val networkConnection: NetworkConnection
 
     @Component.Builder
     interface Builder {

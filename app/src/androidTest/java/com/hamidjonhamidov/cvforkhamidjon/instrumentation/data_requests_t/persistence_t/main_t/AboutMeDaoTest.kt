@@ -6,7 +6,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.hamidjonhamidov.cvforkhamidjon.data_requests.persistence.AppDatabase
 import com.hamidjonhamidov.cvforkhamidjon.data_requests.persistence.main.AboutMeDao
-import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.AboutMeInfo
+import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.AboutMeModel
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.Education
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -45,7 +45,7 @@ class AboutMeDaoTest {
     val EDULIST = listOf(EDUCATION1, EDUCATION2, EDUCATION3, EDUCATION4)
 
     val ABOUTMEINFO =
-        AboutMeInfo(
+        AboutMeModel(
             "Sep 14, 1998",
             "some address",
             "someemail",
@@ -55,7 +55,7 @@ class AboutMeDaoTest {
         )
 
     val ABOUTMEINFO2 =
-        AboutMeInfo(
+        AboutMeModel(
             "Sep 14, 1998 2",
             "some address 2",
             "someemail 2",
@@ -65,7 +65,7 @@ class AboutMeDaoTest {
         )
 
     val ABOUTMEINFO3 =
-        AboutMeInfo(
+        AboutMeModel(
             "Sep 14, 1998 3",
             "some address 3",
             "someemail 3",
