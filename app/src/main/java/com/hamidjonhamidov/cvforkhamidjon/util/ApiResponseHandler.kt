@@ -8,9 +8,9 @@ import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.NETWOR
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.NETWORK_ERROR_TIMEOUT
 
 abstract class ApiResponseHandler<ViewState, RemoteResponseObject, CacheResponseObject>(
-    private val remoteResponseObject: ApiResult<List<RemoteResponseObject>?>,
-    private val stateEvent: StateEvent,
-    private val cacheResponseObject: List<CacheResponseObject>?
+    remoteResponseObject: ApiResult<List<RemoteResponseObject>?>,
+    stateEvent: StateEvent,
+    cacheResponseObject: List<CacheResponseObject>?
 ) {
 
     val result: DataState<ViewState> =

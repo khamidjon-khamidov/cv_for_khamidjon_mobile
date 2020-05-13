@@ -2,13 +2,14 @@ package com.hamidjonhamidov.cvforkhamidjon.repository.main.mainrepsitoryimpltest
 
 import com.hamidjonhamidov.cvforkhamidjon.data_requests.api.main.MainApiService
 import com.hamidjonhamidov.cvforkhamidjon.data_requests.persistence.AppDatabase
-import com.hamidjonhamidov.cvforkhamidjon.data_requests.persistence.main.AboutMeDao
-import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.AboutMeModel
+import com.hamidjonhamidov.cvforkhamidjon.data_requests.persistence.main.SkillsDao
+import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.SkillModel
 import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImpl
-import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImplTestConstants.ABOUTME_MODEL
-import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImplTestConstants.ABOUTME_REMOTE_MODEL
-import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImplTestConstants.GETHOME
-import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainStateEvent.GetHome
+import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImplTestConstants.GETMYSKILLS
+import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImplTestConstants.SKILLS_MODEL_LIST
+import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImplTestConstants.SKILLS_REMOTE_MODEL_LIST
+import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainStateEvent
+import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainStateEvent.GetMySkills
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NETWORK_ERROR_CACHE_EMPTY
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NETWORK_ERROR_CACHE_SUCCESS
@@ -16,10 +17,12 @@ import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAG
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NO_INTERNET_CACHE_EMPTY
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NO_INTERNET_CACHE_SUCCESS
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSSAGE_NETWORK_TIMEOUT_CACHE_SUCCESS
-import com.nhaarman.mockitokotlin2.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -27,13 +30,14 @@ import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import org.mockito.Mock
 import org.mockito.Mockito
+import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
-import java.lang.RuntimeException
+
 
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
 @RunWith(JUnit4::class)
-class GetAboutMeTest {
+class GetMySkillsTest {
 
     private val TAG = "UnitTesting"
 
@@ -46,13 +50,13 @@ class GetAboutMeTest {
     lateinit var appDatabase: AppDatabase
 
     @Mock
-    lateinit var aboutMeDaoTd: AboutMeDaoTd
+    lateinit var skillsDaoTd: SkillsDaoTd
 
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
-        aboutMeDaoTd =
-            AboutMeDaoTd()
+        skillsDaoTd =
+            SkillsDaoTd()
 
         SUT =
             MainRepositoryImpl(
@@ -63,24 +67,24 @@ class GetAboutMeTest {
 
 
     @Test
-    fun getAboutMe_networkAvailableGetHomeEvent_aboutMeFlowReturned() = runBlocking {
+    fun getMySkills_networkAvailableGetMySkillsEvent_skillsFlowReturned_savedToDb() = runBlocking {
         // arrange
         println("Test started")
 
-        val shouldToFragment = GETHOME
-        val shouldAboutMeModel = ABOUTME_MODEL
+        val shouldToFragment = GETMYSKILLS
+        val shouldSkillsModelList = SKILLS_MODEL_LIST
         val shouldMessage = MESSAGE_NETWORK_SUCCESS_CACHE_SUCCESSS.copy()
 
-        Mockito.`when`(appDatabase.getAboutMeDao())
-            .thenReturn(aboutMeDaoTd)
+        `when`(appDatabase.getSkillsDao())
+            .thenReturn(skillsDaoTd)
 
-        Mockito.`when`(apiService.getAboutMeSync())
-            .thenReturn(listOf(ABOUTME_REMOTE_MODEL))
+        `when`(apiService.getSkillsSync())
+            .thenReturn(SKILLS_REMOTE_MODEL_LIST)
 
         // act
         val result =
-            SUT.getAboutMe(
-                GetHome(),
+            SUT.getMySkills(
+                GetMySkills(),
                 true
             )
 
@@ -89,30 +93,30 @@ class GetAboutMeTest {
 
         result.onEach {
             assertEquals(it.toFragment, shouldToFragment)
-            assertEquals(it.data?.homeFragmentView?.aboutMe, shouldAboutMeModel)
+            assertEquals(it.data?.mySkillsFragmentView?.mySkills, shouldSkillsModelList)
             assertEquals(it.message, shouldMessage)
         }.launchIn(this)
 
         delay(1000)
-        verify(apiService, times(1)).getAboutMeSync()
-        assertEquals(aboutMeDaoTd.replaceAboutMeCalls, 1)
-        assertEquals(aboutMeDaoTd.funCalls, 1)
-        assertEquals(aboutMeDaoTd.inMemoryData.size, 1)
+        verify(apiService, times(1)).getSkillsSync()
+        assertEquals(skillsDaoTd.insertManyAndReplaceCalls, 1)
+        assertEquals(skillsDaoTd.funCalls, 1)
+        assertEquals(skillsDaoTd.inMemoryData.size, 5)
         Unit
     }
 
     @Test
-    fun getAboutMe_networkTimeoutCacheEmpty_returnCachedData() = runBlocking {
+    fun getMySkills_networkTimeoutCacheEmpty_returnCachedData() = runBlocking {
         // arrange
         NetworkConstants.NETWORK_DELAY = 6000 // make network delay long to throw exception
-        aboutMeDaoTd.inMemoryData.add(ABOUTME_MODEL.copy())
-        Mockito.`when`(appDatabase.getAboutMeDao())
-            .thenReturn(aboutMeDaoTd)
+        skillsDaoTd.inMemoryData.addAll(SKILLS_MODEL_LIST)
+        `when`(appDatabase.getSkillsDao())
+            .thenReturn(skillsDaoTd)
         var onEachCalls = 0
 
         // act
-        val result = SUT.getAboutMe(
-            GetHome(),
+        val result = SUT.getMySkills(
+            GetMySkills(),
             true
         )
 
@@ -120,16 +124,16 @@ class GetAboutMeTest {
         result.onEach {
             onEachCalls++
             assertEquals(it.message, MESSSAGE_NETWORK_TIMEOUT_CACHE_SUCCESS)
-            assertEquals(it.toFragment, GETHOME)
-            assertEquals(it.data?.homeFragmentView?.aboutMe, ABOUTME_MODEL)
+            assertEquals(it.toFragment, GETMYSKILLS)
+            assertEquals(it.data?.mySkillsFragmentView?.mySkills, SKILLS_MODEL_LIST)
         }.launchIn(this)
 
         delay(7000)
         verifyNoMoreInteractions(apiService)
         assertEquals(onEachCalls, 1)
-        assertEquals(aboutMeDaoTd.getAboutMeCalls, 1)
-        assertEquals(aboutMeDaoTd.funCalls, 1)
-        assertEquals(aboutMeDaoTd.inMemoryData.size, 1)
+        assertEquals(skillsDaoTd.getSkillsCalls, 1)
+        assertEquals(skillsDaoTd.funCalls, 1)
+        assertEquals(skillsDaoTd.inMemoryData.size, 5)
         NetworkConstants.NETWORK_DELAY = 0
         Unit
     }
@@ -138,15 +142,15 @@ class GetAboutMeTest {
     fun getAboutMe_networkTimeOut_cacheEmpty() = runBlocking {
         // arrange
         NetworkConstants.NETWORK_DELAY = 6000
-        Mockito.`when`(appDatabase.getAboutMeDao())
-            .thenReturn(aboutMeDaoTd)
+        `when`(appDatabase.getSkillsDao())
+            .thenReturn(skillsDaoTd)
         var onEachCalls =  0
 
         // act
         println("Before result")
 
-        val result = SUT.getAboutMe(
-            GetHome(),
+        val result = SUT.getMySkills(
+            GetMySkills(),
             true
         )
 
@@ -156,8 +160,8 @@ class GetAboutMeTest {
         result.onEach {
             onEachCalls++
             assertEquals(it.message, NetworkConstants.MESSAGE_NETWORK_TIMEOUT_CACHE_EMPTY)
-            assertEquals(it.toFragment, GETHOME)
-            assertEquals(it.data?.homeFragmentView?.aboutMe, null)
+            assertEquals(it.toFragment, GETMYSKILLS)
+            assertEquals(it.data?.mySkillsFragmentView?.mySkills, null)
         }.launchIn(this)
 
         println("After onEach calls")
@@ -172,16 +176,16 @@ class GetAboutMeTest {
     @Test
     fun getAboutMe_noInternetCacheSucces_returnCachedData() = runBlocking {
         // arrange
-        aboutMeDaoTd.inMemoryData.add(ABOUTME_MODEL)
-        Mockito.`when`(appDatabase.getAboutMeDao())
-            .thenReturn(aboutMeDaoTd)
+        skillsDaoTd.inMemoryData.addAll(SKILLS_MODEL_LIST)
+        `when`(appDatabase.getSkillsDao())
+            .thenReturn(skillsDaoTd)
         var onEachCalls =  0
 
         // act
         println("Before result")
 
-        val result = SUT.getAboutMe(
-            GetHome(),
+        val result = SUT.getMySkills(
+            GetMySkills(),
             false
         )
 
@@ -191,8 +195,8 @@ class GetAboutMeTest {
         result.onEach {
             onEachCalls++
             assertEquals(it.message, MESSAGE_NO_INTERNET_CACHE_SUCCESS)
-            assertEquals(it.toFragment, GETHOME)
-            assertEquals(it.data?.homeFragmentView?.aboutMe, ABOUTME_MODEL.copy())
+            assertEquals(it.toFragment, GETMYSKILLS)
+            assertEquals(it.data?.mySkillsFragmentView?.mySkills, SKILLS_MODEL_LIST)
         }.launchIn(this)
 
         println("After onEach calls")
@@ -200,23 +204,23 @@ class GetAboutMeTest {
         delay(2000)
         assertEquals(onEachCalls, 1)
         verifyNoMoreInteractions(apiService)
-        assertEquals(aboutMeDaoTd.funCalls, 1)
-        assertEquals(aboutMeDaoTd.getAboutMeCalls, 1)
-        assertEquals(aboutMeDaoTd.inMemoryData.size, 1)
+        assertEquals(skillsDaoTd.funCalls, 1)
+        assertEquals(skillsDaoTd.getSkillsCalls, 1)
+        assertEquals(skillsDaoTd.inMemoryData.size, 5)
         Unit
     }
 
     @Test
     fun getAboutMe_noInternetCacheEmpty_returnNull() = runBlocking {
         // arrange
-        Mockito.`when`(appDatabase.getAboutMeDao())
-            .thenReturn(aboutMeDaoTd)
+        Mockito.`when`(appDatabase.getSkillsDao())
+            .thenReturn(skillsDaoTd)
         var onEachCalls =  0
 
         // act
         println("Before result")
-        val result = SUT.getAboutMe(
-            GetHome(),
+        val result = SUT.getMySkills(
+            GetMySkills(),
             false
         )
 
@@ -226,8 +230,8 @@ class GetAboutMeTest {
         result.onEach {
             onEachCalls++
             assertEquals(it.message, MESSAGE_NO_INTERNET_CACHE_EMPTY)
-            assertEquals(it.toFragment, GETHOME)
-            assertEquals(it.data?.homeFragmentView?.aboutMe, null)
+            assertEquals(it.toFragment, GETMYSKILLS)
+            assertEquals(it.data?.mySkillsFragmentView?.mySkills, null)
         }.launchIn(this)
 
         println("After onEach calls")
@@ -235,28 +239,28 @@ class GetAboutMeTest {
         delay(2000)
         assertEquals(onEachCalls, 1)
         verifyNoMoreInteractions(apiService)
-        assertEquals(aboutMeDaoTd.funCalls, 1)
-        assertEquals(aboutMeDaoTd.getAboutMeCalls, 1)
-        assertEquals(aboutMeDaoTd.inMemoryData.size, 0)
+        assertEquals(skillsDaoTd.funCalls, 1)
+        assertEquals(skillsDaoTd.getSkillsCalls, 1)
+        assertEquals(skillsDaoTd.inMemoryData.size, 0)
         Unit
     }
 
     @Test
     fun getAboutMe_NetworkErrorCacheSuccess_returnCachedData() = runBlocking {
         // arrange
-        aboutMeDaoTd.inMemoryData.add(ABOUTME_MODEL.copy())
-        Mockito.`when`(appDatabase.getAboutMeDao())
-            .thenReturn(aboutMeDaoTd)
+        skillsDaoTd.inMemoryData.addAll(SKILLS_MODEL_LIST)
+        `when`(appDatabase.getSkillsDao())
+            .thenReturn(skillsDaoTd)
 
         doThrow(RuntimeException())
-            .`when`(apiService).getAboutMeSync()
+            .`when`(apiService).getSkillsSync()
 
         var onEachCalls =  0
 
         // act
         println("Before result")
-        val result = SUT.getAboutMe(
-            GetHome(),
+        val result = SUT.getMySkills(
+            GetMySkills(),
             true
         )
         println("After result")
@@ -265,35 +269,35 @@ class GetAboutMeTest {
         result.onEach {
             onEachCalls++
             assertEquals(it.message, MESSAGE_NETWORK_ERROR_CACHE_SUCCESS)
-            assertEquals(it.toFragment, GETHOME)
-            assertEquals(it.data?.homeFragmentView?.aboutMe, ABOUTME_MODEL)
+            assertEquals(it.toFragment, GETMYSKILLS)
+            assertEquals(it.data?.mySkillsFragmentView?.mySkills, SKILLS_MODEL_LIST)
         }.launchIn(this)
         println("After onEach calls")
 
         delay(2000)
         assertEquals(onEachCalls, 1)
-        verify(apiService, times(1)).getAboutMeSync()
-        assertEquals(aboutMeDaoTd.funCalls, 1)
-        assertEquals(aboutMeDaoTd.getAboutMeCalls, 1)
-        assertEquals(aboutMeDaoTd.inMemoryData.size, 1)
+        verify(apiService, times(1)).getSkillsSync()
+        assertEquals(skillsDaoTd.funCalls, 1)
+        assertEquals(skillsDaoTd.getSkillsCalls, 1)
+        assertEquals(skillsDaoTd.inMemoryData.size, 5)
         Unit
     }
 
     @Test
     fun getAboutMe_NetworkErrorCacheEmpty_returnEmptyData() = runBlocking {
         // arrange
-        Mockito.`when`(appDatabase.getAboutMeDao())
-            .thenReturn(aboutMeDaoTd)
+        `when`(appDatabase.getSkillsDao())
+            .thenReturn(skillsDaoTd)
 
         doThrow(RuntimeException())
-            .`when`(apiService).getAboutMeSync()
+            .`when`(apiService).getSkillsSync()
 
         var onEachCalls =  0
 
         // act
         println("Before result")
-        val result = SUT.getAboutMe(
-            GetHome(),
+        val result = SUT.getMySkills(
+            GetMySkills(),
             true
         )
         println("After result")
@@ -302,55 +306,53 @@ class GetAboutMeTest {
         result.onEach {
             onEachCalls++
             assertEquals(it.message, MESSAGE_NETWORK_ERROR_CACHE_EMPTY)
-            assertEquals(it.toFragment, GETHOME)
-            assertEquals(it.data?.homeFragmentView?.aboutMe, null)
+            assertEquals(it.toFragment, GETMYSKILLS)
+            assertEquals(it.data?.mySkillsFragmentView?.mySkills, null)
         }.launchIn(this)
         println("After onEach calls")
 
         delay(2000)
         assertEquals(onEachCalls, 1)
-        verify(apiService, times(1)).getAboutMeSync()
-        assertEquals(aboutMeDaoTd.funCalls, 1)
-        assertEquals(aboutMeDaoTd.getAboutMeCalls, 1)
-        assertEquals(aboutMeDaoTd.inMemoryData.size, 0)
+        verify(apiService, times(1)).getSkillsSync()
+        assertEquals(skillsDaoTd.funCalls, 1)
+        assertEquals(skillsDaoTd.getSkillsCalls, 1)
+        assertEquals(skillsDaoTd.inMemoryData.size, 0)
         Unit
     }
 
     ////////////////// Helper Classes ///////////////
-    class AboutMeDaoTd : AboutMeDao {
+    class SkillsDaoTd : SkillsDao {
         var funCalls = 0
         var insertCalls = 0
         var deleteAllCalls = 0
-        var getAboutMeCalls = 0
-        var replaceAboutMeCalls = 0
+        var getSkillsCalls = 0
+        var insertManyAndReplaceCalls = 0
 
-        val inMemoryData = ArrayList<AboutMeModel>()
+        val inMemoryData = ArrayList<SkillModel>()
 
-
-        override suspend fun insert(aboutMeModel: AboutMeModel) {
-            inMemoryData.add(aboutMeModel)
+        override suspend fun insert(skillModel: SkillModel) {
+            funCalls++
             insertCalls++
-            funCalls++
         }
 
-        override suspend fun deleteAll() {
-            inMemoryData.clear()
+        override suspend fun getSkills(): List<SkillModel> {
             funCalls++
-            deleteAllCalls++
-        }
-
-        override suspend fun getAboutMe(): List<AboutMeModel> {
-            funCalls++
-            getAboutMeCalls++
+            getSkillsCalls++
             return inMemoryData
         }
 
-        override suspend fun replaceAboutMe(aboutMeModel: AboutMeModel) {
+        override fun deleteAll() {
             funCalls++
-            replaceAboutMeCalls++
-            inMemoryData.add(aboutMeModel)
+            deleteAllCalls++
+            inMemoryData.clear()
         }
 
+        override suspend fun insertManyAndReplace(skillsList: List<SkillModel>) {
+            funCalls++
+            insertManyAndReplaceCalls++
+            inMemoryData.clear()
+            inMemoryData.addAll(skillsList)
+        }
     }
 
     /////////////////////////////////////////////////

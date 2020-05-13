@@ -5,7 +5,6 @@ import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.AboutMeModel
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.AchievementModel
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.ProjectModel
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.SkillModel
-import com.hamidjonhamidov.cvforkhamidjon.ui.main.home.HomeFragment
 import kotlinx.android.parcel.Parcelize
 
 const val MAIN_VIEW_STATE_BUNDLE_KEY = "com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainViewState"

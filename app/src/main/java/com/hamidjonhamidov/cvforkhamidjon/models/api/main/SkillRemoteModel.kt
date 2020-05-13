@@ -2,6 +2,7 @@ package com.hamidjonhamidov.cvforkhamidjon.models.api.main
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.SkillModel
 
 data class SkillRemoteModel(
 
@@ -21,3 +22,6 @@ data class SkillRemoteModel(
     @Expose
     var skillsList: List<String> = listOf()
 )
+
+fun SkillRemoteModel.convertToSkillModel() =
+    SkillModel(id, name, percentage, skillsList)

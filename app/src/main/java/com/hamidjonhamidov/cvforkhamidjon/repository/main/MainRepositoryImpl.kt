@@ -4,11 +4,15 @@ import com.hamidjonhamidov.cvforkhamidjon.data_requests.api.main.MainApiService
 import com.hamidjonhamidov.cvforkhamidjon.data_requests.persistence.AppDatabase
 import com.hamidjonhamidov.cvforkhamidjon.di.main.MainScope
 import com.hamidjonhamidov.cvforkhamidjon.models.api.main.AboutMeRemoteModel
+import com.hamidjonhamidov.cvforkhamidjon.models.api.main.SkillRemoteModel
 import com.hamidjonhamidov.cvforkhamidjon.models.api.main.convertToAboutMeModel
+import com.hamidjonhamidov.cvforkhamidjon.models.api.main.convertToSkillModel
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.AboutMeModel
+import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.SkillModel
 import com.hamidjonhamidov.cvforkhamidjon.repository.Repository
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainViewState
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainViewState.HomeFragmentView
+import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainViewState.MySkillsFragmentView
 import com.hamidjonhamidov.cvforkhamidjon.util.ApiResponseHandler
 import com.hamidjonhamidov.cvforkhamidjon.util.ApiResult
 import com.hamidjonhamidov.cvforkhamidjon.util.DataState
@@ -129,8 +133,94 @@ constructor(
     override fun getMySkills(
         stateEvent: StateEvent,
         isNetworkAvailable: Boolean
-    ): Flow<DataState<MainViewState>> {
-        TODO("Not yet implemented")
+    ): Flow<DataState<MainViewState>> = flow {
+
+        var response: ApiResult<List<SkillRemoteModel>?> =
+            ApiResult.GenericError(
+                null,
+                NetworkConstants.NETWORK_ERROR_NO_INTERNET
+            ) // set it to network error no internet available default
+
+
+        if (isNetworkAvailable)
+            response =
+                safeApiCall(Dispatchers.IO) { apiService.getSkillsSync() } // if internet is available request from internet
+
+        var cacheRepsonse: List<SkillModel>? =
+            listOf() // set cache response default to empty list
+
+        // if there has been some error from internet try to receive it from cache
+        if (response is ApiResult.GenericError) {
+            cacheRepsonse = withContext(Dispatchers.IO) { appDatabase.getSkillsDao().getSkills() }
+        }
+
+        val result = withContext(Dispatchers.Default) {
+            object : ApiResponseHandler<MainViewState, SkillRemoteModel, SkillModel>(
+                response,
+                stateEvent,
+                cacheRepsonse
+            ) {
+                override fun handleNetworkSuccessCacheSuccess(
+                    stateEvent: StateEvent,
+                    remoteResponse: List<SkillRemoteModel>
+                ): DataState<MainViewState> {
+                    val skillsList = remoteResponse.map { it.convertToSkillModel() }
+
+                    GlobalScope.launch((Dispatchers.IO)) {
+                        appDatabase.getSkillsDao().insertManyAndReplace(skillsList)
+                    }
+                    return DataState(
+                        toFragment = stateEvent.toString(),
+                        data = MainViewState(
+                            mySkillsFragmentView = MySkillsFragmentView(skillsList)
+                        ),
+                        message = MESSAGE_NETWORK_SUCCESS_CACHE_SUCCESSS.copy()
+                    )
+                }
+
+                override fun handleNetworkTimeoutCacheSuccess(
+                    stateEvent: StateEvent,
+                    cacheResponseObject: List<SkillModel>
+                ): DataState<MainViewState> {
+                    return DataState(
+                        toFragment = stateEvent.toString(),
+                        data = MainViewState(
+                            mySkillsFragmentView = MySkillsFragmentView(cacheResponseObject)
+                        ),
+                        message = MESSSAGE_NETWORK_TIMEOUT_CACHE_SUCCESS
+                    )
+                }
+
+                override fun handleNoInternetCacheSuccess(
+                    stateEvent: StateEvent,
+                    cacheResponseObject: List<SkillModel>
+                ): DataState<MainViewState> {
+                    return DataState(
+                        toFragment = stateEvent.toString(),
+                        data = MainViewState(
+                            mySkillsFragmentView = MySkillsFragmentView(cacheResponseObject)
+                        ),
+                        message = MESSAGE_NO_INTERNET_CACHE_SUCCESS
+                    )
+                }
+
+                override fun handleNetworkFailureCacheSuccess(
+                    stateEvent: StateEvent,
+                    cacheResponseObject: List<SkillModel>
+                ): DataState<MainViewState> {
+                    return DataState(
+                        toFragment = stateEvent.toString(),
+                        data = MainViewState(
+                            mySkillsFragmentView = MySkillsFragmentView(cacheResponseObject)
+                        ),
+                        message = MESSAGE_NETWORK_ERROR_CACHE_SUCCESS
+                    )
+                }
+            }.result
+        }
+
+        emit(result)
+
     }
 
     override fun getAchievements(
