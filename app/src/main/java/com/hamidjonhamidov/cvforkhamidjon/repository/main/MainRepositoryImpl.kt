@@ -3,16 +3,14 @@ package com.hamidjonhamidov.cvforkhamidjon.repository.main
 import com.hamidjonhamidov.cvforkhamidjon.data_requests.api.main.MainApiService
 import com.hamidjonhamidov.cvforkhamidjon.data_requests.persistence.AppDatabase
 import com.hamidjonhamidov.cvforkhamidjon.di.main.MainScope
-import com.hamidjonhamidov.cvforkhamidjon.models.api.main.AboutMeRemoteModel
-import com.hamidjonhamidov.cvforkhamidjon.models.api.main.SkillRemoteModel
-import com.hamidjonhamidov.cvforkhamidjon.models.api.main.convertToAboutMeModel
-import com.hamidjonhamidov.cvforkhamidjon.models.api.main.convertToSkillModel
+import com.hamidjonhamidov.cvforkhamidjon.models.api.main.*
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.AboutMeModel
+import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.AchievementModel
+import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.ProjectModel
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.SkillModel
 import com.hamidjonhamidov.cvforkhamidjon.repository.Repository
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainViewState
-import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainViewState.HomeFragmentView
-import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainViewState.MySkillsFragmentView
+import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainViewState.*
 import com.hamidjonhamidov.cvforkhamidjon.util.ApiResponseHandler
 import com.hamidjonhamidov.cvforkhamidjon.util.ApiResult
 import com.hamidjonhamidov.cvforkhamidjon.util.DataState
@@ -226,15 +224,188 @@ constructor(
     override fun getAchievements(
         stateEvent: StateEvent,
         isNetworkAvailable: Boolean
-    ): Flow<DataState<MainViewState>> {
-        TODO("Not yet implemented")
+    ): Flow<DataState<MainViewState>> = flow {
+        var response: ApiResult<List<AchievementRemoteModel>?> =
+            ApiResult.GenericError(
+                null,
+                NetworkConstants.NETWORK_ERROR_NO_INTERNET
+            ) // set it to network error no internet available default
+
+
+        if (isNetworkAvailable)
+            response =
+                safeApiCall(Dispatchers.IO) { apiService.getAchievementsSync() } // if internet is available request from internet
+
+        var cacheRepsonse: List<AchievementModel>? =
+            listOf() // set cache response default to empty list
+
+        // if there has been some error from internet try to receive it from cache
+        if (response is ApiResult.GenericError) {
+            cacheRepsonse = withContext(Dispatchers.IO) {
+                appDatabase.getAchievementsDao().getAllAchievements()
+            }
+        }
+
+        val result = withContext(Dispatchers.Default) {
+            object : ApiResponseHandler<MainViewState, AchievementRemoteModel, AchievementModel>(
+                response,
+                stateEvent,
+                cacheRepsonse
+            ) {
+                override fun handleNetworkSuccessCacheSuccess(
+                    stateEvent: StateEvent,
+                    remoteResponse: List<AchievementRemoteModel>
+                ): DataState<MainViewState> {
+                    val achievementList = remoteResponse.map { it.convertToAchievmentModel() }
+
+                    GlobalScope.launch((Dispatchers.IO)) {
+                        appDatabase.getAchievementsDao().insertManyAndReplace(achievementList)
+                    }
+                    return DataState(
+                        toFragment = stateEvent.toString(),
+                        data = MainViewState(
+                            achievementsFragmentView = AchievementsFragmentView(achievementList)
+                        ),
+                        message = MESSAGE_NETWORK_SUCCESS_CACHE_SUCCESSS.copy()
+                    )
+                }
+
+                override fun handleNetworkTimeoutCacheSuccess(
+                    stateEvent: StateEvent,
+                    cacheResponseObject: List<AchievementModel>
+                ): DataState<MainViewState> {
+                    return DataState(
+                        toFragment = stateEvent.toString(),
+                        data = MainViewState(
+                            achievementsFragmentView = AchievementsFragmentView(cacheResponseObject)
+                        ),
+                        message = MESSSAGE_NETWORK_TIMEOUT_CACHE_SUCCESS
+                    )
+                }
+
+                override fun handleNoInternetCacheSuccess(
+                    stateEvent: StateEvent,
+                    cacheResponseObject: List<AchievementModel>
+                ): DataState<MainViewState> {
+                    return DataState(
+                        toFragment = stateEvent.toString(),
+                        data = MainViewState(
+                            achievementsFragmentView = AchievementsFragmentView(cacheResponseObject)
+                        ),
+                        message = MESSAGE_NO_INTERNET_CACHE_SUCCESS
+                    )
+                }
+
+                override fun handleNetworkFailureCacheSuccess(
+                    stateEvent: StateEvent,
+                    cacheResponseObject: List<AchievementModel>
+                ): DataState<MainViewState> {
+                    return DataState(
+                        toFragment = stateEvent.toString(),
+                        data = MainViewState(
+                            achievementsFragmentView = AchievementsFragmentView(cacheResponseObject)
+                        ),
+                        message = MESSAGE_NETWORK_ERROR_CACHE_SUCCESS
+                    )
+                }
+            }.result
+        }
+
+        emit(result)
+
     }
 
     override fun getProjects(
         stateEvent: StateEvent,
         isNetworkAvailable: Boolean
-    ): Flow<DataState<MainViewState>> {
-        TODO("Not yet implemented")
+    ): Flow<DataState<MainViewState>> = flow{
+
+        var response: ApiResult<List<ProjectsRemoteModel>?> =
+            ApiResult.GenericError(
+                null,
+                NetworkConstants.NETWORK_ERROR_NO_INTERNET
+            ) // set it to network error no internet available default
+
+
+        if (isNetworkAvailable)
+            response =
+                safeApiCall(Dispatchers.IO) { apiService.getProjectsSync() } // if internet is available request from internet
+
+        var cacheRepsonse: List<ProjectModel>? =
+            listOf() // set cache response default to empty list
+
+        // if there has been some error from internet try to receive it from cache
+        if (response is ApiResult.GenericError) {
+            cacheRepsonse =
+                withContext(Dispatchers.IO) { appDatabase.getProjectsDao().getAllProjects() }
+        }
+
+        val result = withContext(Dispatchers.Default) {
+            object : ApiResponseHandler<MainViewState, ProjectsRemoteModel, ProjectModel>(
+                response,
+                stateEvent,
+                cacheRepsonse
+            ) {
+                override fun handleNetworkSuccessCacheSuccess(
+                    stateEvent: StateEvent,
+                    remoteResponse: List<ProjectsRemoteModel>
+                ): DataState<MainViewState> {
+                    val projectList = remoteResponse.map { it.convertToProjectModel() }
+
+                    GlobalScope.launch((Dispatchers.IO)) {
+                        appDatabase.getProjectsDao().insertManyAndReplace(projectList)
+                    }
+                    return DataState(
+                        toFragment = stateEvent.toString(),
+                        data = MainViewState(
+                            projectsFragmentView = ProjectsFragmentView(projectList)
+                        ),
+                        message = MESSAGE_NETWORK_SUCCESS_CACHE_SUCCESSS.copy()
+                    )
+                }
+
+                override fun handleNetworkTimeoutCacheSuccess(
+                    stateEvent: StateEvent,
+                    cacheResponseObject: List<ProjectModel>
+                ): DataState<MainViewState> {
+                    return DataState(
+                        toFragment = stateEvent.toString(),
+                        data = MainViewState(
+                            projectsFragmentView = ProjectsFragmentView(cacheResponseObject)
+                        ),
+                        message = MESSSAGE_NETWORK_TIMEOUT_CACHE_SUCCESS
+                    )
+                }
+
+                override fun handleNoInternetCacheSuccess(
+                    stateEvent: StateEvent,
+                    cacheResponseObject: List<ProjectModel>
+                ): DataState<MainViewState> {
+                    return DataState(
+                        toFragment = stateEvent.toString(),
+                        data = MainViewState(
+                            projectsFragmentView = ProjectsFragmentView(cacheResponseObject)
+                        ),
+                        message = MESSAGE_NO_INTERNET_CACHE_SUCCESS
+                    )
+                }
+
+                override fun handleNetworkFailureCacheSuccess(
+                    stateEvent: StateEvent,
+                    cacheResponseObject: List<ProjectModel>
+                ): DataState<MainViewState> {
+                    return DataState(
+                        toFragment = stateEvent.toString(),
+                        data = MainViewState(
+                            projectsFragmentView = ProjectsFragmentView(cacheResponseObject)
+                        ),
+                        message = MESSAGE_NETWORK_ERROR_CACHE_SUCCESS
+                    )
+                }
+            }.result
+        }
+
+        emit(result)
     }
 
 }

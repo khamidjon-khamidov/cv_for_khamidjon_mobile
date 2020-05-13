@@ -1,13 +1,11 @@
 package com.hamidjonhamidov.cvforkhamidjon.data_requests.api
 
 import com.hamidjonhamidov.cvforkhamidjon.models.api.main.AboutMeRemoteModel
-import com.hamidjonhamidov.cvforkhamidjon.models.api.main.AchievementsRemoteModel
+import com.hamidjonhamidov.cvforkhamidjon.models.api.main.AchievementRemoteModel
 import com.hamidjonhamidov.cvforkhamidjon.models.api.main.ProjectsRemoteModel
 import com.hamidjonhamidov.cvforkhamidjon.models.api.main.SkillRemoteModel
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.Education
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.Honor
-import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.ProjectModel
-import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.SkillModel
 
 object ActualModelsInServer {
 
@@ -24,7 +22,7 @@ object ActualModelsInServer {
         "I am an enthusiastic Android and Junior Web Developer who is keen on learning and working with a friendly team."
     )
 
-    val ACHIEVEMENT2INSERVER = AchievementsRemoteModel(
+    val ACHIEVEMENT2INSERVER = AchievementRemoteModel(
         2003,
         "Others",
         listOf(

@@ -2,6 +2,7 @@ package com.hamidjonhamidov.cvforkhamidjon.models.api.main
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.ProjectModel
 
 
 data class ProjectsRemoteModel(
@@ -29,3 +30,21 @@ data class ProjectsRemoteModel(
     @Expose
     var projectGitLink: String = "......"
 )
+
+fun ProjectsRemoteModel.convertToProjectModel() =
+    ProjectModel(
+        projectId,
+        projectTime,
+        projectTitle,
+        projectDes,
+        projectLink,
+        projectGitLink
+    )
+
+
+
+
+
+
+
+

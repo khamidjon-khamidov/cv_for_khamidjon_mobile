@@ -7,14 +7,13 @@ import com.hamidjonhamidov.cvforkhamidjon.data_requests.api.ActualModelsInServer
 import com.hamidjonhamidov.cvforkhamidjon.data_requests.api.ActualModelsInServer.SKILL7INSERVER
 import com.hamidjonhamidov.cvforkhamidjon.data_requests.api.main.MainApiService
 import com.hamidjonhamidov.cvforkhamidjon.models.api.main.AboutMeRemoteModel
-import com.hamidjonhamidov.cvforkhamidjon.models.api.main.AchievementsRemoteModel
+import com.hamidjonhamidov.cvforkhamidjon.models.api.main.AchievementRemoteModel
 import com.hamidjonhamidov.cvforkhamidjon.models.api.main.ProjectsRemoteModel
 import com.hamidjonhamidov.cvforkhamidjon.models.api.main.SkillRemoteModel
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.API_URLS.BASE_URL
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
-import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -69,7 +68,7 @@ class MainApiServiceTest {
     @Test
     fun getAchievementsRemoteModel_requestAchievements_assertEqual() = runBlocking {
         // arrange
-        var achievementsList = listOf<AchievementsRemoteModel>()
+        var achievementsList = listOf<AchievementRemoteModel>()
 
         // act
         withContext(Dispatchers.IO) {
