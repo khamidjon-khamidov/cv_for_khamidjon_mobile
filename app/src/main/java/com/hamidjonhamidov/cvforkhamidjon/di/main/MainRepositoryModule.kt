@@ -20,19 +20,14 @@ object MainRepositoryModule {
             .build()
             .create(MainApiService::class.java)
 
-    @JvmSuppressWildcards
-    @MainScope
-    @Provides
-    fun getBaseRepository() = Repository()
 
     @JvmStatic
     @MainScope
     @Provides
     fun provideMainRepository(
         apiService: MainApiService,
-        appDatabase: AppDatabase,
-        repository: Repository
+        appDatabase: AppDatabase
     ): MainRepository =
 
-        MainRepositoryImpl(apiService, appDatabase, repository)
+        MainRepositoryImpl(apiService, appDatabase)
 }

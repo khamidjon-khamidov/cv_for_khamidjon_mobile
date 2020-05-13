@@ -15,5 +15,4 @@ interface MainRepository {
 
     fun getProjects(stateEvent: StateEvent, isNetworkAvailable: Boolean): Flow<DataState<MainViewState>>
 
-
 }

@@ -1,13 +1,11 @@
 package com.hamidjonhamidov.cvforkhamidjon.repository
 
 import com.hamidjonhamidov.cvforkhamidjon.util.ApiResult
-import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetwrokConstants.NETWORK_ERROR_TIMEOUT
-import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetwrokConstants.NETWORK_TIMEOUT
-import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetwrokConstants.UNKNOWN_ERROR
+import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.NETWORK_ERROR_TIMEOUT
+import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.NETWORK_ERROR_FAILURE
 import kotlinx.coroutines.*
 import okhttp3.ResponseBody
 import org.junit.Before
-
 import org.junit.Assert.*
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -22,7 +20,7 @@ class RepositoryTest {
 
     @Before
     fun setUp() {
-        SUT = Repository()
+        SUT = object : Repository() {}
     }
 
     @Test
@@ -104,7 +102,7 @@ class RepositoryTest {
         assertEquals(true, response is ApiResult.GenericError)
         response as ApiResult.GenericError
         assertEquals(response.code, null)
-        assertEquals(response.errorMessage, UNKNOWN_ERROR)
+        assertEquals(response.errorMessage, NETWORK_ERROR_FAILURE)
     }
 }
 

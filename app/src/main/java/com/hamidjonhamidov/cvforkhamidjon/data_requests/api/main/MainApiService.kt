@@ -11,7 +11,7 @@ import com.hamidjonhamidov.cvforkhamidjon.util.constants.API_URLS.GET_PROJECTS_P
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.API_URLS.GET_SKILLS_PATH
 import retrofit2.http.GET
 
-interface MainApiService{
+interface MainApiService {
 
     @GET(GET_ABOUTME_PATH)
     suspend fun getAboutMeSync(): List<AboutMeRemoteModel>

@@ -2,6 +2,7 @@ package com.hamidjonhamidov.cvforkhamidjon.models.api.main
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.AboutMeModel
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.Education
 import kotlinx.android.parcel.RawValue
 
@@ -35,3 +36,19 @@ data class AboutMeRemoteModel (
     @Expose
     var description: String = "Couldn't Load"
 )
+
+fun AboutMeRemoteModel.convertToAboutMeModel() =
+    AboutMeModel(
+        dateOfBirth,
+        address,
+        email,
+        phone,
+        education,
+        pictureLink,
+        description
+    )
+
+
+
+
+

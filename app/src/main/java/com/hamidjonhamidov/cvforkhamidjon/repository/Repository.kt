@@ -3,10 +3,11 @@ package com.hamidjonhamidov.cvforkhamidjon.repository
 import com.hamidjonhamidov.cvforkhamidjon.util.ApiResult
 import com.hamidjonhamidov.cvforkhamidjon.util.ApiResult.GenericError
 import com.hamidjonhamidov.cvforkhamidjon.util.ApiResult.Success
-import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetwrokConstants.NETWORK_DELAY
-import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetwrokConstants.NETWORK_ERROR_TIMEOUT
-import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetwrokConstants.NETWORK_TIMEOUT
-import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetwrokConstants.UNKNOWN_ERROR
+import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.NETWORK_DELAY
+import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.NETWORK_ERROR_TIMEOUT
+import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.NETWORK_ERROR_FAILURE
+import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.NETWORK_SUCCESS
+import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.NETWORK_TIMEOUT
 import kotlinx.coroutines.*
 import retrofit2.HttpException
 
@@ -15,60 +16,36 @@ import retrofit2.HttpException
  * codingwithmitch.com
  */
 
-open class Repository
+abstract class Repository {
 
-suspend fun <T> Repository.safeApiCall(
-    dispatcher: CoroutineDispatcher,
-    apiCall: suspend () -> T?
-): ApiResult<T?> =
-    withContext(dispatcher) {
-        try {
-            withTimeout(NETWORK_TIMEOUT) {
-                delay(NETWORK_DELAY)
-                Success(apiCall.invoke())
-            }
-
-        } catch (throwable: Throwable) {
-
-            when (throwable) {
-                is TimeoutCancellationException -> {
-                    val code = 408 // timeout error
-                    GenericError(code, NETWORK_ERROR_TIMEOUT)
+    suspend fun <T> safeApiCall(
+        dispatcher: CoroutineDispatcher,
+        apiCall: suspend () -> T?
+    ): ApiResult<T?> =
+        withContext(dispatcher) {
+            try {
+                withTimeout(NETWORK_TIMEOUT) {
+                    delay(NETWORK_DELAY)
+                    Success(apiCall.invoke(), NETWORK_SUCCESS)
                 }
 
-                is HttpException -> {
-                    val code = throwable.code()
-                    val errorReponse = convertErrorBody(throwable)
-                    GenericError(code, errorReponse)
-                }
+            } catch (throwable: Throwable) {
 
-                else -> {
-                    GenericError(null, UNKNOWN_ERROR)
+                when (throwable) {
+                    is TimeoutCancellationException -> {
+                        val code = 408 // timeout error
+                        GenericError(code, NETWORK_ERROR_TIMEOUT)
+                    }
+
+                    is HttpException -> {
+                        val code = throwable.code()
+                        GenericError(code, NETWORK_ERROR_FAILURE)
+                    }
+
+                    else -> {
+                        GenericError(null, NETWORK_ERROR_FAILURE)
+                    }
                 }
             }
         }
-    }
-
-private fun convertErrorBody(throwable: HttpException): String? {
-    return try {
-        throwable.response()?.errorBody()?.toString()
-    } catch (exception: Exception) {
-        UNKNOWN_ERROR
-    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
