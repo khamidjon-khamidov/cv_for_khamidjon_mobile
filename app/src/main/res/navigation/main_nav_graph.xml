@@ -10,4 +10,30 @@
         android:name="com.hamidjonhamidov.cvforkhamidjon.ui.main.home.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/aboutMeFragment"
+        android:name="com.hamidjonhamidov.cvforkhamidjon.ui.main.aboutme.AboutMeFragment"
+        android:label="fragment_about_me"
+        tools:layout="@layout/fragment_about_me" />
+    <fragment
+        android:id="@+id/mySkillsFragment"
+        android:name="com.hamidjonhamidov.cvforkhamidjon.ui.main.myskills.MySkillsFragment"
+        android:label="fragment_my_skills"
+        tools:layout="@layout/fragment_my_skills" />
+    <fragment
+        android:id="@+id/achievementsFragment"
+        android:name="com.hamidjonhamidov.cvforkhamidjon.ui.main.achievements.AchievementsFragment"
+        android:label="fragment_achievements"
+        tools:layout="@layout/fragment_achievements" />
+    <fragment
+        android:id="@+id/aboutAppFragment"
+        android:name="com.hamidjonhamidov.cvforkhamidjon.ui.main.aboutapp.AboutAppFragment"
+        android:label="fragment_about_app"
+        tools:layout="@layout/fragment_about_app" />
+    <fragment
+        android:id="@+id/notificationsFragment"
+        android:name="com.hamidjonhamidov.cvforkhamidjon.ui.main.notifications.NotificationsFragment"
+        android:label="fragment_notifications"
+        tools:layout="@layout/fragment_notifications" />
 </navigation>

@@ -1,4 +1,4 @@
-package com.hamidjonhamidov.cvforkhamidjon.di
+package com.hamidjonhamidov.cvforkhamidjon.di_test
 
 import androidx.lifecycle.ViewModel
 import dagger.MapKey
@@ -6,4 +6,4 @@ import kotlin.reflect.KClass
 
 @MapKey
 @Target(AnnotationTarget.FUNCTION)
-annotation class ViewModeKey(val value: KClass<out ViewModel>)
+annotation class ViewModelKey(val value: KClass<out ViewModel>)

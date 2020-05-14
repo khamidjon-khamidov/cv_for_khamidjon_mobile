@@ -1,8 +1,6 @@
-package com.hamidjonhamidov.cvforkhamidjon.di.main
+package com.hamidjonhamidov.cvforkhamidjon.di_test.main_subcomponent
 
-import com.hamidjonhamidov.cvforkhamidjon.fragment_builders.main.MainNavHostFragment
 import dagger.Module
-import dagger.Provides
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 

@@ -2,7 +2,7 @@ package com.hamidjonhamidov.cvforkhamidjon.repository.main
 
 import com.hamidjonhamidov.cvforkhamidjon.data_requests.api.main.MainApiService
 import com.hamidjonhamidov.cvforkhamidjon.data_requests.persistence.AppDatabase
-import com.hamidjonhamidov.cvforkhamidjon.di.main.MainScope
+import com.hamidjonhamidov.cvforkhamidjon.di_test.main_subcomponent.MainActivityScope
 import com.hamidjonhamidov.cvforkhamidjon.models.api.main.*
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.AboutMeModel
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.AchievementModel
@@ -28,7 +28,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-@MainScope
+@MainActivityScope
 class MainRepositoryImpl
 @Inject
 constructor(

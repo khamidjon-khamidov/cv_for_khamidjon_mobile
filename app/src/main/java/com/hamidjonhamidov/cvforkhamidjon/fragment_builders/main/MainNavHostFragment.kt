@@ -4,8 +4,8 @@ import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.FragmentFactory
 import androidx.navigation.fragment.NavHostFragment
-import com.hamidjonhamidov.cvforkhamidjon.BaseApplication
-import dagger.android.support.AndroidSupportInjection
+import com.hamidjonhamidov.cvforkhamidjon.MyApplication
+import com.hamidjonhamidov.cvforkhamidjon.ui.main.MainActivity
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import javax.inject.Inject
@@ -21,7 +21,8 @@ class MainNavHostFragment : NavHostFragment() {
 
 
     override fun onAttach(context: Context) {
-        AndroidSupportInjection
+        (activity as MainActivity)
+            .mainComponent
             .inject(this)
 
         super.onAttach(context)

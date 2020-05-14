@@ -1,9 +1,9 @@
-package com.hamidjonhamidov.cvforkhamidjon.di.main
+package com.hamidjonhamidov.cvforkhamidjon.di_test.main_subcomponent
 
 import androidx.fragment.app.FragmentFactory
 import com.hamidjonhamidov.cvforkhamidjon.fragment_builders.main.MainFragmentFactory
 import com.hamidjonhamidov.cvforkhamidjon.util.glide.GlideManager
-import com.hamidjonhamidov.cvforkhamidjon.viewmodelfactory.ViewModelProviderFactory
+import com.hamidjonhamidov.cvforkhamidjon.viewmodelfactory.MainViewModelFactory
 import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -15,12 +15,12 @@ import kotlinx.coroutines.InternalCoroutinesApi
 object MainFragmentModule {
 
     @JvmStatic
-    @MainScope
+    @MainActivityScope
     @Provides
     fun provideMainFragmentFactory(
-        viewModelFactory: ViewModelProviderFactory,
+        mainViewModelFactory: MainViewModelFactory,
         glideManager: GlideManager
     )
-            : FragmentFactory  =
-        MainFragmentFactory(viewModelFactory, glideManager)
+            : FragmentFactory =
+        MainFragmentFactory(mainViewModelFactory, glideManager)
 }

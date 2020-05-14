@@ -63,11 +63,6 @@ dependencies {
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
     kaptAndroidTest "com.google.dagger:dagger-compiler:$dagger_version"
 
-    // Dagger Android
-    implementation "com.google.dagger:dagger-android:$dagger_version"
-    implementation "com.google.dagger:dagger-android-support:$dagger_version"
-    kapt "com.google.dagger:dagger-android-processor:$dagger_version"
-
     // jetpack navigation components
     def nav_version = "2.3.0-alpha06"
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
@@ -123,4 +118,8 @@ dependencies {
     // mockito testing
     testImplementation 'org.mockito:mockito-inline:2.8.47'
     testImplementation 'com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0-RC3'
+
+    // circle image view
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+//
 }

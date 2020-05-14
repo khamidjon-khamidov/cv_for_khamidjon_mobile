@@ -1,8 +1,7 @@
-package com.hamidjonhamidov.cvforkhamidjon.di.main
+package com.hamidjonhamidov.cvforkhamidjon.di_test.main_subcomponent
 
 import com.hamidjonhamidov.cvforkhamidjon.data_requests.api.main.MainApiService
 import com.hamidjonhamidov.cvforkhamidjon.data_requests.persistence.AppDatabase
-import com.hamidjonhamidov.cvforkhamidjon.repository.Repository
 import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepository
 import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImpl
 import dagger.Module
@@ -13,7 +12,7 @@ import retrofit2.Retrofit
 object MainRepositoryModule {
 
     @JvmStatic
-    @MainScope
+    @MainActivityScope
     @Provides
     fun provideApiService(retrofitBuilder: Retrofit.Builder): MainApiService =
         retrofitBuilder
@@ -22,7 +21,7 @@ object MainRepositoryModule {
 
 
     @JvmStatic
-    @MainScope
+    @MainActivityScope
     @Provides
     fun provideMainRepository(
         apiService: MainApiService,

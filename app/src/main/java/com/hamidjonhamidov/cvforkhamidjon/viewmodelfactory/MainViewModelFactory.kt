@@ -2,13 +2,14 @@ package com.hamidjonhamidov.cvforkhamidjon.viewmodelfactory
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.hamidjonhamidov.cvforkhamidjon.di_test.main_subcomponent.MainActivityScope
 import javax.inject.Inject
 import javax.inject.Provider
 import javax.inject.Singleton
 
 
-@Singleton
-class ViewModelProviderFactory
+@MainActivityScope
+class MainViewModelFactory
 @Inject
 constructor(
     private val creators: Map<Class<out ViewModel>, @JvmSuppressWildcards Provider<ViewModel>>
