@@ -30,7 +30,8 @@ object MainRepositoryImplTestConstants {
             Education("edu 2", "link2")
         ),
         "nonsense picture link",
-        "nonsense description"
+        "nonsense description",
+        "nonsense cv link"
     )
 
     val ABOUTME_MODEL = AboutMeModel(
@@ -43,7 +44,8 @@ object MainRepositoryImplTestConstants {
             Education("edu 2", "link2")
         ),
         "nonsense picture link",
-        "nonsense description"
+        "nonsense description",
+        "nonsense cv link"
     )
 
 

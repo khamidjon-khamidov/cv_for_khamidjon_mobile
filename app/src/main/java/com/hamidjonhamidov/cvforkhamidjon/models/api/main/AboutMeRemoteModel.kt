@@ -30,12 +30,17 @@ data class AboutMeRemoteModel (
 
     @SerializedName("pictureLink")
     @Expose
-    var pictureLink: String = "Couldn't Load",
+    var pictureLink: String = "",
 
     @SerializedName("description")
     @Expose
-    var description: String = "Couldn't Load"
+    var description: String = "",
+
+    @SerializedName("cvLink")
+    @Expose
+    var cvLink: String = ""
 )
+
 
 fun AboutMeRemoteModel.convertToAboutMeModel() =
     AboutMeModel(
@@ -45,10 +50,6 @@ fun AboutMeRemoteModel.convertToAboutMeModel() =
         phone,
         education,
         pictureLink,
-        description
+        description,
+        cvLink
     )
-
-
-
-
-
