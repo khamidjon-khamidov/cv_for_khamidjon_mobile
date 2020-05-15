@@ -4,8 +4,10 @@ import com.hamidjonhamidov.cvforkhamidjon.fragment_builders.main.MainNavHostFrag
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.MainActivity
 import dagger.Subcomponent
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.InternalCoroutinesApi
 
+@FlowPreview
 @InternalCoroutinesApi
 @ExperimentalCoroutinesApi
 @MainActivityScope

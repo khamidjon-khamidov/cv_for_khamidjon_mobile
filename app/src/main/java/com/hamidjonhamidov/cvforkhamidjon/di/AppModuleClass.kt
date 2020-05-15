@@ -1,6 +1,7 @@
 package com.hamidjonhamidov.cvforkhamidjon.di
 
 import android.app.Application
+import android.preference.PreferenceManager
 import androidx.room.Room
 import com.bumptech.glide.Glide
 import com.hamidjonhamidov.cvforkhamidjon.data_requests.persistence.AppDatabase
@@ -12,7 +13,7 @@ import dagger.Provides
 import javax.inject.Singleton
 
 @Module
-class AppModule{
+class AppModuleClass{
 
     @Singleton
     @Provides
