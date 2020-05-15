@@ -25,7 +25,7 @@ abstract class ApiResponseHandler<ViewState, RemoteResponseObject, CacheResponse
                             handleNetworkFailureCacheSuccess(stateEvent, cacheResponseObject)
                         } else {
                             DataState(
-                                toFragment = stateEvent.toString(),
+                                toFragment = stateEvent.toFragment,
                                 message = MESSAGE_NETWORK_ERROR_CACHE_EMPTY.copy()
                             )
                         }
@@ -36,7 +36,7 @@ abstract class ApiResponseHandler<ViewState, RemoteResponseObject, CacheResponse
                             handleNoInternetCacheSuccess(stateEvent, cacheResponseObject)
                         } else {
                             DataState(
-                                toFragment = stateEvent.toString(),
+                                toFragment = stateEvent.toFragment,
                                 message = MESSAGE_NO_INTERNET_CACHE_EMPTY.copy()
                             )
                         }
@@ -47,14 +47,14 @@ abstract class ApiResponseHandler<ViewState, RemoteResponseObject, CacheResponse
                             handleNetworkTimeoutCacheSuccess(stateEvent, cacheResponseObject)
                         } else {
                             DataState(
-                                toFragment = stateEvent.toString(),
+                                toFragment = stateEvent.toFragment,
                                 message = MESSAGE_NETWORK_TIMEOUT_CACHE_EMPTY
                             )
                         }
                     }
 
                     else -> DataState(
-                        toFragment = stateEvent.toString(),
+                        toFragment = stateEvent.toFragment,
                         message = MESSAGE_NETWORK_ERROR_CACHE_EMPTY
                     )
                 }

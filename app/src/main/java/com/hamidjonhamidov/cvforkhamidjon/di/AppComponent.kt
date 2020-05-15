@@ -1,41 +1,33 @@
 package com.hamidjonhamidov.cvforkhamidjon.di
 
 import android.app.Application
-import com.hamidjonhamidov.cvforkhamidjon.BaseApplication
-import com.hamidjonhamidov.cvforkhamidjon.di.main.MainFragmentModule
-import com.hamidjonhamidov.cvforkhamidjon.di.main.MainRepositoryModule
-import com.hamidjonhamidov.cvforkhamidjon.fragment_builders.main.MainNavHostFragment
+import com.hamidjonhamidov.cvforkhamidjon.di.main_subcomponent.MainComponent
 import com.hamidjonhamidov.cvforkhamidjon.util.NetworkConnection
 import dagger.BindsInstance
 import dagger.Component
-import dagger.android.AndroidInjectionModule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import javax.inject.Singleton
+
 
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
 @Singleton
 @Component(
     modules = [
-        AndroidInjectionModule::class,
         InternalVariablesModule::class,
         AppModule::class,
-        ActivityBuildersModule::class,
-        ViewModelFactoryModule::class
+        AppSubcomponents::class
     ]
 )
 interface AppComponent {
 
     val networkConnection: NetworkConnection
 
-    @Component.Builder
-    interface Builder {
-        @BindsInstance
-        fun application(application: Application): Builder
-
-        fun build(): AppComponent
+    @Component.Factory
+    interface Factory {
+        fun create(@BindsInstance app: Application): AppComponent
     }
 
-    fun inject(app: BaseApplication)
+    fun mainComponent(): MainComponent.Factory
 }

@@ -4,9 +4,9 @@ import android.app.Application
 import androidx.room.Room
 import com.bumptech.glide.Glide
 import com.hamidjonhamidov.cvforkhamidjon.data_requests.persistence.AppDatabase
+import com.hamidjonhamidov.cvforkhamidjon.util.constants.DATABASE_CONSTANTS
 import com.hamidjonhamidov.cvforkhamidjon.util.glide.GlideManager
 import com.hamidjonhamidov.cvforkhamidjon.util.glide.GlideRequestManager
-import com.hamidjonhamidov.cvforkhamidjon.util.constants.DATABASE_CONSTANTS
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton

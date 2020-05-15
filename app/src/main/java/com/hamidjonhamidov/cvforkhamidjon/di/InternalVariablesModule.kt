@@ -2,7 +2,7 @@ package com.hamidjonhamidov.cvforkhamidjon.di
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.hamidjonhamidov.cvforkhamidjon.util.constants.API_URLS.BASE_URL
+import com.hamidjonhamidov.cvforkhamidjon.util.constants.API_URLS
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
@@ -25,7 +25,7 @@ object InternalVariablesModule {
     @Provides
     fun provideRetrofitBuilder(gsonBuilder: Gson): Retrofit.Builder =
         Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(API_URLS.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create(gsonBuilder))
 
 }

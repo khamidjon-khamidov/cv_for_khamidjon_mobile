@@ -2,36 +2,30 @@ package com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state
 
 import com.hamidjonhamidov.cvforkhamidjon.util.StateEvent
 
-sealed class MainStateEvent: StateEvent {
+sealed class MainStateEvent : StateEvent {
 
-    class GetHome(): MainStateEvent(){
-
-        override fun toString(): String {
-            return "GetHome"
-        }
+    class GetHome() : MainStateEvent() {
+        override val toFragment: String
+            get() = "GetHome"
     }
 
     class GetAboutMe() : MainStateEvent() {
-        override fun toString(): String {
-            return "GetAboutMe"
-        }
+        override val toFragment: String
+            get() = "GetAboutMe"
     }
 
-    class GetMySkills(): MainStateEvent(){
-        override fun toString(): String {
-            return "GetMySkills"
-        }
+    class GetMySkills() : MainStateEvent() {
+        override val toFragment: String
+            get() = "GetMySkills"
     }
 
-    class GetAchievements(): MainStateEvent(){
-        override fun toString(): String {
-            return "GetAchievements"
-        }
+    class GetAchievements() : MainStateEvent() {
+        override val toFragment: String
+            get() = "GetAchievements"
     }
 
-    class GetProjects(): MainStateEvent(){
-        override fun toString(): String {
-            return "GetProjects"
-        }
+    class GetProjects() : MainStateEvent() {
+        override val toFragment: String
+            get() = "GetProjects"
     }
 }

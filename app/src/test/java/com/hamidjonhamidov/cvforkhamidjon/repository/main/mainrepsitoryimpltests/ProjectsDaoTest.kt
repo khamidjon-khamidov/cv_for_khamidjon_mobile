@@ -38,7 +38,8 @@ import org.mockito.MockitoAnnotations
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
 @RunWith(JUnit4::class)
-class ProjectsDaoTest {
+class
+ProjectsDaoTest {
 
     private val TAG = "UnitTesting"
 
