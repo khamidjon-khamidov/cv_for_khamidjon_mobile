@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="social_icon_height">25dp</dimen>
+    <dimen name="social_icon_width">25dp</dimen>
+    <dimen name="social_icon_textsize">10sp</dimen>
+
+</resources>

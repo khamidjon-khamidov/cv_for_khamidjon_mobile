@@ -11,5 +11,6 @@
     <color name="color3">#fac100</color>
     <color name="color4">#ff5500</color>
     <color name="white">#fff</color>
+    <color name="text_grey">#939C9D</color>
 
 </resources>

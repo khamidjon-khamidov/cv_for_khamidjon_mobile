@@ -31,20 +31,7 @@ class MainViewModel
 constructor(
     private val mainRepository: MainRepository,
     private val networkConnection: NetworkConnection
-) : ViewModel() {
-
-    private val dataChannel = ConflatedBroadcastChannel<DataState<MainViewState>>()
-
-    private val _viewState: MutableLiveData<MainViewState> = MutableLiveData()
-
-    val viewState: LiveData<MainViewState>
-        get() = _viewState
-
-    val messages = HashMap<String, MutableLiveData<Message?>>()
-
-    fun setViewState(newViewState: MainViewState) {
-        _viewState.value = newViewState
-    }
+) : BaseMainViewModel() {
 
     init {
         setUpChannel()
