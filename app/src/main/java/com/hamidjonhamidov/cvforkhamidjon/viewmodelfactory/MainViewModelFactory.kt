@@ -2,10 +2,9 @@ package com.hamidjonhamidov.cvforkhamidjon.viewmodelfactory
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.hamidjonhamidov.cvforkhamidjon.di_test.main_subcomponent.MainActivityScope
+import com.hamidjonhamidov.cvforkhamidjon.di.main_subcomponent.MainActivityScope
 import javax.inject.Inject
 import javax.inject.Provider
-import javax.inject.Singleton
 
 
 @MainActivityScope

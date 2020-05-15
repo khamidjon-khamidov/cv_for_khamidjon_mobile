@@ -1,4 +1,4 @@
-package com.hamidjonhamidov.cvforkhamidjon.di_test
+package com.hamidjonhamidov.cvforkhamidjon.di
 
 import android.app.Application
 import androidx.room.Room

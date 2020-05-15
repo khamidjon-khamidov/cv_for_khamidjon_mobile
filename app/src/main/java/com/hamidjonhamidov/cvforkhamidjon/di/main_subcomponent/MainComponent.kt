@@ -1,9 +1,7 @@
-package com.hamidjonhamidov.cvforkhamidjon.di_test.main_subcomponent
+package com.hamidjonhamidov.cvforkhamidjon.di.main_subcomponent
 
-import android.app.Application
 import com.hamidjonhamidov.cvforkhamidjon.fragment_builders.main.MainNavHostFragment
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.MainActivity
-import dagger.BindsInstance
 import dagger.Subcomponent
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi

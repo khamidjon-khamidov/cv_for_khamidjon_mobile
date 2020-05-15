@@ -4,7 +4,7 @@
     android:id="@+id/achievements_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.main.achievements.AchievementsFragment">
+    tools:context=".ui.main.d_achievements.AchievementsFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView

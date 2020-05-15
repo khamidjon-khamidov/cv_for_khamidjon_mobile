@@ -1,4 +1,4 @@
-package com.hamidjonhamidov.cvforkhamidjon.ui.main.achievements
+package com.hamidjonhamidov.cvforkhamidjon.ui.main.d_achievements
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

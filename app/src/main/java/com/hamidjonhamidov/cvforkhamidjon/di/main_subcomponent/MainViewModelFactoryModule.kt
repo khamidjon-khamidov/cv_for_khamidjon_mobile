@@ -1,8 +1,8 @@
-package com.hamidjonhamidov.cvforkhamidjon.di_test.main_subcomponent
+package com.hamidjonhamidov.cvforkhamidjon.di.main_subcomponent
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.hamidjonhamidov.cvforkhamidjon.di_test.ViewModelKey
+import com.hamidjonhamidov.cvforkhamidjon.di.ViewModelKey
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.MainViewModel
 import com.hamidjonhamidov.cvforkhamidjon.viewmodelfactory.MainViewModelFactory
 import dagger.Binds

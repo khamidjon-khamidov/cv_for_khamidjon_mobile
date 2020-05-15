@@ -3,7 +3,7 @@ package com.hamidjonhamidov.cvforkhamidjon.util
 data class DataState<T>(
     val toFragment: String,
     val data: T? = null,
-    val message: Message?
+    val message: Message
 ){
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -21,7 +21,7 @@ data class DataState<T>(
     override fun hashCode(): Int {
         var result = toFragment.hashCode()
         result = 31 * result + (data?.hashCode() ?: 0)
-        result = 31 * result + (message?.hashCode() ?: 0)
+        result = 31 * result + message.hashCode()
         return result
     }
 }

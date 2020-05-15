@@ -1,8 +1,8 @@
 package com.hamidjonhamidov.cvforkhamidjon
 
 import android.app.Application
-import com.hamidjonhamidov.cvforkhamidjon.di_test.AppComponent
-import com.hamidjonhamidov.cvforkhamidjon.di_test.DaggerAppComponent
+import com.hamidjonhamidov.cvforkhamidjon.di.AppComponent
+import com.hamidjonhamidov.cvforkhamidjon.di.DaggerAppComponent
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 

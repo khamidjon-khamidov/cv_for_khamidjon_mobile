@@ -1,7 +1,7 @@
-package com.hamidjonhamidov.cvforkhamidjon.di_test
+package com.hamidjonhamidov.cvforkhamidjon.di
 
 import android.app.Application
-import com.hamidjonhamidov.cvforkhamidjon.di_test.main_subcomponent.MainComponent
+import com.hamidjonhamidov.cvforkhamidjon.di.main_subcomponent.MainComponent
 import com.hamidjonhamidov.cvforkhamidjon.util.NetworkConnection
 import dagger.BindsInstance
 import dagger.Component

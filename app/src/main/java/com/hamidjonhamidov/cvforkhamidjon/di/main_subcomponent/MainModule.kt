@@ -1,4 +1,4 @@
-package com.hamidjonhamidov.cvforkhamidjon.di_test.main_subcomponent
+package com.hamidjonhamidov.cvforkhamidjon.di.main_subcomponent
 
 import dagger.Module
 import kotlinx.coroutines.ExperimentalCoroutinesApi

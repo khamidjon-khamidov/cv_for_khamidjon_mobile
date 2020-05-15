@@ -14,16 +14,19 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import com.hamidjonhamidov.cvforkhamidjon.MyApplication
 import com.hamidjonhamidov.cvforkhamidjon.R
-import com.hamidjonhamidov.cvforkhamidjon.di_test.main_subcomponent.MainComponent
+import com.hamidjonhamidov.cvforkhamidjon.di.main_subcomponent.MainComponent
+import com.hamidjonhamidov.cvforkhamidjon.ui.MainUiCommunicationListener
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.InternalCoroutinesApi
 import javax.inject.Inject
 
+@FlowPreview
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), MainUiCommunicationListener {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -33,6 +36,7 @@ class MainActivity : AppCompatActivity() {
     private val navController: NavController by lazy {
         findNavController(R.id.nav_host_fragment)
     }
+
 
     val viewModel: MainViewModel by viewModels {
         viewModelFactory
@@ -48,7 +52,13 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val appBarConfiguration =
-            AppBarConfiguration(navController.graph, drawerLayout = drawer_layout)
+            AppBarConfiguration(setOf(
+                R.id.homeFragment,
+                R.id.aboutMeFragment,
+                R.id.achievementsFragment,
+                R.id.aboutAppFragment,
+                R.id.notificationsFragment
+            ), drawerLayout = drawer_layout)
 
         findViewById<Toolbar>(R.id.main_toolbar)
             .setupWithNavController(navController, appBarConfiguration)
@@ -59,6 +69,7 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)
     }
+
 }
 
 

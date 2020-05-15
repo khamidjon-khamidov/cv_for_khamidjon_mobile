@@ -1,3 +1,5 @@
 package com.hamidjonhamidov.cvforkhamidjon.util
 
-interface StateEvent
+interface StateEvent{
+    val toFragment: String
+}

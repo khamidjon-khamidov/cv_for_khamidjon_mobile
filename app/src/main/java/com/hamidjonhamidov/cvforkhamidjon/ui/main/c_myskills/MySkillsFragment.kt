@@ -1,4 +1,4 @@
-package com.hamidjonhamidov.cvforkhamidjon.ui.main.myskills
+package com.hamidjonhamidov.cvforkhamidjon.ui.main.c_myskills
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

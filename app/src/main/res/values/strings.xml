@@ -13,4 +13,6 @@
     <string name="menu_title_contact">Contact</string>
     <string name="notifications">Notifications</string>
     <string name="exit">Exit</string>
+    <string name="app_details">App Details</string>
+    <string name="ok">OK</string>
 </resources>

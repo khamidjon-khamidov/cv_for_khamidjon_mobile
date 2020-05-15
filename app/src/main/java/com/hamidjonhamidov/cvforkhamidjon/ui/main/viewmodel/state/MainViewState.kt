@@ -5,12 +5,16 @@ import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.AboutMeModel
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.AchievementModel
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.ProjectModel
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.SkillModel
+import com.hamidjonhamidov.cvforkhamidjon.util.MyJob
 import kotlinx.android.parcel.Parcelize
+import kotlinx.android.parcel.RawValue
 
 const val MAIN_VIEW_STATE_BUNDLE_KEY = "com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainViewState"
 
 @Parcelize
 data class MainViewState(
+    var activeJobs: @RawValue HashSet<MyJob> = HashSet(),
+
     var homeFragmentView: HomeFragmentView = HomeFragmentView(),
 
     var aboutMeFragmentView: AboutMeFragmentView = AboutMeFragmentView(),

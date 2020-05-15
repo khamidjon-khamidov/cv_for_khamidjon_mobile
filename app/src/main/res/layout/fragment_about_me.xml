@@ -4,7 +4,7 @@
     android:id="@+id/about_me_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.main.aboutme.AboutMeFragment">
+    tools:context=".ui.main.b_aboutme.AboutMeFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
