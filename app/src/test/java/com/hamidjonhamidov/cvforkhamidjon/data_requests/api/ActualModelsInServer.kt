@@ -21,7 +21,8 @@ object ActualModelsInServer {
             Education("LSBU", "https://www.lsbu.ac.uk/")
         ),
         "https://firebasestorage.googleapis.com/v0/b/who-is-khamidjon.appspot.com/o/hamidjon_improved.png?alt=media&token=3d56b28a-c8aa-43fe-b739-78eb89eca601",
-        "I am an enthusiastic Android and Junior Web Developer who is keen on learning and working with a friendly team."
+        "I am an enthusiastic Android and Junior Web Developer who is keen on learning and working with a friendly team.",
+        "https://firebasestorage.googleapis.com/v0/b/who-is-khamidjon.appspot.com/o/cv%2FCV_Programming.docx?alt=media&token=0ab13a3a-9ad4-4741-a44d-700bb211cad9"
     )
 
     val ACHIEVEMENT2INSERVER = AchievementsRemoteModel(
