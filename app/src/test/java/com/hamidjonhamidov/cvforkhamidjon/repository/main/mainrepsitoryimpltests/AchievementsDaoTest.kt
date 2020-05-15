@@ -6,13 +6,16 @@ import com.hamidjonhamidov.cvforkhamidjon.data_requests.persistence.main.Achieve
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.AchievementModel
 import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImpl
 import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImplTestConstants.ACHIEVEMENT_MODEL_LIST
+import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImplTestConstants.ACHIEVEMENT_REMOTE_MODEL1
+import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImplTestConstants.ACHIEVEMENT_REMOTE_MODEL2
 import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImplTestConstants.ACHIEVEMENT_REMOTE_MODEL_LIST
 import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImplTestConstants.GETACHIEVEMENTS
-import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainStateEvent
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainStateEvent.GetAchievements
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NETWORK_ERROR_CACHE_EMPTY
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NETWORK_ERROR_CACHE_SUCCESS
+import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NETWORK_NOT_ALLOWED_CACHE_EMPTY
+import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NETWORK_NOT_ALLOWED_CACHE_SUCCESS
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NETWORK_SUCCESS_CACHE_SUCCESSS
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NO_INTERNET_CACHE_EMPTY
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NO_INTERNET_CACHE_SUCCESS
@@ -32,6 +35,7 @@ import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
+import java.util.Collections.list
 
 
 @ExperimentalCoroutinesApi
@@ -67,46 +71,51 @@ class AchievementsDaoTest {
 
 
     @Test
-    fun getAchievements_networkAvailableGetAchievementsEvent_achivementsFlowReturned_savedToDb() = runBlocking {
-        // arrange
-        println("Test started")
+    fun getAchievements_networkAvailableGetAchievementsEvent_achivementsFlowReturned_savedToDb() =
+        runBlocking {
+            // arrange
+            println("Test started")
 
-        val shouldToFragment = GETACHIEVEMENTS
-        val shouldAchievevementModelList = ACHIEVEMENT_MODEL_LIST
-        val shouldMessage = MESSAGE_NETWORK_SUCCESS_CACHE_SUCCESSS.copy()
+            val shouldToFragment = GETACHIEVEMENTS
+            val shouldAchievevementModelList = ACHIEVEMENT_MODEL_LIST
+            val shouldMessage = MESSAGE_NETWORK_SUCCESS_CACHE_SUCCESSS.copy()
 
-        `when`(appDatabase.getAchievementsDao())
-            .thenReturn(achievevementsDaoTd)
+            `when`(appDatabase.getAchievementsDao())
+                .thenReturn(achievevementsDaoTd)
 
-        `when`(apiService.getAchievementsSync())
-            .thenReturn(ACHIEVEMENT_REMOTE_MODEL_LIST)
+            `when`(apiService.getAchievementsSync())
+                .thenReturn(ACHIEVEMENT_REMOTE_MODEL_LIST)
 
-        // act
-        val result =
-            SUT.getAchievements(
-                GetAchievements(),
-                true
-            )
+            // act
+            val result =
+                SUT.getAchievements(
+                    GetAchievements(),
+                    true,
+                    true
+                )
 
 
-        // assert
+            // assert
 
-        result.onEach {
-            assertEquals(it.toFragment, shouldToFragment)
-            assertEquals(it.data?.achievementsFragmentView?.achievements, shouldAchievevementModelList)
-            assertEquals(it.message, shouldMessage)
-        }.launchIn(this)
+            result.onEach {
+                assertEquals(it.toFragment, shouldToFragment)
+                assertEquals(
+                    it.data?.achievementsFragmentView?.achievements,
+                    shouldAchievevementModelList
+                )
+                assertEquals(it.message, shouldMessage)
+            }.launchIn(this)
 
-        delay(1000)
-        verify(apiService, times(1)).getAchievementsSync()
-        assertEquals(achievevementsDaoTd.insertManyAndReplaceCalls, 1)
-        assertEquals(achievevementsDaoTd.funCalls, 1)
-        assertEquals(achievevementsDaoTd.inMemoryData.size, 5)
-        Unit
-    }
+            delay(1000)
+            verify(apiService, times(1)).getAchievementsSync()
+            assertEquals(achievevementsDaoTd.insertManyAndReplaceCalls, 1)
+            assertEquals(achievevementsDaoTd.funCalls, 1)
+            assertEquals(achievevementsDaoTd.inMemoryData.size, 5)
+            Unit
+        }
 
     @Test
-    fun getMySkills_networkTimeoutCacheEmpty_returnCachedData() = runBlocking {
+    fun getAchievements_networkTimeoutCacheEmpty_returnCachedData() = runBlocking {
         // arrange
         NetworkConstants.NETWORK_DELAY = 6000 // make network delay long to throw exception
         achievevementsDaoTd.inMemoryData.addAll(ACHIEVEMENT_MODEL_LIST)
@@ -117,6 +126,7 @@ class AchievementsDaoTest {
         // act
         val result = SUT.getAchievements(
             GetAchievements(),
+            true,
             true
         )
 
@@ -139,18 +149,19 @@ class AchievementsDaoTest {
     }
 
     @Test
-    fun getAboutMe_networkTimeOut_cacheEmpty() = runBlocking {
+    fun getAchievements_networkTimeOut_cacheEmpty() = runBlocking {
         // arrange
         NetworkConstants.NETWORK_DELAY = 6000
         `when`(appDatabase.getAchievementsDao())
             .thenReturn(achievevementsDaoTd)
-        var onEachCalls =  0
+        var onEachCalls = 0
 
         // act
         println("Before result")
 
         val result = SUT.getAchievements(
             GetAchievements(),
+            true,
             true
         )
 
@@ -174,19 +185,20 @@ class AchievementsDaoTest {
     }
 
     @Test
-    fun getAboutMe_noInternetCacheSucces_returnCachedData() = runBlocking {
+    fun getAchievements_noInternetCacheSucces_returnCachedData() = runBlocking {
         // arrange
         achievevementsDaoTd.inMemoryData.addAll(ACHIEVEMENT_MODEL_LIST)
         `when`(appDatabase.getAchievementsDao())
             .thenReturn(achievevementsDaoTd)
-        var onEachCalls =  0
+        var onEachCalls = 0
 
         // act
         println("Before result")
 
         val result = SUT.getAchievements(
             GetAchievements(),
-            false
+            false,
+            true
         )
 
         println("After result")
@@ -211,17 +223,18 @@ class AchievementsDaoTest {
     }
 
     @Test
-    fun getAboutMe_noInternetCacheEmpty_returnNull() = runBlocking {
+    fun getAchievements_noInternetCacheEmpty_returnNull() = runBlocking {
         // arrange
         Mockito.`when`(appDatabase.getAchievementsDao())
             .thenReturn(achievevementsDaoTd)
-        var onEachCalls =  0
+        var onEachCalls = 0
 
         // act
         println("Before result")
         val result = SUT.getAchievements(
             GetAchievements(),
-            false
+            false,
+            true
         )
 
         println("After result")
@@ -246,7 +259,7 @@ class AchievementsDaoTest {
     }
 
     @Test
-    fun getAboutMe_NetworkErrorCacheSuccess_returnCachedData() = runBlocking {
+    fun getAchievements_NetworkErrorCacheSuccess_returnCachedData() = runBlocking {
         // arrange
         achievevementsDaoTd.inMemoryData.addAll(ACHIEVEMENT_MODEL_LIST)
         `when`(appDatabase.getAchievementsDao())
@@ -255,12 +268,13 @@ class AchievementsDaoTest {
         doThrow(RuntimeException())
             .`when`(apiService).getAchievementsSync()
 
-        var onEachCalls =  0
+        var onEachCalls = 0
 
         // act
         println("Before result")
         val result = SUT.getAchievements(
             GetAchievements(),
+            true,
             true
         )
         println("After result")
@@ -284,7 +298,7 @@ class AchievementsDaoTest {
     }
 
     @Test
-    fun getAboutMe_NetworkErrorCacheEmpty_returnEmptyData() = runBlocking {
+    fun getAchievements_NetworkErrorCacheEmpty_returnEmptyData() = runBlocking {
         // arrange
         `when`(appDatabase.getAchievementsDao())
             .thenReturn(achievevementsDaoTd)
@@ -292,12 +306,13 @@ class AchievementsDaoTest {
         doThrow(RuntimeException())
             .`when`(apiService).getAchievementsSync()
 
-        var onEachCalls =  0
+        var onEachCalls = 0
 
         // act
         println("Before result")
         val result = SUT.getAchievements(
             GetAchievements(),
+            true,
             true
         )
         println("After result")
@@ -314,6 +329,83 @@ class AchievementsDaoTest {
         delay(2000)
         assertEquals(onEachCalls, 1)
         verify(apiService, times(1)).getAchievementsSync()
+        assertEquals(achievevementsDaoTd.funCalls, 1)
+        assertEquals(achievevementsDaoTd.getAchievementCalls, 1)
+        assertEquals(achievevementsDaoTd.inMemoryData.size, 0)
+        Unit
+    }
+
+    @Test
+    fun getAchievements_networkNotAllowedCacheSuccess_returnCacheData() = runBlocking {
+        // arrange
+        achievevementsDaoTd.inMemoryData.addAll(ACHIEVEMENT_MODEL_LIST)
+        `when`(appDatabase.getAchievementsDao())
+            .thenReturn(achievevementsDaoTd)
+
+        `when`(apiService.getAchievementsSync())
+            .thenReturn(
+                listOf(
+                    ACHIEVEMENT_REMOTE_MODEL1.copy(listId = 4),
+                    ACHIEVEMENT_REMOTE_MODEL2.copy(listId = 9)
+                )
+            )
+
+        // act
+        val result = SUT
+            .getAchievements(
+                GetAchievements(),
+                false,
+                false
+            )
+
+        // assert
+        result.onEach {
+            assertEquals(it.message, MESSAGE_NETWORK_NOT_ALLOWED_CACHE_SUCCESS)
+            assertEquals(it.toFragment, GETACHIEVEMENTS)
+            assertEquals(
+                it.data?.achievementsFragmentView?.achievements,
+                ACHIEVEMENT_MODEL_LIST
+            )
+        }.launchIn(this)
+
+        delay(2000)
+        verify(apiService, times(0)).getAchievementsSync()
+        assertEquals(achievevementsDaoTd.funCalls, 1)
+        assertEquals(achievevementsDaoTd.getAchievementCalls, 1)
+        assertEquals(achievevementsDaoTd.inMemoryData.size, 5)
+        Unit
+    }
+
+    @Test
+    fun getAchievements_networkNotAllowedCacheEmpty_returnNull() = runBlocking {
+        // arrange
+        achievevementsDaoTd.inMemoryData.addAll(listOf())
+        `when`(appDatabase.getAchievementsDao())
+            .thenReturn(achievevementsDaoTd)
+
+        `when`(apiService.getAchievementsSync())
+            .thenReturn(listOf())
+
+        // act
+        val result = SUT
+            .getAchievements(
+                GetAchievements(),
+                false,
+                false
+            )
+
+        // assert
+        result.onEach {
+            assertEquals(it.message, MESSAGE_NETWORK_NOT_ALLOWED_CACHE_EMPTY)
+            assertEquals(it.toFragment, GETACHIEVEMENTS)
+            assertEquals(
+                it.data?.achievementsFragmentView?.achievements,
+                null
+            )
+        }.launchIn(this)
+
+        delay(2000)
+        verify(apiService, times(0)).getAchievementsSync()
         assertEquals(achievevementsDaoTd.funCalls, 1)
         assertEquals(achievevementsDaoTd.getAchievementCalls, 1)
         assertEquals(achievevementsDaoTd.inMemoryData.size, 0)

@@ -17,6 +17,7 @@ import com.hamidjonhamidov.cvforkhamidjon.util.DataState
 import com.hamidjonhamidov.cvforkhamidjon.util.StateEvent
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NETWORK_ERROR_CACHE_SUCCESS
+import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NETWORK_NOT_ALLOWED_CACHE_SUCCESS
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NETWORK_SUCCESS_CACHE_SUCCESSS
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NO_INTERNET_CACHE_SUCCESS
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSSAGE_NETWORK_TIMEOUT_CACHE_SUCCESS
@@ -38,33 +39,38 @@ constructor(
 
     override fun getAboutMe(
         stateEvent: StateEvent,
-        isNetworkAvailable: Boolean
+        isNetworkAvailable: Boolean,
+        isNetworkAllowed: Boolean
     ): Flow<DataState<MainViewState>> = flow {
 
+        // set network response to network error no internet available as a default
         var response: ApiResult<List<AboutMeRemoteModel>?> =
             ApiResult.GenericError(
                 null,
                 NetworkConstants.NETWORK_ERROR_NO_INTERNET
-            ) // set it to network error no internet available default
+            )
 
-
-        if (isNetworkAvailable)
+        // if network is available and allowed, try to get from remote
+        if (isNetworkAvailable && isNetworkAllowed)
             response =
-                safeApiCall(Dispatchers.IO) { apiService.getAboutMeSync() } // if internet is available request from internet
+                safeApiCall(Dispatchers.IO) { apiService.getAboutMeSync() }
 
+        // set cache response to default empty
         var cacheRepsonse: List<AboutMeModel>? =
-            listOf() // set cache response default to empty list
+            listOf()
 
-        // if there has been some error from internet try to receive it from cache
-        if (response is ApiResult.GenericError) {
+        // if there has been some error from internet or internet not allowed, try to receive it from cache
+        if (response is ApiResult.GenericError || !isNetworkAllowed) {
             cacheRepsonse = withContext(Dispatchers.IO) { appDatabase.getAboutMeDao().getAboutMe() }
         }
 
+        // process cache and remote response
         val result = withContext(Dispatchers.Default) {
             object : ApiResponseHandler<MainViewState, AboutMeRemoteModel, AboutMeModel>(
                 response,
                 stateEvent,
-                cacheRepsonse
+                cacheRepsonse,
+                isNetworkAllowed
             ) {
                 override fun handleNetworkSuccessCacheSuccess(
                     stateEvent: StateEvent,
@@ -121,6 +127,19 @@ constructor(
                         message = MESSAGE_NETWORK_ERROR_CACHE_SUCCESS
                     )
                 }
+
+                override fun handleNetworkNotAllowedCacheSuccess(
+                    stateEvent: StateEvent,
+                    cacheResponseObject: List<AboutMeModel>
+                ): DataState<MainViewState> {
+                    return DataState(
+                        toFragment = stateEvent.toString(),
+                        data = MainViewState(
+                            homeFragmentView = HomeFragmentView(cacheResponseObject[0])
+                        ),
+                        message = MESSAGE_NETWORK_NOT_ALLOWED_CACHE_SUCCESS
+                    )
+                }
             }.result
         }
 
@@ -130,22 +149,25 @@ constructor(
 
     override fun getMySkills(
         stateEvent: StateEvent,
-        isNetworkAvailable: Boolean
+        isNetworkAvailable: Boolean,
+        isNetworkAllowed: Boolean
     ): Flow<DataState<MainViewState>> = flow {
 
+        // set remote response to network error no internet available as default
         var response: ApiResult<List<SkillRemoteModel>?> =
             ApiResult.GenericError(
                 null,
                 NetworkConstants.NETWORK_ERROR_NO_INTERNET
-            ) // set it to network error no internet available default
+            )
 
-
+        // if internet is available request from internet
         if (isNetworkAvailable)
             response =
-                safeApiCall(Dispatchers.IO) { apiService.getSkillsSync() } // if internet is available request from internet
+                safeApiCall(Dispatchers.IO) { apiService.getSkillsSync() }
 
+        // set cache response to empty list as default
         var cacheRepsonse: List<SkillModel>? =
-            listOf() // set cache response default to empty list
+            listOf()
 
         // if there has been some error from internet try to receive it from cache
         if (response is ApiResult.GenericError) {
@@ -156,7 +178,8 @@ constructor(
             object : ApiResponseHandler<MainViewState, SkillRemoteModel, SkillModel>(
                 response,
                 stateEvent,
-                cacheRepsonse
+                cacheRepsonse,
+                isNetworkAllowed
             ) {
                 override fun handleNetworkSuccessCacheSuccess(
                     stateEvent: StateEvent,
@@ -214,6 +237,19 @@ constructor(
                         message = MESSAGE_NETWORK_ERROR_CACHE_SUCCESS
                     )
                 }
+
+                override fun handleNetworkNotAllowedCacheSuccess(
+                    stateEvent: StateEvent,
+                    cacheResponseObject: List<SkillModel>
+                ): DataState<MainViewState> {
+                    return DataState(
+                        toFragment = stateEvent.toString(),
+                        data = MainViewState(
+                            mySkillsFragmentView = MySkillsFragmentView(cacheResponseObject)
+                        ),
+                        message = MESSAGE_NETWORK_NOT_ALLOWED_CACHE_SUCCESS
+                    )
+                }
             }.result
         }
 
@@ -223,21 +259,27 @@ constructor(
 
     override fun getAchievements(
         stateEvent: StateEvent,
-        isNetworkAvailable: Boolean
+        isNetworkAvailable: Boolean,
+        isNetworkAllowed: Boolean
     ): Flow<DataState<MainViewState>> = flow {
+
+        // set remote response to network error no internet available as default
         var response: ApiResult<List<AchievementRemoteModel>?> =
             ApiResult.GenericError(
                 null,
                 NetworkConstants.NETWORK_ERROR_NO_INTERNET
-            ) // set it to network error no internet available default
+            )
 
 
+        // if internet is available, request from internet
         if (isNetworkAvailable)
             response =
-                safeApiCall(Dispatchers.IO) { apiService.getAchievementsSync() } // if internet is available request from internet
+                safeApiCall(Dispatchers.IO) { apiService.getAchievementsSync() }
 
+
+        // set cache response to empty list as default
         var cacheRepsonse: List<AchievementModel>? =
-            listOf() // set cache response default to empty list
+            listOf()
 
         // if there has been some error from internet try to receive it from cache
         if (response is ApiResult.GenericError) {
@@ -250,7 +292,8 @@ constructor(
             object : ApiResponseHandler<MainViewState, AchievementRemoteModel, AchievementModel>(
                 response,
                 stateEvent,
-                cacheRepsonse
+                cacheRepsonse,
+                isNetworkAllowed
             ) {
                 override fun handleNetworkSuccessCacheSuccess(
                     stateEvent: StateEvent,
@@ -308,6 +351,19 @@ constructor(
                         message = MESSAGE_NETWORK_ERROR_CACHE_SUCCESS
                     )
                 }
+
+                override fun handleNetworkNotAllowedCacheSuccess(
+                    stateEvent: StateEvent,
+                    cacheResponseObject: List<AchievementModel>
+                ): DataState<MainViewState> {
+                    return DataState(
+                        toFragment = stateEvent.toString(),
+                        data = MainViewState(
+                            achievementsFragmentView = AchievementsFragmentView(cacheResponseObject)
+                        ),
+                        message = MESSAGE_NETWORK_NOT_ALLOWED_CACHE_SUCCESS
+                    )
+                }
             }.result
         }
 
@@ -317,22 +373,26 @@ constructor(
 
     override fun getProjects(
         stateEvent: StateEvent,
-        isNetworkAvailable: Boolean
-    ): Flow<DataState<MainViewState>> = flow{
+        isNetworkAvailable: Boolean,
+        isNetworkAllowed: Boolean
+    ): Flow<DataState<MainViewState>> = flow {
 
+        // set remote response to network error no internet available as default
         var response: ApiResult<List<ProjectsRemoteModel>?> =
             ApiResult.GenericError(
                 null,
                 NetworkConstants.NETWORK_ERROR_NO_INTERNET
-            ) // set it to network error no internet available default
+            )
 
 
+        // if internet is available, request from internet
         if (isNetworkAvailable)
             response =
-                safeApiCall(Dispatchers.IO) { apiService.getProjectsSync() } // if internet is available request from internet
+                safeApiCall(Dispatchers.IO) { apiService.getProjectsSync() }
 
+        // set cache response to empty list as default
         var cacheRepsonse: List<ProjectModel>? =
-            listOf() // set cache response default to empty list
+            listOf()
 
         // if there has been some error from internet try to receive it from cache
         if (response is ApiResult.GenericError) {
@@ -344,7 +404,8 @@ constructor(
             object : ApiResponseHandler<MainViewState, ProjectsRemoteModel, ProjectModel>(
                 response,
                 stateEvent,
-                cacheRepsonse
+                cacheRepsonse,
+                isNetworkAllowed
             ) {
                 override fun handleNetworkSuccessCacheSuccess(
                     stateEvent: StateEvent,
@@ -400,6 +461,19 @@ constructor(
                             projectsFragmentView = ProjectsFragmentView(cacheResponseObject)
                         ),
                         message = MESSAGE_NETWORK_ERROR_CACHE_SUCCESS
+                    )
+                }
+
+                override fun handleNetworkNotAllowedCacheSuccess(
+                    stateEvent: StateEvent,
+                    cacheResponseObject: List<ProjectModel>
+                ): DataState<MainViewState> {
+                    return DataState(
+                        toFragment = stateEvent.toString(),
+                        data = MainViewState(
+                            projectsFragmentView = ProjectsFragmentView(cacheResponseObject)
+                        ),
+                        message = MESSAGE_NETWORK_NOT_ALLOWED_CACHE_SUCCESS
                     )
                 }
             }.result

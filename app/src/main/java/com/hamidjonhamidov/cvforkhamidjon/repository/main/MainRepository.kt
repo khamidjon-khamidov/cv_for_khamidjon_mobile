@@ -7,12 +7,16 @@ import kotlinx.coroutines.flow.Flow
 
 interface MainRepository {
 
-    fun getAboutMe(stateEvent: StateEvent, isNetworkAvailable: Boolean): Flow<DataState<MainViewState>>
+    fun getAboutMe(stateEvent: StateEvent, isNetworkAvailable: Boolean, isNetworkAllowed: Boolean = true)
+            : Flow<DataState<MainViewState>>
 
-    fun getMySkills(stateEvent: StateEvent, isNetworkAvailable: Boolean): Flow<DataState<MainViewState>>
+    fun getMySkills(stateEvent: StateEvent, isNetworkAvailable: Boolean, isNetworkAllowed: Boolean = true)
+            : Flow<DataState<MainViewState>>
 
-    fun getAchievements(stateEvent: StateEvent, isNetworkAvailable: Boolean): Flow<DataState<MainViewState>>
+    fun getAchievements(stateEvent: StateEvent, isNetworkAvailable: Boolean, isNetworkAllowed: Boolean = true)
+            : Flow<DataState<MainViewState>>
 
-    fun getProjects(stateEvent: StateEvent, isNetworkAvailable: Boolean): Flow<DataState<MainViewState>>
+    fun getProjects(stateEvent: StateEvent, isNetworkAvailable: Boolean, isNetworkAllowed: Boolean = true)
+            : Flow<DataState<MainViewState>>
 
 }

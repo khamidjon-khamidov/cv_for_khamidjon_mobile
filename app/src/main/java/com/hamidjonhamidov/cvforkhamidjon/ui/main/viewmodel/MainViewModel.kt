@@ -3,7 +3,6 @@ package com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel
 import androidx.lifecycle.ViewModel
 import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.InternalCoroutinesApi
 import javax.inject.Inject
 

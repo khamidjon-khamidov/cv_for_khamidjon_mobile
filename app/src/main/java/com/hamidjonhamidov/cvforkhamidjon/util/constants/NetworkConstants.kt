@@ -42,6 +42,16 @@ object NetworkConstants {
     const val NETWORK_ERROR_CACHE_EMPTY_TITLE = "Network Failure! Cache Empty!"
     const val NETWORK_ERROR_CACHE_EMPTY_DES = "Sorry, due to network failure and empty cache, NO DATA available! Please try again!"
 
+    // network not allowed, cache success
+    val NETWORK_NOT_ALLOWED_CACHE_SUCCESS_TITLE = "Success"
+    val NETWORK_NOT_ALLOWED_CACHE_SUCCESS_DES = "As your daily refresh limit finished, Data have been received from Database!"
+
+    // network not allowed, cache empty
+    val NETWORK_NOT_ALLOWED_CACHE_EMPTY_TITLE = "Failure"
+    val NETWORK_NOT_ALLOWED_CACHE_EMPTY_DES = "For some reason data unavailable despite you run of refresh limits. Please try tomorrow!"
+
+
+
     // possible messages
     // network success
     val MESSAGE_NETWORK_SUCCESS_CACHE_SUCCESSS = Message(
@@ -95,6 +105,22 @@ object NetworkConstants {
     val MESSAGE_NETWORK_TIMEOUT_CACHE_EMPTY = Message(
         NETWORK_TIMEOUT_CACHE_EMPTY_TITLE,
         NETWORK_TIMEOUT_CACHE_EMPTY_DES,
+        UIType.Dialog(),
+        false
+    )
+
+    // network not allowed, cache success
+    val MESSAGE_NETWORK_NOT_ALLOWED_CACHE_SUCCESS = Message(
+        NETWORK_NOT_ALLOWED_CACHE_SUCCESS_TITLE,
+        NETWORK_NOT_ALLOWED_CACHE_SUCCESS_DES,
+        UIType.Toast(),
+        false
+    )
+
+    // network not allowed, cache empty
+    val MESSAGE_NETWORK_NOT_ALLOWED_CACHE_EMPTY = Message(
+        NETWORK_NOT_ALLOWED_CACHE_EMPTY_TITLE,
+        NETWORK_NOT_ALLOWED_CACHE_EMPTY_DES,
         UIType.Dialog(),
         false
     )

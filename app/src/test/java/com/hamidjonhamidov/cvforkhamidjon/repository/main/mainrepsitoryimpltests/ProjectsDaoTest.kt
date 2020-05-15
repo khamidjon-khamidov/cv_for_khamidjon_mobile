@@ -14,6 +14,8 @@ import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainStateEvent
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NETWORK_ERROR_CACHE_EMPTY
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NETWORK_ERROR_CACHE_SUCCESS
+import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NETWORK_NOT_ALLOWED_CACHE_EMPTY
+import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NETWORK_NOT_ALLOWED_CACHE_SUCCESS
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NETWORK_SUCCESS_CACHE_SUCCESSS
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NETWORK_TIMEOUT_CACHE_EMPTY
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NO_INTERNET_CACHE_EMPTY
@@ -26,6 +28,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -68,7 +71,7 @@ class ProjectsDaoTest {
 
 
     @Test
-    fun getAchievements_networkAvailableGetAchievementsEvent_achivementsFlowReturned_savedToDb() = runBlocking {
+    fun getProjects_networkAvailableGetAchievementsEvent_achivementsFlowReturned_savedToDb() = runBlocking {
         // arrange
         println("Test started")
 
@@ -107,7 +110,7 @@ class ProjectsDaoTest {
     }
 
     @Test
-    fun getMySkills_networkTimeoutCacheEmpty_returnCachedData() = runBlocking {
+    fun getProjects_networkTimeoutCacheEmpty_returnCachedData() = runBlocking {
         // arrange
         NetworkConstants.NETWORK_DELAY = 6000 // make network delay long to throw exception
         projectsDaoTd.inMemoryData.addAll(PROJECT_MODEL_LIST)
@@ -140,7 +143,7 @@ class ProjectsDaoTest {
     }
 
     @Test
-    fun getAboutMe_networkTimeOut_cacheEmpty() = runBlocking {
+    fun getProjects_networkTimeOut_cacheEmpty() = runBlocking {
         // arrange
         NetworkConstants.NETWORK_DELAY = 6000
         `when`(appDatabase.getProjectsDao())
@@ -175,7 +178,7 @@ class ProjectsDaoTest {
     }
 
     @Test
-    fun getAboutMe_noInternetCacheSucces_returnCachedData() = runBlocking {
+    fun getProjects_noInternetCacheSucces_returnCachedData() = runBlocking {
         // arrange
         projectsDaoTd.inMemoryData.addAll(PROJECT_MODEL_LIST)
         `when`(appDatabase.getProjectsDao())
@@ -212,7 +215,7 @@ class ProjectsDaoTest {
     }
 
     @Test
-    fun getAboutMe_noInternetCacheEmpty_returnNull() = runBlocking {
+    fun getProjects_noInternetCacheEmpty_returnNull() = runBlocking {
         // arrange
         `when`(appDatabase.getProjectsDao())
             .thenReturn(projectsDaoTd)
@@ -247,7 +250,7 @@ class ProjectsDaoTest {
     }
 
     @Test
-    fun getAboutMe_NetworkErrorCacheSuccess_returnCachedData() = runBlocking {
+    fun getProjects_NetworkErrorCacheSuccess_returnCachedData() = runBlocking {
         // arrange
         projectsDaoTd.inMemoryData.addAll(PROJECT_MODEL_LIST)
         `when`(appDatabase.getProjectsDao())
@@ -285,7 +288,7 @@ class ProjectsDaoTest {
     }
 
     @Test
-    fun getAboutMe_NetworkErrorCacheEmpty_returnEmptyData() = runBlocking {
+    fun getProjects_NetworkErrorCacheEmpty_returnEmptyData() = runBlocking {
         // arrange
         `when`(appDatabase.getProjectsDao())
             .thenReturn(projectsDaoTd)
@@ -318,6 +321,72 @@ class ProjectsDaoTest {
         Assert.assertEquals(projectsDaoTd.funCalls, 1)
         Assert.assertEquals(projectsDaoTd.getProjectsCalls, 1)
         Assert.assertEquals(projectsDaoTd.inMemoryData.size, 0)
+        Unit
+    }
+
+    @Test
+    fun getProjects_networkNotAllowedCacheSuccess_returnCacheData() = runBlocking {
+        // arrange
+        projectsDaoTd.inMemoryData.addAll(PROJECT_MODEL_LIST)
+        `when`(appDatabase.getProjectsDao())
+            .thenReturn(projectsDaoTd)
+
+        // act
+        val result = SUT
+            .getProjects(
+                GetProjects(),
+                false,
+                false
+            )
+
+        // assert
+        result.onEach {
+            assertEquals(it.message, MESSAGE_NETWORK_NOT_ALLOWED_CACHE_SUCCESS)
+            assertEquals(it.toFragment, GETPROJECT)
+            assertEquals(
+                it.data?.projectsFragmentView?.projects,
+                PROJECT_MODEL_LIST
+            )
+        }.launchIn(this)
+
+        delay(2000)
+        verifyNoMoreInteractions(apiService)
+        assertEquals(projectsDaoTd.funCalls, 1)
+        assertEquals(projectsDaoTd.getProjectsCalls, 1)
+        assertEquals(projectsDaoTd.inMemoryData.size, 4)
+        Unit
+    }
+
+    @Test
+    fun getProjects_networkNotAllowedCacheEmpty_returnNull() = runBlocking {
+        // arrange
+        projectsDaoTd.inMemoryData.addAll(listOf())
+        `when`(appDatabase.getProjectsDao())
+            .thenReturn(projectsDaoTd)
+
+        // act
+        val result = SUT
+            .getProjects(
+                GetProjects(),
+                false,
+                false
+            )
+
+        // assert
+        result.onEach {
+            assertEquals(it.message, MESSAGE_NETWORK_NOT_ALLOWED_CACHE_EMPTY)
+            assertEquals(it.toFragment, GETPROJECT)
+            assertEquals(
+                it.data?.projectsFragmentView?.projects,
+                null
+            )
+        }.launchIn(this)
+
+        delay(2000)
+        verifyNoMoreInteractions(apiService)
+        assertEquals(projectsDaoTd.funCalls, 1)
+        assertEquals(projectsDaoTd.getProjectsCalls, 1)
+        assertEquals(projectsDaoTd.inMemoryData.size, 0)
         Unit
     }
 

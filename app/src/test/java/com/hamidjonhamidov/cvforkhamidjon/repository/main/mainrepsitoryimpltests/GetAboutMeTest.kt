@@ -5,13 +5,20 @@ import com.hamidjonhamidov.cvforkhamidjon.data_requests.persistence.AppDatabase
 import com.hamidjonhamidov.cvforkhamidjon.data_requests.persistence.main.AboutMeDao
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.AboutMeModel
 import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImpl
+import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImplTestConstants
 import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImplTestConstants.ABOUTME_MODEL
 import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImplTestConstants.ABOUTME_REMOTE_MODEL
+import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImplTestConstants.GETABOUTME
+import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImplTestConstants.GETACHIEVEMENTS
 import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImplTestConstants.GETHOME
+import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainStateEvent
+import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainStateEvent.GetAboutMe
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainStateEvent.GetHome
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NETWORK_ERROR_CACHE_EMPTY
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NETWORK_ERROR_CACHE_SUCCESS
+import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NETWORK_NOT_ALLOWED_CACHE_EMPTY
+import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NETWORK_NOT_ALLOWED_CACHE_SUCCESS
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NETWORK_SUCCESS_CACHE_SUCCESSS
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NO_INTERNET_CACHE_EMPTY
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NO_INTERNET_CACHE_SUCCESS
@@ -27,6 +34,7 @@ import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import org.mockito.Mock
 import org.mockito.Mockito
+import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
 import java.lang.RuntimeException
 
@@ -173,7 +181,7 @@ class GetAboutMeTest {
     fun getAboutMe_noInternetCacheSucces_returnCachedData() = runBlocking {
         // arrange
         aboutMeDaoTd.inMemoryData.add(ABOUTME_MODEL)
-        Mockito.`when`(appDatabase.getAboutMeDao())
+        `when`(appDatabase.getAboutMeDao())
             .thenReturn(aboutMeDaoTd)
         var onEachCalls =  0
 
@@ -245,7 +253,7 @@ class GetAboutMeTest {
     fun getAboutMe_NetworkErrorCacheSuccess_returnCachedData() = runBlocking {
         // arrange
         aboutMeDaoTd.inMemoryData.add(ABOUTME_MODEL.copy())
-        Mockito.`when`(appDatabase.getAboutMeDao())
+        `when`(appDatabase.getAboutMeDao())
             .thenReturn(aboutMeDaoTd)
 
         doThrow(RuntimeException())
@@ -310,6 +318,72 @@ class GetAboutMeTest {
         delay(2000)
         assertEquals(onEachCalls, 1)
         verify(apiService, times(1)).getAboutMeSync()
+        assertEquals(aboutMeDaoTd.funCalls, 1)
+        assertEquals(aboutMeDaoTd.getAboutMeCalls, 1)
+        assertEquals(aboutMeDaoTd.inMemoryData.size, 0)
+        Unit
+    }
+
+    @Test
+    fun getAboutMe_networkNotAllowedCacheSuccess_returnCacheData() = runBlocking {
+        // arrange
+        aboutMeDaoTd.inMemoryData.add(ABOUTME_MODEL)
+        `when`(appDatabase.getAboutMeDao())
+            .thenReturn(aboutMeDaoTd)
+
+        // act
+        val result = SUT
+            .getAboutMe(
+                GetAboutMe(),
+                false,
+                false
+            )
+
+        // assert
+        result.onEach {
+            assertEquals(it.message, MESSAGE_NETWORK_NOT_ALLOWED_CACHE_SUCCESS)
+            assertEquals(it.toFragment, GETABOUTME)
+            assertEquals(
+                it.data?.homeFragmentView?.aboutMe,
+                ABOUTME_MODEL
+            )
+        }.launchIn(this)
+
+        delay(2000)
+        verify(apiService, times(0)).getAboutMeSync()
+        assertEquals(aboutMeDaoTd.funCalls, 1)
+        assertEquals(aboutMeDaoTd.getAboutMeCalls, 1)
+        assertEquals(aboutMeDaoTd.inMemoryData.size, 1)
+        Unit
+    }
+
+    @Test
+    fun getAboutMe_networkNotAllowedCacheEmpty_returnNull() = runBlocking {
+        // arrange
+        aboutMeDaoTd.inMemoryData.addAll(listOf())
+        `when`(appDatabase.getAboutMeDao())
+            .thenReturn(aboutMeDaoTd)
+
+        // act
+        val result = SUT
+            .getAboutMe(
+                GetAboutMe(),
+                false,
+                false
+            )
+
+        // assert
+        result.onEach {
+            assertEquals(it.message, MESSAGE_NETWORK_NOT_ALLOWED_CACHE_EMPTY)
+            assertEquals(it.toFragment, GETABOUTME)
+            assertEquals(
+                it.data?.homeFragmentView?.aboutMe,
+                null
+            )
+        }.launchIn(this)
+
+        delay(2000)
+        verify(apiService, times(0)).getAboutMeSync()
         assertEquals(aboutMeDaoTd.funCalls, 1)
         assertEquals(aboutMeDaoTd.getAboutMeCalls, 1)
         assertEquals(aboutMeDaoTd.inMemoryData.size, 0)
