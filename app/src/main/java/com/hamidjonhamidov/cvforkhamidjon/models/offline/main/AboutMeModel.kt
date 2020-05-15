@@ -29,11 +29,11 @@ data class AboutMeInfo(
     @ColumnInfo(name = "education")
     var education: @RawValue List<Education> = listOf(),
 
-    @ColumnInfo(name = "pictureLinke")
-    var pictureLink: String = "Couldn't Load",
+    @ColumnInfo(name = "pictureLinke") var pictureLink: String = "",
 
-    @ColumnInfo(name = "description")
-    var description: String = "Couldn't Load"
+    @ColumnInfo(name = "description") var description: String = "",
+
+    @ColumnInfo(name = "cvLink") var cvLink: String = ""
 
 ) : Parcelable {
 
