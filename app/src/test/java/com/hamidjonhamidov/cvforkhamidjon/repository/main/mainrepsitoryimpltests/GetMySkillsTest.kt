@@ -13,6 +13,8 @@ import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainStateEvent
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NETWORK_ERROR_CACHE_EMPTY
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NETWORK_ERROR_CACHE_SUCCESS
+import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NETWORK_NOT_ALLOWED_CACHE_EMPTY
+import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NETWORK_NOT_ALLOWED_CACHE_SUCCESS
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NETWORK_SUCCESS_CACHE_SUCCESSS
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NO_INTERNET_CACHE_EMPTY
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NO_INTERNET_CACHE_SUCCESS
@@ -139,7 +141,7 @@ class GetMySkillsTest {
     }
 
     @Test
-    fun getAboutMe_networkTimeOut_cacheEmpty() = runBlocking {
+    fun getMySkills_networkTimeOut_cacheEmpty() = runBlocking {
         // arrange
         NetworkConstants.NETWORK_DELAY = 6000
         `when`(appDatabase.getSkillsDao())
@@ -174,7 +176,7 @@ class GetMySkillsTest {
     }
 
     @Test
-    fun getAboutMe_noInternetCacheSucces_returnCachedData() = runBlocking {
+    fun getMySkills_noInternetCacheSucces_returnCachedData() = runBlocking {
         // arrange
         skillsDaoTd.inMemoryData.addAll(SKILLS_MODEL_LIST)
         `when`(appDatabase.getSkillsDao())
@@ -211,7 +213,7 @@ class GetMySkillsTest {
     }
 
     @Test
-    fun getAboutMe_noInternetCacheEmpty_returnNull() = runBlocking {
+    fun getMySkills_noInternetCacheEmpty_returnNull() = runBlocking {
         // arrange
         Mockito.`when`(appDatabase.getSkillsDao())
             .thenReturn(skillsDaoTd)
@@ -246,7 +248,7 @@ class GetMySkillsTest {
     }
 
     @Test
-    fun getAboutMe_NetworkErrorCacheSuccess_returnCachedData() = runBlocking {
+    fun getMySkills_NetworkErrorCacheSuccess_returnCachedData() = runBlocking {
         // arrange
         skillsDaoTd.inMemoryData.addAll(SKILLS_MODEL_LIST)
         `when`(appDatabase.getSkillsDao())
@@ -284,7 +286,7 @@ class GetMySkillsTest {
     }
 
     @Test
-    fun getAboutMe_NetworkErrorCacheEmpty_returnEmptyData() = runBlocking {
+    fun getMySkills_NetworkErrorCacheEmpty_returnEmptyData() = runBlocking {
         // arrange
         `when`(appDatabase.getSkillsDao())
             .thenReturn(skillsDaoTd)
@@ -319,6 +321,73 @@ class GetMySkillsTest {
         assertEquals(skillsDaoTd.inMemoryData.size, 0)
         Unit
     }
+
+    @Test
+    fun getMySkills_networkNotAllowedCacheSuccess_returnCacheData() = runBlocking {
+        // arrange
+        skillsDaoTd.inMemoryData.addAll(SKILLS_MODEL_LIST)
+        `when`(appDatabase.getSkillsDao())
+            .thenReturn(skillsDaoTd)
+
+        // act
+        val result = SUT
+            .getMySkills(
+                GetMySkills(),
+                false,
+                false
+            )
+
+        // assert
+        result.onEach {
+            assertEquals(it.message, MESSAGE_NETWORK_NOT_ALLOWED_CACHE_SUCCESS)
+            assertEquals(it.toFragment, GETMYSKILLS)
+            assertEquals(
+                it.data?.mySkillsFragmentView?.mySkills,
+                SKILLS_MODEL_LIST
+            )
+        }.launchIn(this)
+
+        delay(2000)
+        verifyNoMoreInteractions(apiService)
+        assertEquals(skillsDaoTd.funCalls, 1)
+        assertEquals(skillsDaoTd.getSkillsCalls, 1)
+        assertEquals(skillsDaoTd.inMemoryData.size, 5)
+        Unit
+    }
+
+    @Test
+    fun getMySkills_networkNotAllowedCacheEmpty_returnNull() = runBlocking {
+        // arrange
+        skillsDaoTd.inMemoryData.addAll(listOf())
+        `when`(appDatabase.getSkillsDao())
+            .thenReturn(skillsDaoTd)
+
+        // act
+        val result = SUT
+            .getMySkills(
+                GetMySkills(),
+                false,
+                false
+            )
+
+        // assert
+        result.onEach {
+            assertEquals(it.message, MESSAGE_NETWORK_NOT_ALLOWED_CACHE_EMPTY)
+            assertEquals(it.toFragment, GETMYSKILLS)
+            assertEquals(
+                it.data?.mySkillsFragmentView?.mySkills,
+                null
+            )
+        }.launchIn(this)
+
+        delay(2000)
+        verifyNoMoreInteractions(apiService)
+        assertEquals(skillsDaoTd.funCalls, 1)
+        assertEquals(skillsDaoTd.getSkillsCalls, 1)
+        assertEquals(skillsDaoTd.inMemoryData.size, 0)
+        Unit
+    }
+
 
     ////////////////// Helper Classes ///////////////
     class SkillsDaoTd : SkillsDao {

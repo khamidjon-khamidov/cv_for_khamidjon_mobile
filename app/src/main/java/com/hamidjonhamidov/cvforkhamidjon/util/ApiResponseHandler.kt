@@ -1,6 +1,7 @@
 package com.hamidjonhamidov.cvforkhamidjon.util
 
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NETWORK_ERROR_CACHE_EMPTY
+import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NETWORK_NOT_ALLOWED_CACHE_EMPTY
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NETWORK_TIMEOUT_CACHE_EMPTY
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NO_INTERNET_CACHE_EMPTY
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.NETWORK_ERROR_FAILURE
@@ -8,14 +9,28 @@ import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.NETWOR
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.NETWORK_ERROR_TIMEOUT
 
 abstract class ApiResponseHandler<ViewState, RemoteResponseObject, CacheResponseObject>(
-    remoteResponseObject: ApiResult<List<RemoteResponseObject>?>,
-    stateEvent: StateEvent,
-    cacheResponseObject: List<CacheResponseObject>?
+    val remoteResponseObject: ApiResult<List<RemoteResponseObject>?>,
+    val stateEvent: StateEvent,
+    val cacheResponseObject: List<CacheResponseObject>?,
+    val isNetworkAllowed: Boolean
 ) {
 
-    val result: DataState<ViewState> =
+    val result: DataState<ViewState> = processResponse()
 
-        when (remoteResponseObject) {
+
+    fun processResponse(): DataState<ViewState> {
+        if(!isNetworkAllowed){
+            return if(cacheResponseObject?.isNotEmpty()==true){
+                handleNetworkNotAllowedCacheSuccess(stateEvent, cacheResponseObject)
+            } else {
+                DataState(
+                    toFragment = stateEvent.toString(),
+                    message = MESSAGE_NETWORK_NOT_ALLOWED_CACHE_EMPTY
+                )
+            }
+        }
+
+        return when (remoteResponseObject) {
             is ApiResult.GenericError -> {
 
                 when (remoteResponseObject.errorMessage) {
@@ -64,6 +79,12 @@ abstract class ApiResponseHandler<ViewState, RemoteResponseObject, CacheResponse
                 handleNetworkSuccessCacheSuccess(stateEvent, remoteResponseObject.value!!)
             }
         }
+    }
+
+    abstract fun handleNetworkNotAllowedCacheSuccess(
+        stateEvent: StateEvent,
+        cacheResponseObject: List<CacheResponseObject>
+    ): DataState<ViewState>
 
 
     abstract fun handleNetworkSuccessCacheSuccess(
