@@ -3,6 +3,7 @@ package com.hamidjonhamidov.cvforkhamidjon.di.main_subcomponent
 import androidx.fragment.app.FragmentFactory
 import com.hamidjonhamidov.cvforkhamidjon.fragment_builders.main.MainFragmentFactory
 import com.hamidjonhamidov.cvforkhamidjon.util.glide.GlideManager
+import com.hamidjonhamidov.cvforkhamidjon.util.shared_prefs.RefreshLimitController
 import com.hamidjonhamidov.cvforkhamidjon.viewmodelfactory.MainViewModelFactory
 import dagger.Module
 import dagger.Provides

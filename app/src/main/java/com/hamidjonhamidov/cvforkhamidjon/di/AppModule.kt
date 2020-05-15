@@ -13,8 +13,9 @@ import dagger.Provides
 import javax.inject.Singleton
 
 @Module
-class AppModuleClass{
+object AppModule{
 
+    @JvmStatic
     @Singleton
     @Provides
     fun provideGlideRequestManager(
@@ -24,6 +25,7 @@ class AppModuleClass{
             Glide.with(application)
         )
 
+    @JvmStatic
     @Singleton
     @Provides
     fun provideAppDb(app: Application) =

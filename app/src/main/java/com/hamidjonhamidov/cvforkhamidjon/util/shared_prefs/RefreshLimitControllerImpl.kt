@@ -24,7 +24,7 @@ class RefreshLimitControllerImpl
 @Inject
 constructor(
     application: Application
-) : RefreshLimitController{
+) : RefreshLimitController {
 
     private val sharedPreferences =
         application.getSharedPreferences(SHARED_PREF_KEY, Context.MODE_PRIVATE)
@@ -68,53 +68,53 @@ constructor(
 
 
     // this function increments refresh times
-    private fun incrementSyncTime(key: String){
+    private fun incrementSyncTime(key: String) {
         val getLastRefreshTime = getLastRefreshTime(key)
         val storeValue: Long
 
-        // if last refresh time is 0 or on day has already passed, get current time and increment it
-        if(getLastRefreshTime==0L || isOneDayPassed(getLastRefreshTime/10)){
+        // if last refresh time is 0 or one day has already passed, get current time and increment it
+        if (getLastRefreshTime == 0L || isOneDayPassed(getLastRefreshTime / 10)) {
             storeValue = System.currentTimeMillis() * 10L + 1
         }
         // otherwise increment last refresh time
         else {
-            storeValue = getLastRefreshTime+1
+            storeValue = getLastRefreshTime + 1
         }
 
         setLastRefreshTime(key, storeValue)
     }
 
-    private fun getLastRefreshTime(key: String) =
-        sharedPreferences.getLong(key, 0)
-
-    private fun setLastRefreshTime(key: String, value: Long){
-        with(sharedPreferences.edit()){
-            putLong(key, value)
-            apply()
-        }
-    }
 
     private fun canSync(key: String): Boolean {
         val lastRefreshTime = getLastRefreshTime(key)
         // if last refresh time is 0, then we can freely refresh
-        if(lastRefreshTime==0L){
+        if (lastRefreshTime == 0L) {
             return true
         }
-        // if one day has already passed, set time to 0 and return true
-        else if (isOneDayPassed(lastRefreshTime/10)) {
-            setLastRefreshTime(key, 0)
+        // if one day has already passed, return true
+        else if (isOneDayPassed(lastRefreshTime / 10)) {
             return true
         }
-        // if one day has not passed but there are allowed refresh times return true
-        else if(lastRefreshTime%10 < DAILY_REFRESH_LIMIT){
+        // if one day has not passed but there are allowed refresh times, then return true
+        else if (lastRefreshTime % 10 < DAILY_REFRESH_LIMIT) {
             return true
         }
         // if one day has passed, refresh limit finished, then return false
-        else
-            return false
+        else return false
     }
 
     private fun isOneDayPassed(lasRefreshTimeInMilliseconds: Long) =
         // this returns true if it has been more than a day
         (System.currentTimeMillis() - lasRefreshTimeInMilliseconds) > 86_400_000L
+
+
+    private fun getLastRefreshTime(key: String) =
+        sharedPreferences.getLong(key, 0)
+
+    private fun setLastRefreshTime(key: String, value: Long) {
+        with(sharedPreferences.edit()) {
+            putLong(key, value)
+            apply()
+        }
+    }
 }

@@ -14,8 +14,8 @@ import kotlinx.coroutines.InternalCoroutinesApi
 @Subcomponent(
     modules = [
         MainFragmentModule::class,
+        MainModuleAbstract::class,
         MainModule::class,
-        MainRepositoryModule::class,
         MainViewModelFactoryModule::class
     ]
 )

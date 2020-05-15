@@ -12,6 +12,7 @@ import com.hamidjonhamidov.cvforkhamidjon.util.DataState
 import com.hamidjonhamidov.cvforkhamidjon.util.Message
 import com.hamidjonhamidov.cvforkhamidjon.util.NetworkConnection
 import com.hamidjonhamidov.cvforkhamidjon.util.MyJob
+import com.hamidjonhamidov.cvforkhamidjon.util.shared_prefs.RefreshLimitController
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.InternalCoroutinesApi
@@ -30,7 +31,8 @@ class MainViewModel
 @Inject
 constructor(
     private val mainRepository: MainRepository,
-    private val networkConnection: NetworkConnection
+    private val networkConnection: NetworkConnection,
+    refreshLimitController: RefreshLimitController
 ) : BaseMainViewModel() {
 
     init {

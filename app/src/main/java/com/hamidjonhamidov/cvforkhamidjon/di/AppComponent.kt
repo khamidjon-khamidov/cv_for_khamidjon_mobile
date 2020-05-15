@@ -18,7 +18,7 @@ import javax.inject.Singleton
 @Component(
     modules = [
         InternalVariablesModule::class,
-        AppModuleClass::class,
+        AppModule::class,
         AppModuleAbstract::class,
         AppSubcomponents::class
     ]

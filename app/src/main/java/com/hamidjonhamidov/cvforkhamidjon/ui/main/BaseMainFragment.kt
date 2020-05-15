@@ -29,4 +29,8 @@ abstract class BaseMainFragment(
 
         setHasOptionsMenu(true)
     }
+
+    abstract fun subscribeObservers()
+
+    abstract fun initData()
 }
