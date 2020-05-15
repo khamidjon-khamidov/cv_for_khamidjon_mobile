@@ -6,10 +6,12 @@ import com.hamidjonhamidov.cvforkhamidjon.util.NetworkConnection
 import dagger.BindsInstance
 import dagger.Component
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.InternalCoroutinesApi
 import javax.inject.Singleton
 
 
+@FlowPreview
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
 @Singleton
@@ -17,6 +19,7 @@ import javax.inject.Singleton
     modules = [
         InternalVariablesModule::class,
         AppModule::class,
+        AppModuleAbstract::class,
         AppSubcomponents::class
     ]
 )

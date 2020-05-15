@@ -1,6 +1,7 @@
 package com.hamidjonhamidov.cvforkhamidjon.di
 
 import android.app.Application
+import android.preference.PreferenceManager
 import androidx.room.Room
 import com.bumptech.glide.Glide
 import com.hamidjonhamidov.cvforkhamidjon.data_requests.persistence.AppDatabase
@@ -12,8 +13,9 @@ import dagger.Provides
 import javax.inject.Singleton
 
 @Module
-class AppModule{
+object AppModule{
 
+    @JvmStatic
     @Singleton
     @Provides
     fun provideGlideRequestManager(
@@ -23,6 +25,7 @@ class AppModule{
             Glide.with(application)
         )
 
+    @JvmStatic
     @Singleton
     @Provides
     fun provideAppDb(app: Application) =

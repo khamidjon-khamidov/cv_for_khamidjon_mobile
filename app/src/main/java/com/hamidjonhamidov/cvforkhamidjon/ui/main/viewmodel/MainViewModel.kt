@@ -12,6 +12,7 @@ import com.hamidjonhamidov.cvforkhamidjon.util.DataState
 import com.hamidjonhamidov.cvforkhamidjon.util.Message
 import com.hamidjonhamidov.cvforkhamidjon.util.NetworkConnection
 import com.hamidjonhamidov.cvforkhamidjon.util.MyJob
+import com.hamidjonhamidov.cvforkhamidjon.util.shared_prefs.RefreshLimitController
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.InternalCoroutinesApi
@@ -30,21 +31,9 @@ class MainViewModel
 @Inject
 constructor(
     private val mainRepository: MainRepository,
-    private val networkConnection: NetworkConnection
-) : ViewModel() {
-
-    private val dataChannel = ConflatedBroadcastChannel<DataState<MainViewState>>()
-
-    private val _viewState: MutableLiveData<MainViewState> = MutableLiveData()
-
-    val viewState: LiveData<MainViewState>
-        get() = _viewState
-
-    val messages = HashMap<String, MutableLiveData<Message?>>()
-
-    fun setViewState(newViewState: MainViewState) {
-        _viewState.value = newViewState
-    }
+    private val networkConnection: NetworkConnection,
+    refreshLimitController: RefreshLimitController
+) : BaseMainViewModel() {
 
     init {
         setUpChannel()

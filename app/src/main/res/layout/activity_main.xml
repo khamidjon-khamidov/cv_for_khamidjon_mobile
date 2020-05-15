@@ -20,7 +20,8 @@
             app:layout_constraintLeft_toLeftOf="parent"
             android:layout_height="55dp"
             app:titleTextColor="@color/white"
-            android:background="@color/colorPrimary"/>
+            android:background="@color/colorPrimary"
+            app:title="Home"/>
 
         <ProgressBar
             android:id="@+id/progress_bar"

@@ -1,15 +1,376 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
     android:id="@+id/home_fragment"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".ui.main.a_home.HomeFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-</FrameLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:focusable="true"
+            android:clickable="true"
+            android:foreground="?selectableItemBackgroundBorderless"
+            android:background="#F4F4F4"
+            tools:ignore="UnusedAttribute">
+
+            <TextView
+                android:id="@+id/home_tv_hi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="@string/hi_i_am"
+                android:textColor="@color/colorPrimary"
+                android:textSize="25sp"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/home_tv_fullname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/full_name"
+                android:textColor="@color/colorAccent"
+                android:textSize="30sp"
+                app:layout_constraintTop_toBottomOf="@id/home_tv_hi" />
+
+            <ImageView
+                android:id="@+id/home_iv_me"
+                android:layout_width="300dp"
+                android:layout_height="500dp"
+                android:layout_marginTop="20dp"
+                android:contentDescription="@string/full_name"
+                android:src="@drawable/hamidjon"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/home_tv_fullname" />
+
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/home_cv_ame"
+                android:layout_width="match_parent"
+                android:layout_height="130dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/home_iv_me"
+                android:layout_marginTop="450dp"
+                app:cardCornerRadius="50dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:baselineAligned="false"
+                    android:paddingEnd="15dp"
+                    android:paddingStart="15dp">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="120dp"
+                        android:focusable="true"
+                        android:clickable="true"
+                        android:gravity="center"
+                        android:background="?selectableItemBackgroundBorderless"
+                        android:orientation="vertical"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:layout_width="70dp"
+                            android:layout_height="70dp"
+                            android:src="@drawable/android_development"
+                            android:contentDescription="@string/android_development"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:textStyle="bold"
+                            android:textColor="@color/colorAccent"
+                            android:text="@string/android_development"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="120dp"
+                        android:focusable="true"
+                        android:clickable="true"
+                        android:gravity="center"
+                        android:background="?selectableItemBackgroundBorderless"
+                        android:orientation="vertical"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:layout_width="70dp"
+                            android:layout_height="70dp"
+                            android:src="@drawable/algorithms"
+                            android:contentDescription="@string/algorithms"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:textStyle="bold"
+                            android:textColor="@color/colorAccent"
+                            android:text="@string/algorithms_n_in_c_c"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="120dp"
+                        android:focusable="true"
+                        android:clickable="true"
+                        android:gravity="center"
+                        android:background="?selectableItemBackgroundBorderless"
+                        android:orientation="vertical"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:layout_width="70dp"
+                            android:layout_height="70dp"
+                            android:src="@drawable/web_development"
+                            android:contentDescription="@string/web_ndevelopment"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:textStyle="bold"
+                            android:textColor="@color/colorAccent"
+                            android:text="@string/web_ndevelopment"/>
+                    </LinearLayout>
+
+
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/home_tv_android_developer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="20dp"
+                android:text="@string/android_developer"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textColor="@color/colorAccent"
+                app:layout_constraintTop_toBottomOf="@id/home_cv_ame"/>
+
+            <TextView
+                android:id="@+id/home_tv_des"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_grey"
+                android:textSize="18sp"
+                android:padding="10dp"
+                android:gravity="center"
+                android:text="@string/home_des_text"
+                app:layout_constraintTop_toBottomOf="@id/home_tv_android_developer"/>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp"
+                android:paddingStart="30dp"
+                android:paddingEnd="30dp"
+                app:layout_constraintTop_toBottomOf="@id/home_tv_des">
+
+
+                <LinearLayout
+                    android:id="@+id/home_ll_git"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@id/home_ll_linkedin"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <ImageView
+                        android:layout_width="@dimen/social_icon_width"
+                        android:layout_height="@dimen/social_icon_height"
+                        android:layout_marginBottom="5dp"
+                        android:contentDescription="@string/github"
+                        android:src="@drawable/githubb" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/github"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/social_icon_textsize" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/home_ll_linkedin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toRightOf="@id/home_ll_git"
+                    app:layout_constraintRight_toLeftOf="@id/home_ll_facebook"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <ImageView
+                        android:layout_width="@dimen/social_icon_width"
+                        android:layout_height="@dimen/social_icon_height"
+                        android:layout_marginBottom="5dp"
+                        android:contentDescription="@string/linkedin"
+                        android:src="@drawable/linkedinn" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/linkedin"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/social_icon_textsize" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/home_ll_facebook"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toRightOf="@id/home_ll_linkedin"
+                    app:layout_constraintRight_toLeftOf="@id/home_ll_telegram"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <ImageView
+                        android:layout_width="@dimen/social_icon_width"
+                        android:layout_height="@dimen/social_icon_height"
+                        android:layout_marginBottom="5dp"
+                        android:contentDescription="@string/facebook"
+                        android:src="@drawable/facebookk" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/facebook"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/social_icon_textsize" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/home_ll_telegram"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toRightOf="@id/home_ll_facebook"
+                    app:layout_constraintRight_toLeftOf="@id/home_ll_mywebsite"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <ImageView
+                        android:layout_width="@dimen/social_icon_width"
+                        android:layout_height="@dimen/social_icon_height"
+                        android:layout_marginBottom="5dp"
+                        android:contentDescription="@string/telegram"
+                        android:src="@drawable/telegramm" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/telegram"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/social_icon_textsize" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/home_ll_mywebsite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toRightOf="@id/home_ll_telegram"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <ImageView
+                        android:layout_width="@dimen/social_icon_width"
+                        android:layout_height="@dimen/social_icon_height"
+                        android:layout_marginBottom="5dp"
+                        android:contentDescription="@string/website"
+                        android:src="@drawable/mywebsite" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/website"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/social_icon_textsize" />
+                </LinearLayout>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+
+</ScrollView>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

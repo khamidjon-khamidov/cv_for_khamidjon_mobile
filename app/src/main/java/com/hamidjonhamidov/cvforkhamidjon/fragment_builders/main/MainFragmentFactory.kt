@@ -6,7 +6,9 @@ import androidx.lifecycle.ViewModelProvider
 import com.hamidjonhamidov.cvforkhamidjon.di.main_subcomponent.MainActivityScope
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.a_home.HomeFragment
 import com.hamidjonhamidov.cvforkhamidjon.util.glide.GlideManager
+import com.hamidjonhamidov.cvforkhamidjon.util.shared_prefs.RefreshLimitController
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.InternalCoroutinesApi
 import javax.inject.Inject
 
@@ -20,6 +22,7 @@ constructor(
     private val glideManager: GlideManager
 ) : FragmentFactory(){
 
+    @FlowPreview
     override fun instantiate(classLoader: ClassLoader, className: String): Fragment =
         when(className){
 

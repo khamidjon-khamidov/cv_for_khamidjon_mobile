@@ -51,10 +51,14 @@ class MainActivity : AppCompatActivity(), MainUiCommunicationListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // set toolbar
+        setSupportActionBar(main_toolbar)
+
         val appBarConfiguration =
             AppBarConfiguration(setOf(
                 R.id.homeFragment,
                 R.id.aboutMeFragment,
+                R.id.mySkillsFragment,
                 R.id.achievementsFragment,
                 R.id.aboutAppFragment,
                 R.id.notificationsFragment
