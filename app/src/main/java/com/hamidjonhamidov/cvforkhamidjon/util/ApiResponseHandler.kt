@@ -24,7 +24,7 @@ abstract class ApiResponseHandler<ViewState, RemoteResponseObject, CacheResponse
                 handleNetworkNotAllowedCacheSuccess(stateEvent, cacheResponseObject)
             } else {
                 DataState(
-                    toFragment = stateEvent.toString(),
+                    toFragment = stateEvent.toFragment,
                     message = MESSAGE_NETWORK_NOT_ALLOWED_CACHE_EMPTY
                 )
             }

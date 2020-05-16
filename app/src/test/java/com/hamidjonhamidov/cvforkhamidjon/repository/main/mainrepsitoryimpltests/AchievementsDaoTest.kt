@@ -342,14 +342,6 @@ class AchievementsDaoTest {
         `when`(appDatabase.getAchievementsDao())
             .thenReturn(achievevementsDaoTd)
 
-        `when`(apiService.getAchievementsSync())
-            .thenReturn(
-                listOf(
-                    ACHIEVEMENT_REMOTE_MODEL1.copy(listId = 4),
-                    ACHIEVEMENT_REMOTE_MODEL2.copy(listId = 9)
-                )
-            )
-
         // act
         val result = SUT
             .getAchievements(
@@ -369,7 +361,7 @@ class AchievementsDaoTest {
         }.launchIn(this)
 
         delay(2000)
-        verify(apiService, times(0)).getAchievementsSync()
+        verifyNoMoreInteractions(apiService)
         assertEquals(achievevementsDaoTd.funCalls, 1)
         assertEquals(achievevementsDaoTd.getAchievementCalls, 1)
         assertEquals(achievevementsDaoTd.inMemoryData.size, 5)

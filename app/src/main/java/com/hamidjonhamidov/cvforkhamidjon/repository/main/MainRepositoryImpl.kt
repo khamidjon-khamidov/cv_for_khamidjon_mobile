@@ -133,7 +133,7 @@ constructor(
                     cacheResponseObject: List<AboutMeModel>
                 ): DataState<MainViewState> {
                     return DataState(
-                        toFragment = stateEvent.toString(),
+                        toFragment = stateEvent.toFragment,
                         data = MainViewState(
                             homeFragmentView = HomeFragmentView(cacheResponseObject[0])
                         ),
@@ -243,7 +243,7 @@ constructor(
                     cacheResponseObject: List<SkillModel>
                 ): DataState<MainViewState> {
                     return DataState(
-                        toFragment = stateEvent.toString(),
+                        toFragment = stateEvent.toFragment,
                         data = MainViewState(
                             mySkillsFragmentView = MySkillsFragmentView(cacheResponseObject)
                         ),
@@ -357,7 +357,7 @@ constructor(
                     cacheResponseObject: List<AchievementModel>
                 ): DataState<MainViewState> {
                     return DataState(
-                        toFragment = stateEvent.toString(),
+                        toFragment = stateEvent.toFragment,
                         data = MainViewState(
                             achievementsFragmentView = AchievementsFragmentView(cacheResponseObject)
                         ),
@@ -469,7 +469,7 @@ constructor(
                     cacheResponseObject: List<ProjectModel>
                 ): DataState<MainViewState> {
                     return DataState(
-                        toFragment = stateEvent.toString(),
+                        toFragment = stateEvent.toFragment,
                         data = MainViewState(
                             projectsFragmentView = ProjectsFragmentView(cacheResponseObject)
                         ),
