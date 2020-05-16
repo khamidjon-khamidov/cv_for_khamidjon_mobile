@@ -10,6 +10,8 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
+import java.util.*
+import kotlin.collections.HashMap
 
 @FlowPreview
 @InternalCoroutinesApi
@@ -23,7 +25,8 @@ abstract class BaseMainViewModel(): ViewModel(){
     val viewState: LiveData<MainViewState>
         get() = _viewState
 
-    val messages = HashMap<String, MutableLiveData<Message?>>()
+    val listenMessageLiveData = MutableLiveData(false)
+    val messages = HashMap<String, Queue<FragmentMessage>>()
 
     fun setViewState(newViewState: MainViewState) {
         _viewState.value = newViewState

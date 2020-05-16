@@ -7,14 +7,12 @@ import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.SkillModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.InternalCoroutinesApi
-
+import java.util.*
 
 @FlowPreview
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
-fun MainViewModel.setAboutMe(aboutMe: AboutMeModel?){
-    if(aboutMe==null) return
-
+fun MainViewModel.setAboutMe(aboutMe: AboutMeModel){
     val update = getCurrentViewStateOrNew()
     update.homeFragmentView.aboutMe = aboutMe
     update.aboutMeFragmentView.aboutMe = aboutMe
@@ -24,9 +22,7 @@ fun MainViewModel.setAboutMe(aboutMe: AboutMeModel?){
 @FlowPreview
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
-fun MainViewModel.setMySkills(skills: List<SkillModel>?){
-    if(skills==null) return
-
+fun MainViewModel.setMySkills(skills: List<SkillModel>){
     val update = getCurrentViewStateOrNew()
     update.mySkillsFragmentView.mySkills = skills
     setViewState(update)
@@ -35,9 +31,7 @@ fun MainViewModel.setMySkills(skills: List<SkillModel>?){
 @FlowPreview
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
-fun MainViewModel.setAchievments(achievments: List<AchievementModel>?){
-    if(achievments==null) return
-
+fun MainViewModel.setAchievments(achievments: List<AchievementModel>){
     val update = getCurrentViewStateOrNew()
     update.achievementsFragmentView.achievements = achievments
     setViewState(update)
@@ -46,17 +40,40 @@ fun MainViewModel.setAchievments(achievments: List<AchievementModel>?){
 @FlowPreview
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
-fun MainViewModel.setProjects(projects: List<ProjectModel>?){
-    if(projects==null) return
-
+fun MainViewModel.setProjects(projects: List<ProjectModel>){
     val update = getCurrentViewStateOrNew()
     update.projectsFragmentView.projects = projects
     setViewState(update)
 }
 
 
+@FlowPreview
+@ExperimentalCoroutinesApi
+@InternalCoroutinesApi
+fun MainViewModel.setMessage(toFragment: String, message: FragmentMessage) {
+    if(messages[toFragment]==null){
+        messages[toFragment] = LinkedList(listOf(message))
+    } else {
+        messages[toFragment]!!.add(message)
+    }
 
+    notifyFragmentsWithNewMessage()
 
+}
+
+@FlowPreview
+@ExperimentalCoroutinesApi
+@InternalCoroutinesApi
+fun MainViewModel.removeLastMessage(toFragment: String) {
+    messages[toFragment]?.remove()
+}
+
+@ExperimentalCoroutinesApi
+@FlowPreview
+@InternalCoroutinesApi
+fun MainViewModel.notifyFragmentsWithNewMessage() {
+    listenMessageLiveData.value = !(listenMessageLiveData.value ?: false)
+}
 
 
 

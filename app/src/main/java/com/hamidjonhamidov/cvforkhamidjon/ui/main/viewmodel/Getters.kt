@@ -49,37 +49,21 @@ fun MainViewModel.removeFromJobs(mJob: MyJob) {
     setViewState(update)
 }
 
+
 @FlowPreview
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
-fun MainViewModel.setMessage(toFragment: String, message: Message?) {
-    if(messages[toFragment]==null){
-        messages[toFragment] = MutableLiveData()
-    }
-
-    messages[toFragment]!!.value = message
+fun MainViewModel.getMessage(toFragment: String): FragmentMessage? {
+    return messages[toFragment]?.peek()
 }
 
 @FlowPreview
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
-fun MainViewModel.removeMessage(toFragment: String) {
-    if (messages[toFragment] == null) {
-        messages[toFragment] = MutableLiveData()
-    } else {
-        messages[toFragment]?.value = null
-    }
-}
-
-@FlowPreview
-@ExperimentalCoroutinesApi
-@InternalCoroutinesApi
-fun MainViewModel.getMessage(toFragment: String): MutableLiveData<Message?> {
-    if (messages[toFragment] == null) {
-        setMessage(toFragment, null)
-    }
-
-    return messages[toFragment]!!
+fun MainViewModel.getMessageAndSetInProgress(toFragment: String): FragmentMessage? {
+    val message = messages[toFragment]?.peek()
+    message?.progressStatus = FragmentMessage.MESSAGE_IN_PROGRESS
+    return message
 }
 
 

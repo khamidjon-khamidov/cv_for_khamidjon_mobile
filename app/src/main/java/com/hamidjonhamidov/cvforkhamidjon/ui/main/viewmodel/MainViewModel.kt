@@ -1,29 +1,22 @@
 package com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepository
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainStateEvent
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainStateEvent.*
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainViewState
-import com.hamidjonhamidov.cvforkhamidjon.util.DataState
-import com.hamidjonhamidov.cvforkhamidjon.util.Message
-import com.hamidjonhamidov.cvforkhamidjon.util.NetworkConnection
-import com.hamidjonhamidov.cvforkhamidjon.util.MyJob
+import com.hamidjonhamidov.cvforkhamidjon.util.*
+import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.NETWORK_CACHE_SUCCESS_TITLE
 import com.hamidjonhamidov.cvforkhamidjon.util.shared_prefs.RefreshLimitController
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
-//@OptIn(FlowPreview::class)
 @FlowPreview
 @InternalCoroutinesApi
 @ExperimentalCoroutinesApi
@@ -32,7 +25,7 @@ class MainViewModel
 constructor(
     private val mainRepository: MainRepository,
     private val networkConnection: NetworkConnection,
-    refreshLimitController: RefreshLimitController
+    private val refreshLimitController: RefreshLimitController
 ) : BaseMainViewModel() {
 
     init {
@@ -44,10 +37,16 @@ constructor(
             .asFlow()
             .onEach { dataState ->
                 dataState.data?.let {
-                    handleNewData(dataState.toFragment, it, dataState.message)
+                    handleNewIncomingData(it, dataState.message)
                 }
+
+                handleNewMessage(dataState.toFragment, dataState.message)
             }
             .launchIn(viewModelScope)
+    }
+
+    private fun handleNewMessage(toFragment: String, message: Message) {
+        setMessage(toFragment, FragmentMessage(message))
     }
 
     private fun offerToDataChannel(dataState: DataState<MainViewState>) {
@@ -57,44 +56,75 @@ constructor(
     }
 
     fun setStateEvent(stateEvent: MainStateEvent) {
-        val flowData: Flow<DataState<MainViewState>>
+        val dataInFlow: Flow<DataState<MainViewState>>
         val activeJob =
             when (stateEvent) {
 
                 is GetHome -> {
-                    flowData = mainRepository
-                        .getAboutMe(stateEvent, networkConnection.isConectedToInternet())
+                    if (refreshLimitController.canHomeSync()) {
+                        dataInFlow = mainRepository
+                            .getAboutMe(stateEvent, networkConnection.isConectedToInternet())
+                    }  else {
+                        dataInFlow = mainRepository
+                            .getAboutMe(stateEvent, false, false)
+                        setMessage(stateEvent.toFragment, NOT_ALLOWED_MESSAGE)
+                    }
                     MyJob.GetAboutMe()
                 }
 
                 is GetAboutMe -> {
-                    flowData = mainRepository
-                        .getAboutMe(stateEvent, networkConnection.isConectedToInternet())
-                    MyJob.GetAchiements()
+                    if (refreshLimitController.canAboutMeSync()) {
+                        dataInFlow = mainRepository
+                            .getAboutMe(stateEvent, networkConnection.isConectedToInternet())
+                    }  else {
+                        dataInFlow = mainRepository
+                            .getAboutMe(stateEvent, false, false)
+                        setMessage(stateEvent.toFragment, NOT_ALLOWED_MESSAGE)
+                    }
+
+                    MyJob.GetAboutMe()
                 }
 
                 is GetMySkills -> {
-                    flowData = mainRepository
-                        .getMySkills(stateEvent, networkConnection.isConectedToInternet())
+                    if (refreshLimitController.canMySkillsSync()) {
+                        dataInFlow = mainRepository
+                            .getMySkills(stateEvent, networkConnection.isConectedToInternet())
+                    }  else {
+                        dataInFlow = mainRepository
+                            .getMySkills(stateEvent, false, false)
+                        setMessage(stateEvent.toFragment, NOT_ALLOWED_MESSAGE)
+                    }
                     MyJob.GetMySkills()
                 }
 
                 is GetAchievements -> {
-                    flowData = mainRepository
-                        .getAchievements(stateEvent, networkConnection.isConectedToInternet())
+                    if (refreshLimitController.canAchievmentsSync()) {
+                        dataInFlow = mainRepository
+                            .getAchievements(stateEvent, networkConnection.isConectedToInternet())
+                    }  else {
+                        dataInFlow = mainRepository
+                            .getAchievements(stateEvent, false, false)
+                        setMessage(stateEvent.toFragment, NOT_ALLOWED_MESSAGE)
+                    }
 
                     MyJob.GetAchiements()
                 }
 
                 is GetProjects -> {
-                    flowData = mainRepository
-                        .getProjects(stateEvent, networkConnection.isConectedToInternet())
+                    if (refreshLimitController.canAchievmentsSync()) {
+                        dataInFlow = mainRepository
+                            .getAchievements(stateEvent, networkConnection.isConectedToInternet())
+                    }  else {
+                        dataInFlow = mainRepository
+                            .getAchievements(stateEvent, false, false)
+                        setMessage(stateEvent.toFragment, NOT_ALLOWED_MESSAGE)
+                    }
 
                     MyJob.GetProjects()
                 }
             }
 
-        launchJob(activeJob, flowData)
+        launchJob(activeJob, dataInFlow)
     }
 
     private fun launchJob(mJob: MyJob, jobFunction: Flow<DataState<MainViewState>>) {
@@ -108,20 +138,46 @@ constructor(
         }
     }
 
-    private fun handleNewData(toFragment: String, data: MainViewState, message: Message) {
-        setMessage(toFragment, message)
+    private fun handleNewIncomingData(data: MainViewState, message: Message) {
 
-        setAboutMe(data.homeFragmentView.aboutMe)
+        data.homeFragmentView.aboutMe?.let {
+            setAboutMe(it)
+            if(message.title==NETWORK_CACHE_SUCCESS_TITLE){
+                refreshLimitController.incrementAboutMeSyncTimes()
+                refreshLimitController.incrementHomeSyncTimes()
+            }
+        }
 
-        setMySkills(data.mySkillsFragmentView.mySkills)
+        data.mySkillsFragmentView.mySkills?.let{
+            setMySkills(it)
+            if(message.title==NETWORK_CACHE_SUCCESS_TITLE){
+                refreshLimitController.incrementMySkillsSyncTimes()
+            }
+        }
 
-        setAchievments(data.achievementsFragmentView.achievements)
+        data.achievementsFragmentView.achievements?.let{
+            setAchievments(it)
+            if(message.title==NETWORK_CACHE_SUCCESS_TITLE){
+                refreshLimitController.incrementAchievmentsSyncTimes()
+            }
+        }
 
-        setProjects(data.projectsFragmentView.projects)
+        data.projectsFragmentView.projects?.let {
+            setProjects(it)
+            if(message.title==NETWORK_CACHE_SUCCESS_TITLE){
+                refreshLimitController.incrementProjectsSyncTime()
+            }
+        }
     }
 
+    val NOT_ALLOWED_MESSAGE = FragmentMessage(Message(
+        "Warning!!!",
+        "As you daily limits has finished, data will be provided from Database",
+        UIType.Dialog(),
+        false
+    ))
 }
-// this is for empty commit
+
 
 
 

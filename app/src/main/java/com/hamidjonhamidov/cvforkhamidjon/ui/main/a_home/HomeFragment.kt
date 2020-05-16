@@ -38,7 +38,7 @@ constructor(
     }
 
     override fun initData() {
-        TODO("Not yet implemented")
+//        TODO("Not yet implemented")
     }
 
     val observer: Observer<MainViewState> = Observer { viewState ->
