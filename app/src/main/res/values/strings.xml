@@ -28,5 +28,6 @@
     <string name="web_ndevelopment">Web\nDevelopment</string>
     <string name="algorithms_n_in_c_c">Algorithms\n in C/C++</string>
     <string name="android_developer">Android Developer</string>
-    <string name="home_des_text">I am an enthusiastic Android and Junior Web Developer who is keen on learning and working with a friendly team.</string>
+    <string name="home_des_text">This is dummy description</string>
+<!--    <string name="home_des_text">I am an enthusiastic Android and Junior Web Developer who is keen on learning and working with a friendly team.</string>-->
 </resources>

@@ -23,15 +23,6 @@
             android:background="@color/colorPrimary"
             app:title="Home"/>
 
-        <ProgressBar
-            android:id="@+id/progress_bar"
-            android:visibility="gone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/main_toolbar"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginTop="20dp"/>
 
         <fragment
             android:id="@+id/nav_host_fragment"
@@ -45,6 +36,15 @@
             app:navGraph="@navigation/main_nav_graph"
             />
 
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/main_toolbar"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="20dp"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

@@ -5,8 +5,9 @@ import androidx.fragment.app.FragmentFactory
 import androidx.lifecycle.ViewModelProvider
 import com.hamidjonhamidov.cvforkhamidjon.di.main_subcomponent.MainActivityScope
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.a_home.HomeFragment
+import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainStateEvent
+import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainStateEvent.GetHome
 import com.hamidjonhamidov.cvforkhamidjon.util.glide.GlideManager
-import com.hamidjonhamidov.cvforkhamidjon.util.shared_prefs.RefreshLimitController
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.InternalCoroutinesApi
@@ -27,7 +28,7 @@ constructor(
         when(className){
 
             HomeFragment::class.java.name -> {
-                HomeFragment(viewModelProviderFactory, glideManager)
+                HomeFragment(viewModelProviderFactory, glideManager, MainStateEvent.GetHome())
             }
 
             else -> {

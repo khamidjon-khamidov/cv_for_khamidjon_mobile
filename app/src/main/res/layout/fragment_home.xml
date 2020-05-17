@@ -50,7 +50,7 @@
                 android:layout_height="500dp"
                 android:layout_marginTop="20dp"
                 android:contentDescription="@string/full_name"
-                android:src="@drawable/hamidjon"
+                android:src="@drawable/my_circle_image"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/home_tv_fullname" />

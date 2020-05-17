@@ -24,7 +24,7 @@ abstract class ApiResponseHandler<ViewState, RemoteResponseObject, CacheResponse
                 handleNetworkNotAllowedCacheSuccess(stateEvent, cacheResponseObject)
             } else {
                 DataState(
-                    toFragment = stateEvent.toFragment,
+                    toFragment = stateEvent.whichFragment,
                     message = MESSAGE_NETWORK_NOT_ALLOWED_CACHE_EMPTY
                 )
             }
@@ -40,7 +40,7 @@ abstract class ApiResponseHandler<ViewState, RemoteResponseObject, CacheResponse
                             handleNetworkFailureCacheSuccess(stateEvent, cacheResponseObject)
                         } else {
                             DataState(
-                                toFragment = stateEvent.toFragment,
+                                toFragment = stateEvent.whichFragment,
                                 message = MESSAGE_NETWORK_ERROR_CACHE_EMPTY.copy()
                             )
                         }
@@ -51,7 +51,7 @@ abstract class ApiResponseHandler<ViewState, RemoteResponseObject, CacheResponse
                             handleNoInternetCacheSuccess(stateEvent, cacheResponseObject)
                         } else {
                             DataState(
-                                toFragment = stateEvent.toFragment,
+                                toFragment = stateEvent.whichFragment,
                                 message = MESSAGE_NO_INTERNET_CACHE_EMPTY.copy()
                             )
                         }
@@ -62,14 +62,14 @@ abstract class ApiResponseHandler<ViewState, RemoteResponseObject, CacheResponse
                             handleNetworkTimeoutCacheSuccess(stateEvent, cacheResponseObject)
                         } else {
                             DataState(
-                                toFragment = stateEvent.toFragment,
+                                toFragment = stateEvent.whichFragment,
                                 message = MESSAGE_NETWORK_TIMEOUT_CACHE_EMPTY
                             )
                         }
                     }
 
                     else -> DataState(
-                        toFragment = stateEvent.toFragment,
+                        toFragment = stateEvent.whichFragment,
                         message = MESSAGE_NETWORK_ERROR_CACHE_EMPTY
                     )
                 }

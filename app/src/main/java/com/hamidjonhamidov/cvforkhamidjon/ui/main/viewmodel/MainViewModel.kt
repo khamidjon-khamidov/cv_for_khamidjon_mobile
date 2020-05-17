@@ -1,5 +1,6 @@
 package com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepository
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainStateEvent
@@ -7,10 +8,10 @@ import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainStateEvent
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainViewState
 import com.hamidjonhamidov.cvforkhamidjon.util.*
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.NETWORK_CACHE_SUCCESS_TITLE
+import com.hamidjonhamidov.cvforkhamidjon.util.job_manager.JobManager
 import com.hamidjonhamidov.cvforkhamidjon.util.shared_prefs.RefreshLimitController
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.android.parcel.RawValue
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.launchIn
@@ -23,10 +24,13 @@ import javax.inject.Inject
 class MainViewModel
 @Inject
 constructor(
+    private var jobManger:JobManager<MainJobs> = JobManager(),
     private val mainRepository: MainRepository,
     private val networkConnection: NetworkConnection,
     private val refreshLimitController: RefreshLimitController
 ) : BaseMainViewModel() {
+
+    private val TAG = "AppDebug"
 
     init {
         setUpChannel()
@@ -36,6 +40,7 @@ constructor(
         dataChannel
             .asFlow()
             .onEach { dataState ->
+
                 dataState.data?.let {
                     handleNewIncomingData(it, dataState.message)
                 }
@@ -45,9 +50,6 @@ constructor(
             .launchIn(viewModelScope)
     }
 
-    private fun handleNewMessage(toFragment: String, message: Message) {
-        setMessage(toFragment, FragmentMessage(message))
-    }
 
     private fun offerToDataChannel(dataState: DataState<MainViewState>) {
         if (!dataChannel.isClosedForSend) {
@@ -56,20 +58,25 @@ constructor(
     }
 
     fun setStateEvent(stateEvent: MainStateEvent) {
+        // notify progress bar to show
+        setProgressObserverVisibility(stateEvent.whichFragment, true)
+
         val dataInFlow: Flow<DataState<MainViewState>>
         val activeJob =
             when (stateEvent) {
 
                 is GetHome -> {
                     if (refreshLimitController.canHomeSync()) {
+                        Log.d(TAG, "MainViewModel: setStateEvent: get home: canSync")
                         dataInFlow = mainRepository
                             .getAboutMe(stateEvent, networkConnection.isConectedToInternet())
                     }  else {
+                        setMessage(stateEvent.whichFragment, NOT_ALLOWED_MESSAGE)
+                        Log.d(TAG, "MainViewModel: setStateEvent: get home: NOT canSync")
                         dataInFlow = mainRepository
                             .getAboutMe(stateEvent, false, false)
-                        setMessage(stateEvent.toFragment, NOT_ALLOWED_MESSAGE)
                     }
-                    MyJob.GetAboutMe()
+                    MainJobs.GetAboutMe()
                 }
 
                 is GetAboutMe -> {
@@ -77,12 +84,12 @@ constructor(
                         dataInFlow = mainRepository
                             .getAboutMe(stateEvent, networkConnection.isConectedToInternet())
                     }  else {
+                        setMessage(stateEvent.whichFragment, NOT_ALLOWED_MESSAGE)
                         dataInFlow = mainRepository
                             .getAboutMe(stateEvent, false, false)
-                        setMessage(stateEvent.toFragment, NOT_ALLOWED_MESSAGE)
                     }
 
-                    MyJob.GetAboutMe()
+                    MainJobs.GetAboutMe()
                 }
 
                 is GetMySkills -> {
@@ -90,11 +97,11 @@ constructor(
                         dataInFlow = mainRepository
                             .getMySkills(stateEvent, networkConnection.isConectedToInternet())
                     }  else {
+                        setMessage(stateEvent.whichFragment, NOT_ALLOWED_MESSAGE)
                         dataInFlow = mainRepository
                             .getMySkills(stateEvent, false, false)
-                        setMessage(stateEvent.toFragment, NOT_ALLOWED_MESSAGE)
                     }
-                    MyJob.GetMySkills()
+                    MainJobs.GetMySkills()
                 }
 
                 is GetAchievements -> {
@@ -102,12 +109,12 @@ constructor(
                         dataInFlow = mainRepository
                             .getAchievements(stateEvent, networkConnection.isConectedToInternet())
                     }  else {
+                        setMessage(stateEvent.whichFragment, NOT_ALLOWED_MESSAGE)
                         dataInFlow = mainRepository
                             .getAchievements(stateEvent, false, false)
-                        setMessage(stateEvent.toFragment, NOT_ALLOWED_MESSAGE)
                     }
 
-                    MyJob.GetAchiements()
+                    MainJobs.GetAchiements()
                 }
 
                 is GetProjects -> {
@@ -115,27 +122,34 @@ constructor(
                         dataInFlow = mainRepository
                             .getAchievements(stateEvent, networkConnection.isConectedToInternet())
                     }  else {
+                        setMessage(stateEvent.whichFragment, NOT_ALLOWED_MESSAGE)
                         dataInFlow = mainRepository
                             .getAchievements(stateEvent, false, false)
-                        setMessage(stateEvent.toFragment, NOT_ALLOWED_MESSAGE)
                     }
 
-                    MyJob.GetProjects()
+                    MainJobs.GetProjects()
                 }
             }
 
         launchJob(activeJob, dataInFlow)
     }
 
-    private fun launchJob(mJob: MyJob, jobFunction: Flow<DataState<MainViewState>>) {
-        if (!isJobActive(mJob)) {
-            addToJobs(mJob)
+    private fun launchJob(mJob: MainJobs, jobFunction: Flow<DataState<MainViewState>>) {
+        Log.d(TAG, "MainViewModel: launchJob: ")
+        if (!jobManger.isJobActive(mJob)) {
+            jobManger.addJob(mJob)
             jobFunction
                 .onEach { dataState ->
+
                     offerToDataChannel(dataState)
                 }
                 .launchIn(viewModelScope)
         }
+    }
+
+    private fun handleNewMessage(whichFragment: String, message: Message) {
+        setMessage(whichFragment, FragmentMessage(message))
+        setProgressObserverVisibility(whichFragment, false)
     }
 
     private fun handleNewIncomingData(data: MainViewState, message: Message) {

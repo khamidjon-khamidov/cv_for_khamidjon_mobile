@@ -1,5 +1,6 @@
 package com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel
 
+import android.util.Log
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.AboutMeModel
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.AchievementModel
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.ProjectModel
@@ -8,6 +9,8 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.InternalCoroutinesApi
 import java.util.*
+
+private val TAG = "AppDebug"
 
 @FlowPreview
 @ExperimentalCoroutinesApi
@@ -50,11 +53,13 @@ fun MainViewModel.setProjects(projects: List<ProjectModel>){
 @FlowPreview
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
-fun MainViewModel.setMessage(toFragment: String, message: FragmentMessage) {
-    if(messages[toFragment]==null){
-        messages[toFragment] = LinkedList(listOf(message))
+fun MainViewModel.setMessage(whichFragment: String, message: FragmentMessage) {
+    if(messages[whichFragment]==null){
+        Log.d(TAG, ": setMessage: messages created: ${message}")
+        messages[whichFragment] = LinkedList(listOf(message))
     } else {
-        messages[toFragment]!!.add(message)
+        Log.d(TAG, ": setMessage: add to old messages created: ${message}")
+        messages[whichFragment]!!.add(message)
     }
 
     notifyFragmentsWithNewMessage()
@@ -64,16 +69,23 @@ fun MainViewModel.setMessage(toFragment: String, message: FragmentMessage) {
 @FlowPreview
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
-fun MainViewModel.removeLastMessage(toFragment: String) {
-    messages[toFragment]?.remove()
+fun MainViewModel.setLastMessageToProgress(toFragment: String){
+    messages[toFragment]?.peek()?.progressStatus = FragmentMessage.MESSAGE_IN_PROGRESS
 }
 
-@ExperimentalCoroutinesApi
 @FlowPreview
+@ExperimentalCoroutinesApi
 @InternalCoroutinesApi
-fun MainViewModel.notifyFragmentsWithNewMessage() {
-    listenMessageLiveData.value = !(listenMessageLiveData.value ?: false)
+fun MainViewModel.removeLastMessage(toFragment: String) {
+    try{
+        messages[toFragment]?.poll()
+        Log.d(TAG, ": removeLastMessage: messagessize = ${getMessagesSize(toFragment)}")
+    } catch (e: Exception){
+        Log.d(TAG, ": removeLastMessage: last message couldn't be removed ")
+    }
+
 }
+
 
 
 

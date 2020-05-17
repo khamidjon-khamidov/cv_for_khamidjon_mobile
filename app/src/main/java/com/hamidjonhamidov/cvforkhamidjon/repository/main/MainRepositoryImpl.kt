@@ -1,5 +1,6 @@
 package com.hamidjonhamidov.cvforkhamidjon.repository.main
 
+import android.util.Log
 import com.hamidjonhamidov.cvforkhamidjon.data_requests.api.main.MainApiService
 import com.hamidjonhamidov.cvforkhamidjon.data_requests.persistence.AppDatabase
 import com.hamidjonhamidov.cvforkhamidjon.di.main_subcomponent.MainActivityScope
@@ -37,12 +38,16 @@ constructor(
     val appDatabase: AppDatabase
 ) : MainRepository, Repository() {
 
+    private val TAG = "AppDebug"
+    
     override fun getAboutMe(
         stateEvent: StateEvent,
         isNetworkAvailable: Boolean,
         isNetworkAllowed: Boolean
     ): Flow<DataState<MainViewState>> = flow {
 
+        Log.d(TAG, "MainRepositoryImpl: getAboutMe: ")
+        
         // set network response to network error no internet available as a default
         var response: ApiResult<List<AboutMeRemoteModel>?> =
             ApiResult.GenericError(
@@ -81,7 +86,7 @@ constructor(
                         appDatabase.getAboutMeDao().replaceAboutMe(aboutMeModel)
                     }
                     return DataState(
-                        toFragment = stateEvent.toFragment,
+                        toFragment = stateEvent.whichFragment,
                         data = MainViewState(
                             homeFragmentView = HomeFragmentView(aboutMeModel)
                         ),
@@ -94,7 +99,7 @@ constructor(
                     cacheResponseObject: List<AboutMeModel>
                 ): DataState<MainViewState> {
                     return DataState(
-                        toFragment = stateEvent.toFragment,
+                        toFragment = stateEvent.whichFragment,
                         data = MainViewState(
                             homeFragmentView = HomeFragmentView(cacheResponseObject[0])
                         ),
@@ -107,7 +112,7 @@ constructor(
                     cacheResponseObject: List<AboutMeModel>
                 ): DataState<MainViewState> {
                     return DataState(
-                        toFragment = stateEvent.toFragment,
+                        toFragment = stateEvent.whichFragment,
                         data = MainViewState(
                             homeFragmentView = HomeFragmentView(cacheResponseObject[0])
                         ),
@@ -120,7 +125,7 @@ constructor(
                     cacheResponseObject: List<AboutMeModel>
                 ): DataState<MainViewState> {
                     return DataState(
-                        toFragment = stateEvent.toFragment,
+                        toFragment = stateEvent.whichFragment,
                         data = MainViewState(
                             homeFragmentView = HomeFragmentView(cacheResponseObject[0])
                         ),
@@ -133,7 +138,7 @@ constructor(
                     cacheResponseObject: List<AboutMeModel>
                 ): DataState<MainViewState> {
                     return DataState(
-                        toFragment = stateEvent.toFragment,
+                        toFragment = stateEvent.whichFragment,
                         data = MainViewState(
                             homeFragmentView = HomeFragmentView(cacheResponseObject[0])
                         ),
@@ -191,7 +196,7 @@ constructor(
                         appDatabase.getSkillsDao().insertManyAndReplace(skillsList)
                     }
                     return DataState(
-                        toFragment = stateEvent.toFragment,
+                        toFragment = stateEvent.whichFragment,
                         data = MainViewState(
                             mySkillsFragmentView = MySkillsFragmentView(skillsList)
                         ),
@@ -204,7 +209,7 @@ constructor(
                     cacheResponseObject: List<SkillModel>
                 ): DataState<MainViewState> {
                     return DataState(
-                        toFragment = stateEvent.toFragment,
+                        toFragment = stateEvent.whichFragment,
                         data = MainViewState(
                             mySkillsFragmentView = MySkillsFragmentView(cacheResponseObject)
                         ),
@@ -217,7 +222,7 @@ constructor(
                     cacheResponseObject: List<SkillModel>
                 ): DataState<MainViewState> {
                     return DataState(
-                        toFragment = stateEvent.toFragment,
+                        toFragment = stateEvent.whichFragment,
                         data = MainViewState(
                             mySkillsFragmentView = MySkillsFragmentView(cacheResponseObject)
                         ),
@@ -230,7 +235,7 @@ constructor(
                     cacheResponseObject: List<SkillModel>
                 ): DataState<MainViewState> {
                     return DataState(
-                        toFragment = stateEvent.toFragment,
+                        toFragment = stateEvent.whichFragment,
                         data = MainViewState(
                             mySkillsFragmentView = MySkillsFragmentView(cacheResponseObject)
                         ),
@@ -243,7 +248,7 @@ constructor(
                     cacheResponseObject: List<SkillModel>
                 ): DataState<MainViewState> {
                     return DataState(
-                        toFragment = stateEvent.toFragment,
+                        toFragment = stateEvent.whichFragment,
                         data = MainViewState(
                             mySkillsFragmentView = MySkillsFragmentView(cacheResponseObject)
                         ),
@@ -305,7 +310,7 @@ constructor(
                         appDatabase.getAchievementsDao().insertManyAndReplace(achievementList)
                     }
                     return DataState(
-                        toFragment = stateEvent.toFragment,
+                        toFragment = stateEvent.whichFragment,
                         data = MainViewState(
                             achievementsFragmentView = AchievementsFragmentView(achievementList)
                         ),
@@ -318,7 +323,7 @@ constructor(
                     cacheResponseObject: List<AchievementModel>
                 ): DataState<MainViewState> {
                     return DataState(
-                        toFragment = stateEvent.toFragment,
+                        toFragment = stateEvent.whichFragment,
                         data = MainViewState(
                             achievementsFragmentView = AchievementsFragmentView(cacheResponseObject)
                         ),
@@ -331,7 +336,7 @@ constructor(
                     cacheResponseObject: List<AchievementModel>
                 ): DataState<MainViewState> {
                     return DataState(
-                        toFragment = stateEvent.toFragment,
+                        toFragment = stateEvent.whichFragment,
                         data = MainViewState(
                             achievementsFragmentView = AchievementsFragmentView(cacheResponseObject)
                         ),
@@ -344,7 +349,7 @@ constructor(
                     cacheResponseObject: List<AchievementModel>
                 ): DataState<MainViewState> {
                     return DataState(
-                        toFragment = stateEvent.toFragment,
+                        toFragment = stateEvent.whichFragment,
                         data = MainViewState(
                             achievementsFragmentView = AchievementsFragmentView(cacheResponseObject)
                         ),
@@ -357,7 +362,7 @@ constructor(
                     cacheResponseObject: List<AchievementModel>
                 ): DataState<MainViewState> {
                     return DataState(
-                        toFragment = stateEvent.toFragment,
+                        toFragment = stateEvent.whichFragment,
                         data = MainViewState(
                             achievementsFragmentView = AchievementsFragmentView(cacheResponseObject)
                         ),
@@ -383,7 +388,6 @@ constructor(
                 null,
                 NetworkConstants.NETWORK_ERROR_NO_INTERNET
             )
-
 
         // if internet is available, request from internet
         if (isNetworkAvailable)
@@ -417,7 +421,7 @@ constructor(
                         appDatabase.getProjectsDao().insertManyAndReplace(projectList)
                     }
                     return DataState(
-                        toFragment = stateEvent.toFragment,
+                        toFragment = stateEvent.whichFragment,
                         data = MainViewState(
                             projectsFragmentView = ProjectsFragmentView(projectList)
                         ),
@@ -430,7 +434,7 @@ constructor(
                     cacheResponseObject: List<ProjectModel>
                 ): DataState<MainViewState> {
                     return DataState(
-                        toFragment = stateEvent.toFragment,
+                        toFragment = stateEvent.whichFragment,
                         data = MainViewState(
                             projectsFragmentView = ProjectsFragmentView(cacheResponseObject)
                         ),
@@ -443,7 +447,7 @@ constructor(
                     cacheResponseObject: List<ProjectModel>
                 ): DataState<MainViewState> {
                     return DataState(
-                        toFragment = stateEvent.toFragment,
+                        toFragment = stateEvent.whichFragment,
                         data = MainViewState(
                             projectsFragmentView = ProjectsFragmentView(cacheResponseObject)
                         ),
@@ -456,7 +460,7 @@ constructor(
                     cacheResponseObject: List<ProjectModel>
                 ): DataState<MainViewState> {
                     return DataState(
-                        toFragment = stateEvent.toFragment,
+                        toFragment = stateEvent.whichFragment,
                         data = MainViewState(
                             projectsFragmentView = ProjectsFragmentView(cacheResponseObject)
                         ),
@@ -469,7 +473,7 @@ constructor(
                     cacheResponseObject: List<ProjectModel>
                 ): DataState<MainViewState> {
                     return DataState(
-                        toFragment = stateEvent.toFragment,
+                        toFragment = stateEvent.whichFragment,
                         data = MainViewState(
                             projectsFragmentView = ProjectsFragmentView(cacheResponseObject)
                         ),
@@ -483,3 +487,26 @@ constructor(
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
