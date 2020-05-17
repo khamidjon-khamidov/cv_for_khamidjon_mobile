@@ -3,7 +3,6 @@ package com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.FragmentMessage.Companion.MESSAGE_IN_PROGRESS
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.FragmentMessage.Companion.MESSAGE_IS_NOT_IN_PROGRESS
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainViewState
-import com.hamidjonhamidov.cvforkhamidjon.util.MainJobs
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.InternalCoroutinesApi

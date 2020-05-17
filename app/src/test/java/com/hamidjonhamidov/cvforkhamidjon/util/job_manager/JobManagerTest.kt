@@ -1,7 +1,7 @@
 package com.hamidjonhamidov.cvforkhamidjon.util.job_manager
 
-import com.hamidjonhamidov.cvforkhamidjon.util.MainJobs
-import com.hamidjonhamidov.cvforkhamidjon.util.MainJobs.*
+import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainJobs
+import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainJobs.*
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test

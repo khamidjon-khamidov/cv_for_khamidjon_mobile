@@ -1,26 +1,25 @@
 package com.hamidjonhamidov.cvforkhamidjon.util.job_manager
 
+import kotlin.reflect.KClass
 
-class JobManager<JobType>{
-    private val jobList: HashSet<String> = HashSet()
+
+class JobManager<JobType : Any>{
+    private val jobList: HashSet<KClass<out JobType>> = HashSet()
 
     fun isJobActive(job: JobType): Boolean {
-        return jobList.contains(job.toString())
+        return jobList.contains(job::class)
     }
 
-    fun isJobActive(whichFragment: String): Boolean{
-
-    }
 
     fun removeJob(job: JobType) {
-        jobList.remove(job.toString())
+        jobList.remove(job::class)
     }
 
     fun addJob(newJob: JobType): Boolean{
-        if(jobList.contains(newJob.toString())){
+        if(jobList.contains(newJob::class)){
             return false
         } else {
-            jobList.add(newJob.toString())
+            jobList.add(newJob::class)
             return true
         }
     }

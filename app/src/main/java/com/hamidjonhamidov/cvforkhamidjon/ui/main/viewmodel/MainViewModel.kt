@@ -3,6 +3,7 @@ package com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepository
+import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainJobs
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainStateEvent
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainStateEvent.*
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainViewState
@@ -10,7 +11,6 @@ import com.hamidjonhamidov.cvforkhamidjon.util.*
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.NETWORK_CACHE_SUCCESS_TITLE
 import com.hamidjonhamidov.cvforkhamidjon.util.job_manager.JobManager
 import com.hamidjonhamidov.cvforkhamidjon.util.shared_prefs.RefreshLimitController
-import kotlinx.android.parcel.RawValue
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
