@@ -18,14 +18,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.hamidjonhamidov.cvforkhamidjon.R
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.AboutMeModel
-import com.hamidjonhamidov.cvforkhamidjon.ui.askPermission
-import com.hamidjonhamidov.cvforkhamidjon.ui.delayInBackgLaunchInMain
+import com.hamidjonhamidov.cvforkhamidjon.ui.*
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.BaseMainFragment
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.getCurrentViewStateOrNew
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainJobsEvent
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainStateEvent
-import com.hamidjonhamidov.cvforkhamidjon.ui.showProgressBar
-import com.hamidjonhamidov.cvforkhamidjon.ui.showToast
 import com.hamidjonhamidov.cvforkhamidjon.util.StateEvent
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.GeneralConstants.FACEBOOK_LINK
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.GeneralConstants.GIT_LINK
@@ -44,7 +41,7 @@ class HomeFragment(
     viewModelFactory: ViewModelProvider.Factory,
     private val requestManager: GlideManager,
     val homeStateEvent: MainStateEvent
-) : BaseMainFragment<AboutMeModel>(R.layout.fragment_home, viewModelFactory, homeStateEvent) {
+) : BaseMainFragment<AboutMeModel>(R.layout.fragment_home, R.menu.home_menu, viewModelFactory, homeStateEvent) {
 
     private val TAG = "AppDebug"
 
@@ -74,11 +71,6 @@ class HomeFragment(
                 }
             }
         })
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.home_menu, menu)
-        super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -157,29 +149,24 @@ class HomeFragment(
 
     fun enableSocialButtons() {
         home_ll_git.setOnClickListener {
-            goToLink(GIT_LINK)
+            activity?.goToLink(GIT_LINK)
         }
 
         home_ll_linkedin.setOnClickListener {
-            goToLink(LINKEDIN_LINK)
+            activity?.goToLink(LINKEDIN_LINK)
         }
 
         home_ll_facebook.setOnClickListener {
-            goToLink(FACEBOOK_LINK)
+            activity?.goToLink(FACEBOOK_LINK)
         }
 
         home_ll_telegram.setOnClickListener {
-            goToLink(TELEGRAM_LINK)
+            activity?.goToLink(TELEGRAM_LINK)
         }
 
         home_ll_mywebsite.setOnClickListener {
-            goToLink(WEBSITE_LINK)
+            activity?.goToLink(WEBSITE_LINK)
         }
-    }
-
-    fun goToLink(link: String) {
-        val myIntent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
-        startActivity(myIntent)
     }
 }
 

@@ -28,6 +28,17 @@
     <string name="web_ndevelopment">Web\nDevelopment</string>
     <string name="algorithms_n_in_c_c">Algorithms\n in C/C++</string>
     <string name="android_developer">Android Developer</string>
-    <string name="home_des_text">This is dummy description</string>
-<!--    <string name="home_des_text">I am an enthusiastic Android and Junior Web Developer who is keen on learning and working with a friendly team.</string>-->
+    <string name="download_cv">Download CV</string>
+    <string name="my_intro">My Intro</string>
+    <string name="home_des_text">I am an enthusiastic Android and Junior Web Developer who is keen on learning and working with a friendly team.</string>
+    <string name="aboutme_des">I have been learning programming since Sep 2017. Over this period, I have learned Algorithms in C/C++, Android Development(Dagger 2, Retrofit, Firebase, MVVM/MVI, TDD/Unit Testing, UI concepts, Coroutines, Flows, Channels, Room, LiveData, Fragment Factory, Navigation Components and so on) in Java/Kotlin and Web development using html, css, javasrcipt, reactjs for frontend and nodejs, mongodb for backend.</string>
+    <string name="phone">Phone:</string>
+    <string name="phone_number">+44 075653 36207</string>
+    <string name="email">Email:</string>
+    <string name="my_interests">My Interests</string>
+    <string name="chess">Chess</string>
+    <string name="travel">Travel</string>
+    <string name="movie">Movie</string>
+    <string name="music">Music</string>
+    <string name="my_email">hamidovhamid1998@gmail.com</string>
 </resources>

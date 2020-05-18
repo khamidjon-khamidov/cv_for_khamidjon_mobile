@@ -3,12 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/home_mi_download"
-        android:icon="@drawable/download"
-        android:title="@string/download_cv"
-        app:showAsAction="always"/>
-
-    <item
         android:id="@+id/mi_refresh"
         android:icon="@drawable/ic_refresh"
         android:title="@string/refresh"

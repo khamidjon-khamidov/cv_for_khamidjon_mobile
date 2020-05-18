@@ -2,16 +2,21 @@ package com.hamidjonhamidov.cvforkhamidjon.ui
 
 import android.app.Activity
 import android.app.Dialog
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context.CLIPBOARD_SERVICE
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.view.View
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.lifecycle.lifecycleScope
+import androidx.core.content.ContextCompat.checkSelfPermission
 import com.hamidjonhamidov.cvforkhamidjon.R
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.info_dialog.*
 import kotlinx.coroutines.*
+
 
 private val TAG = "AppDebug"
 
@@ -33,8 +38,19 @@ fun Activity.showToast(text: String) {
     Toast.makeText(this, text, Toast.LENGTH_LONG).show()
 }
 
+fun Activity.copyToClipboard(text: String){
+    val clipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+    val clip = ClipData.newPlainText("label", text)
+    clipboard.setPrimaryClip(clip)
+}
+
 fun Activity.showProgressBar(isShow: Boolean) {
     progress_bar?.visibility = if (isShow) View.VISIBLE else View.GONE
+}
+
+fun Activity.goToLink(link: String){
+    val myIntent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
+    startActivity(myIntent)
 }
 
 fun Activity.askPermission(
@@ -42,7 +58,7 @@ fun Activity.askPermission(
     permissionCode: Int
 ): Boolean {
 
-    if (ContextCompat.checkSelfPermission(this, permissionName)
+    if (checkSelfPermission(this, permissionName)
         == PackageManager.PERMISSION_GRANTED
     )
         return true

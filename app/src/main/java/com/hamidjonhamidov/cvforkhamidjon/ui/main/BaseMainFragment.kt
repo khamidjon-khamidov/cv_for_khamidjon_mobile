@@ -2,6 +2,8 @@ package com.hamidjonhamidov.cvforkhamidjon.ui.main
 
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -29,6 +31,7 @@ import kotlinx.coroutines.*
 @ExperimentalCoroutinesApi
 abstract class BaseMainFragment<T>(
     fragmentId: Int,
+    val menuId: Int,
     private val viewModelFactory: ViewModelProvider.Factory,
     val stateEvent: MainStateEvent
 ) : Fragment(fragmentId) {
@@ -87,10 +90,15 @@ abstract class BaseMainFragment<T>(
         activity?.showProgressBar(false)
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(menuId, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         return when (item.itemId) {
-            R.id.home_mi_refresh -> {
+            R.id.mi_refresh -> {
                 viewModel.setStateEvent(stateEvent)
                 true
             }
