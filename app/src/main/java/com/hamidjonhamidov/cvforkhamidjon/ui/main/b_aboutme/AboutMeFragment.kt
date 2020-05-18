@@ -41,7 +41,7 @@ class AboutMeFragment(
 
 
     override fun subscribeDataObservers() {
-        // observe data
+        // observe data in about me
         viewModel.viewState.observe(viewLifecycleOwner, Observer { viewState ->
             viewState?.aboutMeFragmentView?.let {
                 it.aboutMe?.let { aboutMe ->
