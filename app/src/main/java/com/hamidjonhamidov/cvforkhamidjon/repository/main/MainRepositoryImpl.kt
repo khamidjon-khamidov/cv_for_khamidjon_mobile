@@ -9,13 +9,13 @@ import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.AboutMeModel
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.AchievementModel
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.ProjectModel
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.SkillModel
-import com.hamidjonhamidov.cvforkhamidjon.repository.Repository
+import com.hamidjonhamidov.cvforkhamidjon.repository.NetworkApiCall
+import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainStateEvent
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainViewState
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainViewState.*
 import com.hamidjonhamidov.cvforkhamidjon.util.ApiResponseHandler
 import com.hamidjonhamidov.cvforkhamidjon.util.ApiResult
 import com.hamidjonhamidov.cvforkhamidjon.util.DataState
-import com.hamidjonhamidov.cvforkhamidjon.util.StateEvent
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NETWORK_ERROR_CACHE_SUCCESS
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NETWORK_NOT_ALLOWED_CACHE_SUCCESS
@@ -36,18 +36,16 @@ class MainRepositoryImpl
 constructor(
     val apiService: MainApiService,
     val appDatabase: AppDatabase
-) : MainRepository, Repository() {
+) : MainRepository, NetworkApiCall() {
 
     private val TAG = "AppDebug"
-    
+
     override fun getAboutMe(
-        stateEvent: StateEvent,
+        stateEvent: MainStateEvent,
         isNetworkAvailable: Boolean,
         isNetworkAllowed: Boolean
-    ): Flow<DataState<MainViewState>> = flow {
+    ): Flow<DataState<MainViewState, MainStateEvent>> = flow {
 
-        Log.d(TAG, "MainRepositoryImpl: getAboutMe: ")
-        
         // set network response to network error no internet available as a default
         var response: ApiResult<List<AboutMeRemoteModel>?> =
             ApiResult.GenericError(
@@ -71,23 +69,24 @@ constructor(
 
         // process cache and remote response
         val result = withContext(Dispatchers.Default) {
-            object : ApiResponseHandler<MainViewState, AboutMeRemoteModel, AboutMeModel>(
-                response,
-                stateEvent,
-                cacheRepsonse,
-                isNetworkAllowed
-            ) {
+            object :
+                ApiResponseHandler<MainViewState, MainStateEvent, AboutMeRemoteModel, AboutMeModel>(
+                    response,
+                    stateEvent,
+                    cacheRepsonse,
+                    isNetworkAllowed
+                ) {
                 override fun handleNetworkSuccessCacheSuccess(
-                    stateEvent: StateEvent,
+                    stateEvent: MainStateEvent,
                     remoteResponse: List<AboutMeRemoteModel>
-                ): DataState<MainViewState> {
+                ): DataState<MainViewState, MainStateEvent> {
                     val aboutMeModel = remoteResponse[0].convertToAboutMeModel()
                     GlobalScope.launch((Dispatchers.IO)) {
                         appDatabase.getAboutMeDao().replaceAboutMe(aboutMeModel)
                     }
                     return DataState(
-                        toFragment = stateEvent.whichFragment,
-                        data = MainViewState(
+                        stateEvent = stateEvent,
+                        viewState = MainViewState(
                             homeFragmentView = HomeFragmentView(aboutMeModel)
                         ),
                         message = MESSAGE_NETWORK_SUCCESS_CACHE_SUCCESSS.copy()
@@ -95,12 +94,12 @@ constructor(
                 }
 
                 override fun handleNetworkTimeoutCacheSuccess(
-                    stateEvent: StateEvent,
+                    stateEvent: MainStateEvent,
                     cacheResponseObject: List<AboutMeModel>
-                ): DataState<MainViewState> {
+                ): DataState<MainViewState, MainStateEvent> {
                     return DataState(
-                        toFragment = stateEvent.whichFragment,
-                        data = MainViewState(
+                        stateEvent = stateEvent,
+                        viewState = MainViewState(
                             homeFragmentView = HomeFragmentView(cacheResponseObject[0])
                         ),
                         message = MESSSAGE_NETWORK_TIMEOUT_CACHE_SUCCESS
@@ -108,12 +107,13 @@ constructor(
                 }
 
                 override fun handleNoInternetCacheSuccess(
-                    stateEvent: StateEvent,
+                    stateEvent: MainStateEvent,
                     cacheResponseObject: List<AboutMeModel>
-                ): DataState<MainViewState> {
+                ): DataState<MainViewState, MainStateEvent> {
+
                     return DataState(
-                        toFragment = stateEvent.whichFragment,
-                        data = MainViewState(
+                        stateEvent = stateEvent,
+                        viewState = MainViewState(
                             homeFragmentView = HomeFragmentView(cacheResponseObject[0])
                         ),
                         message = MESSAGE_NO_INTERNET_CACHE_SUCCESS
@@ -121,12 +121,12 @@ constructor(
                 }
 
                 override fun handleNetworkFailureCacheSuccess(
-                    stateEvent: StateEvent,
+                    stateEvent: MainStateEvent,
                     cacheResponseObject: List<AboutMeModel>
-                ): DataState<MainViewState> {
+                ): DataState<MainViewState, MainStateEvent> {
                     return DataState(
-                        toFragment = stateEvent.whichFragment,
-                        data = MainViewState(
+                        stateEvent = stateEvent,
+                        viewState = MainViewState(
                             homeFragmentView = HomeFragmentView(cacheResponseObject[0])
                         ),
                         message = MESSAGE_NETWORK_ERROR_CACHE_SUCCESS
@@ -134,12 +134,12 @@ constructor(
                 }
 
                 override fun handleNetworkNotAllowedCacheSuccess(
-                    stateEvent: StateEvent,
+                    stateEvent: MainStateEvent,
                     cacheResponseObject: List<AboutMeModel>
-                ): DataState<MainViewState> {
+                ): DataState<MainViewState, MainStateEvent> {
                     return DataState(
-                        toFragment = stateEvent.whichFragment,
-                        data = MainViewState(
+                        stateEvent = stateEvent,
+                        viewState = MainViewState(
                             homeFragmentView = HomeFragmentView(cacheResponseObject[0])
                         ),
                         message = MESSAGE_NETWORK_NOT_ALLOWED_CACHE_SUCCESS
@@ -153,10 +153,10 @@ constructor(
     }
 
     override fun getMySkills(
-        stateEvent: StateEvent,
+        stateEvent: MainStateEvent,
         isNetworkAvailable: Boolean,
         isNetworkAllowed: Boolean
-    ): Flow<DataState<MainViewState>> = flow {
+    ): Flow<DataState<MainViewState, MainStateEvent>> = flow {
 
         // set remote response to network error no internet available as default
         var response: ApiResult<List<SkillRemoteModel>?> =
@@ -180,24 +180,25 @@ constructor(
         }
 
         val result = withContext(Dispatchers.Default) {
-            object : ApiResponseHandler<MainViewState, SkillRemoteModel, SkillModel>(
-                response,
-                stateEvent,
-                cacheRepsonse,
-                isNetworkAllowed
-            ) {
+            object :
+                ApiResponseHandler<MainViewState, MainStateEvent, SkillRemoteModel, SkillModel>(
+                    response,
+                    stateEvent,
+                    cacheRepsonse,
+                    isNetworkAllowed
+                ) {
                 override fun handleNetworkSuccessCacheSuccess(
-                    stateEvent: StateEvent,
+                    stateEvent: MainStateEvent,
                     remoteResponse: List<SkillRemoteModel>
-                ): DataState<MainViewState> {
+                ): DataState<MainViewState, MainStateEvent> {
                     val skillsList = remoteResponse.map { it.convertToSkillModel() }
 
                     GlobalScope.launch((Dispatchers.IO)) {
                         appDatabase.getSkillsDao().insertManyAndReplace(skillsList)
                     }
                     return DataState(
-                        toFragment = stateEvent.whichFragment,
-                        data = MainViewState(
+                        stateEvent = stateEvent,
+                        viewState = MainViewState(
                             mySkillsFragmentView = MySkillsFragmentView(skillsList)
                         ),
                         message = MESSAGE_NETWORK_SUCCESS_CACHE_SUCCESSS.copy()
@@ -205,12 +206,12 @@ constructor(
                 }
 
                 override fun handleNetworkTimeoutCacheSuccess(
-                    stateEvent: StateEvent,
+                    stateEvent: MainStateEvent,
                     cacheResponseObject: List<SkillModel>
-                ): DataState<MainViewState> {
+                ): DataState<MainViewState, MainStateEvent> {
                     return DataState(
-                        toFragment = stateEvent.whichFragment,
-                        data = MainViewState(
+                        stateEvent = stateEvent,
+                        viewState = MainViewState(
                             mySkillsFragmentView = MySkillsFragmentView(cacheResponseObject)
                         ),
                         message = MESSSAGE_NETWORK_TIMEOUT_CACHE_SUCCESS
@@ -218,12 +219,12 @@ constructor(
                 }
 
                 override fun handleNoInternetCacheSuccess(
-                    stateEvent: StateEvent,
+                    stateEvent: MainStateEvent,
                     cacheResponseObject: List<SkillModel>
-                ): DataState<MainViewState> {
+                ): DataState<MainViewState, MainStateEvent> {
                     return DataState(
-                        toFragment = stateEvent.whichFragment,
-                        data = MainViewState(
+                        stateEvent = stateEvent,
+                        viewState = MainViewState(
                             mySkillsFragmentView = MySkillsFragmentView(cacheResponseObject)
                         ),
                         message = MESSAGE_NO_INTERNET_CACHE_SUCCESS
@@ -231,12 +232,12 @@ constructor(
                 }
 
                 override fun handleNetworkFailureCacheSuccess(
-                    stateEvent: StateEvent,
+                    stateEvent: MainStateEvent,
                     cacheResponseObject: List<SkillModel>
-                ): DataState<MainViewState> {
+                ): DataState<MainViewState, MainStateEvent> {
                     return DataState(
-                        toFragment = stateEvent.whichFragment,
-                        data = MainViewState(
+                        stateEvent = stateEvent,
+                        viewState = MainViewState(
                             mySkillsFragmentView = MySkillsFragmentView(cacheResponseObject)
                         ),
                         message = MESSAGE_NETWORK_ERROR_CACHE_SUCCESS
@@ -244,12 +245,12 @@ constructor(
                 }
 
                 override fun handleNetworkNotAllowedCacheSuccess(
-                    stateEvent: StateEvent,
+                    stateEvent: MainStateEvent,
                     cacheResponseObject: List<SkillModel>
-                ): DataState<MainViewState> {
+                ): DataState<MainViewState, MainStateEvent> {
                     return DataState(
-                        toFragment = stateEvent.whichFragment,
-                        data = MainViewState(
+                        stateEvent = stateEvent,
+                        viewState = MainViewState(
                             mySkillsFragmentView = MySkillsFragmentView(cacheResponseObject)
                         ),
                         message = MESSAGE_NETWORK_NOT_ALLOWED_CACHE_SUCCESS
@@ -263,10 +264,10 @@ constructor(
     }
 
     override fun getAchievements(
-        stateEvent: StateEvent,
+        stateEvent: MainStateEvent,
         isNetworkAvailable: Boolean,
         isNetworkAllowed: Boolean
-    ): Flow<DataState<MainViewState>> = flow {
+    ): Flow<DataState<MainViewState, MainStateEvent>> = flow {
 
         // set remote response to network error no internet available as default
         var response: ApiResult<List<AchievementRemoteModel>?> =
@@ -294,24 +295,25 @@ constructor(
         }
 
         val result = withContext(Dispatchers.Default) {
-            object : ApiResponseHandler<MainViewState, AchievementRemoteModel, AchievementModel>(
-                response,
-                stateEvent,
-                cacheRepsonse,
-                isNetworkAllowed
-            ) {
+            object :
+                ApiResponseHandler<MainViewState, MainStateEvent, AchievementRemoteModel, AchievementModel>(
+                    response,
+                    stateEvent,
+                    cacheRepsonse,
+                    isNetworkAllowed
+                ) {
                 override fun handleNetworkSuccessCacheSuccess(
-                    stateEvent: StateEvent,
+                    stateEvent: MainStateEvent,
                     remoteResponse: List<AchievementRemoteModel>
-                ): DataState<MainViewState> {
+                ): DataState<MainViewState, MainStateEvent> {
                     val achievementList = remoteResponse.map { it.convertToAchievmentModel() }
 
                     GlobalScope.launch((Dispatchers.IO)) {
                         appDatabase.getAchievementsDao().insertManyAndReplace(achievementList)
                     }
                     return DataState(
-                        toFragment = stateEvent.whichFragment,
-                        data = MainViewState(
+                        stateEvent = stateEvent,
+                        viewState = MainViewState(
                             achievementsFragmentView = AchievementsFragmentView(achievementList)
                         ),
                         message = MESSAGE_NETWORK_SUCCESS_CACHE_SUCCESSS.copy()
@@ -319,12 +321,12 @@ constructor(
                 }
 
                 override fun handleNetworkTimeoutCacheSuccess(
-                    stateEvent: StateEvent,
+                    stateEvent: MainStateEvent,
                     cacheResponseObject: List<AchievementModel>
-                ): DataState<MainViewState> {
+                ): DataState<MainViewState, MainStateEvent> {
                     return DataState(
-                        toFragment = stateEvent.whichFragment,
-                        data = MainViewState(
+                        stateEvent = stateEvent,
+                        viewState = MainViewState(
                             achievementsFragmentView = AchievementsFragmentView(cacheResponseObject)
                         ),
                         message = MESSSAGE_NETWORK_TIMEOUT_CACHE_SUCCESS
@@ -332,12 +334,12 @@ constructor(
                 }
 
                 override fun handleNoInternetCacheSuccess(
-                    stateEvent: StateEvent,
+                    stateEvent: MainStateEvent,
                     cacheResponseObject: List<AchievementModel>
-                ): DataState<MainViewState> {
+                ): DataState<MainViewState, MainStateEvent> {
                     return DataState(
-                        toFragment = stateEvent.whichFragment,
-                        data = MainViewState(
+                        stateEvent = stateEvent,
+                        viewState = MainViewState(
                             achievementsFragmentView = AchievementsFragmentView(cacheResponseObject)
                         ),
                         message = MESSAGE_NO_INTERNET_CACHE_SUCCESS
@@ -345,12 +347,12 @@ constructor(
                 }
 
                 override fun handleNetworkFailureCacheSuccess(
-                    stateEvent: StateEvent,
+                    stateEvent: MainStateEvent,
                     cacheResponseObject: List<AchievementModel>
-                ): DataState<MainViewState> {
+                ): DataState<MainViewState, MainStateEvent> {
                     return DataState(
-                        toFragment = stateEvent.whichFragment,
-                        data = MainViewState(
+                        stateEvent = stateEvent,
+                        viewState = MainViewState(
                             achievementsFragmentView = AchievementsFragmentView(cacheResponseObject)
                         ),
                         message = MESSAGE_NETWORK_ERROR_CACHE_SUCCESS
@@ -358,12 +360,12 @@ constructor(
                 }
 
                 override fun handleNetworkNotAllowedCacheSuccess(
-                    stateEvent: StateEvent,
+                    stateEvent: MainStateEvent,
                     cacheResponseObject: List<AchievementModel>
-                ): DataState<MainViewState> {
+                ): DataState<MainViewState, MainStateEvent> {
                     return DataState(
-                        toFragment = stateEvent.whichFragment,
-                        data = MainViewState(
+                        stateEvent = stateEvent,
+                        viewState = MainViewState(
                             achievementsFragmentView = AchievementsFragmentView(cacheResponseObject)
                         ),
                         message = MESSAGE_NETWORK_NOT_ALLOWED_CACHE_SUCCESS
@@ -377,10 +379,10 @@ constructor(
     }
 
     override fun getProjects(
-        stateEvent: StateEvent,
+        stateEvent: MainStateEvent,
         isNetworkAvailable: Boolean,
         isNetworkAllowed: Boolean
-    ): Flow<DataState<MainViewState>> = flow {
+    ): Flow<DataState<MainViewState, MainStateEvent>> = flow {
 
         // set remote response to network error no internet available as default
         var response: ApiResult<List<ProjectsRemoteModel>?> =
@@ -405,24 +407,25 @@ constructor(
         }
 
         val result = withContext(Dispatchers.Default) {
-            object : ApiResponseHandler<MainViewState, ProjectsRemoteModel, ProjectModel>(
-                response,
-                stateEvent,
-                cacheRepsonse,
-                isNetworkAllowed
-            ) {
+            object :
+                ApiResponseHandler<MainViewState, MainStateEvent, ProjectsRemoteModel, ProjectModel>(
+                    response,
+                    stateEvent,
+                    cacheRepsonse,
+                    isNetworkAllowed
+                ) {
                 override fun handleNetworkSuccessCacheSuccess(
-                    stateEvent: StateEvent,
+                    stateEvent: MainStateEvent,
                     remoteResponse: List<ProjectsRemoteModel>
-                ): DataState<MainViewState> {
+                ): DataState<MainViewState, MainStateEvent> {
                     val projectList = remoteResponse.map { it.convertToProjectModel() }
 
                     GlobalScope.launch((Dispatchers.IO)) {
                         appDatabase.getProjectsDao().insertManyAndReplace(projectList)
                     }
                     return DataState(
-                        toFragment = stateEvent.whichFragment,
-                        data = MainViewState(
+                        stateEvent = stateEvent,
+                        viewState = MainViewState(
                             projectsFragmentView = ProjectsFragmentView(projectList)
                         ),
                         message = MESSAGE_NETWORK_SUCCESS_CACHE_SUCCESSS.copy()
@@ -430,12 +433,12 @@ constructor(
                 }
 
                 override fun handleNetworkTimeoutCacheSuccess(
-                    stateEvent: StateEvent,
+                    stateEvent: MainStateEvent,
                     cacheResponseObject: List<ProjectModel>
-                ): DataState<MainViewState> {
+                ): DataState<MainViewState, MainStateEvent> {
                     return DataState(
-                        toFragment = stateEvent.whichFragment,
-                        data = MainViewState(
+                        stateEvent = stateEvent,
+                        viewState = MainViewState(
                             projectsFragmentView = ProjectsFragmentView(cacheResponseObject)
                         ),
                         message = MESSSAGE_NETWORK_TIMEOUT_CACHE_SUCCESS
@@ -443,12 +446,12 @@ constructor(
                 }
 
                 override fun handleNoInternetCacheSuccess(
-                    stateEvent: StateEvent,
+                    stateEvent: MainStateEvent,
                     cacheResponseObject: List<ProjectModel>
-                ): DataState<MainViewState> {
+                ): DataState<MainViewState, MainStateEvent> {
                     return DataState(
-                        toFragment = stateEvent.whichFragment,
-                        data = MainViewState(
+                        stateEvent = stateEvent,
+                        viewState = MainViewState(
                             projectsFragmentView = ProjectsFragmentView(cacheResponseObject)
                         ),
                         message = MESSAGE_NO_INTERNET_CACHE_SUCCESS
@@ -456,12 +459,12 @@ constructor(
                 }
 
                 override fun handleNetworkFailureCacheSuccess(
-                    stateEvent: StateEvent,
+                    stateEvent: MainStateEvent,
                     cacheResponseObject: List<ProjectModel>
-                ): DataState<MainViewState> {
+                ): DataState<MainViewState, MainStateEvent> {
                     return DataState(
-                        toFragment = stateEvent.whichFragment,
-                        data = MainViewState(
+                        stateEvent = stateEvent,
+                        viewState = MainViewState(
                             projectsFragmentView = ProjectsFragmentView(cacheResponseObject)
                         ),
                         message = MESSAGE_NETWORK_ERROR_CACHE_SUCCESS
@@ -469,12 +472,12 @@ constructor(
                 }
 
                 override fun handleNetworkNotAllowedCacheSuccess(
-                    stateEvent: StateEvent,
+                    stateEvent: MainStateEvent,
                     cacheResponseObject: List<ProjectModel>
-                ): DataState<MainViewState> {
+                ): DataState<MainViewState, MainStateEvent> {
                     return DataState(
-                        toFragment = stateEvent.whichFragment,
-                        data = MainViewState(
+                        stateEvent = stateEvent,
+                        viewState = MainViewState(
                             projectsFragmentView = ProjectsFragmentView(cacheResponseObject)
                         ),
                         message = MESSAGE_NETWORK_NOT_ALLOWED_CACHE_SUCCESS

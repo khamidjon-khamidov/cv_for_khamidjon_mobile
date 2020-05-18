@@ -14,13 +14,13 @@ import retrofit2.HttpException
 import retrofit2.Response
 
 @RunWith(JUnit4::class)
-class RepositoryTest {
+class NetworkApiCallTest {
 
-    lateinit var SUT: Repository
+    lateinit var SUT: NetworkApiCall
 
     @Before
     fun setUp() {
-        SUT = object : Repository() {}
+        SUT = object : NetworkApiCall() {}
     }
 
     @Test

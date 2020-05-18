@@ -5,15 +5,13 @@ import com.hamidjonhamidov.cvforkhamidjon.data_requests.persistence.AppDatabase
 import com.hamidjonhamidov.cvforkhamidjon.data_requests.persistence.main.AboutMeDao
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.AboutMeModel
 import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImpl
-import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImplTestConstants
 import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImplTestConstants.ABOUTME_MODEL
 import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImplTestConstants.ABOUTME_REMOTE_MODEL
 import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImplTestConstants.GETABOUTME
-import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImplTestConstants.GETACHIEVEMENTS
 import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImplTestConstants.GETHOME
+import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainJobsEvent
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainStateEvent
-import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainStateEvent.GetAboutMe
-import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainStateEvent.GetHome
+import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainViewDestEvent
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NETWORK_ERROR_CACHE_EMPTY
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NETWORK_ERROR_CACHE_SUCCESS
@@ -56,9 +54,19 @@ class GetAboutMeTest {
     @Mock
     lateinit var aboutMeDaoTd: AboutMeDaoTd
 
+    lateinit var stateEvent: MainStateEvent
+
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
+
+        stateEvent = object : MainStateEvent{
+            override val responsibleJob: MainJobsEvent
+                get() = MainJobsEvent()
+            override val destinationView: MainViewDestEvent
+                get() = MainViewDestEvent.HomeFragmentDest()
+        }
+
         aboutMeDaoTd =
             AboutMeDaoTd()
 
@@ -88,7 +96,7 @@ class GetAboutMeTest {
         // act
         val result =
             SUT.getAboutMe(
-                GetHome(),
+                stateEvent,
                 true
             )
 
@@ -96,8 +104,7 @@ class GetAboutMeTest {
         // assert
 
         result.onEach {
-            assertEquals(it.toFragment, shouldToFragment)
-            assertEquals(it.data?.homeFragmentView?.aboutMe, shouldAboutMeModel)
+            assertEquals(it.viewState?.homeFragmentView?.aboutMe, shouldAboutMeModel)
             assertEquals(it.message, shouldMessage)
         }.launchIn(this)
 
@@ -120,7 +127,7 @@ class GetAboutMeTest {
 
         // act
         val result = SUT.getAboutMe(
-            GetHome(),
+            stateEvent,
             true
         )
 
@@ -128,8 +135,7 @@ class GetAboutMeTest {
         result.onEach {
             onEachCalls++
             assertEquals(it.message, MESSSAGE_NETWORK_TIMEOUT_CACHE_SUCCESS)
-            assertEquals(it.toFragment, GETHOME)
-            assertEquals(it.data?.homeFragmentView?.aboutMe, ABOUTME_MODEL)
+            assertEquals(it.viewState?.homeFragmentView?.aboutMe, ABOUTME_MODEL)
         }.launchIn(this)
 
         delay(7000)
@@ -154,7 +160,7 @@ class GetAboutMeTest {
         println("Before result")
 
         val result = SUT.getAboutMe(
-            GetHome(),
+            stateEvent,
             true
         )
 
@@ -164,8 +170,7 @@ class GetAboutMeTest {
         result.onEach {
             onEachCalls++
             assertEquals(it.message, NetworkConstants.MESSAGE_NETWORK_TIMEOUT_CACHE_EMPTY)
-            assertEquals(it.toFragment, GETHOME)
-            assertEquals(it.data?.homeFragmentView?.aboutMe, null)
+            assertEquals(it.viewState?.homeFragmentView?.aboutMe, null)
         }.launchIn(this)
 
         println("After onEach calls")
@@ -189,7 +194,7 @@ class GetAboutMeTest {
         println("Before result")
 
         val result = SUT.getAboutMe(
-            GetHome(),
+            stateEvent,
             false
         )
 
@@ -199,8 +204,7 @@ class GetAboutMeTest {
         result.onEach {
             onEachCalls++
             assertEquals(it.message, MESSAGE_NO_INTERNET_CACHE_SUCCESS)
-            assertEquals(it.toFragment, GETHOME)
-            assertEquals(it.data?.homeFragmentView?.aboutMe, ABOUTME_MODEL.copy())
+            assertEquals(it.viewState?.homeFragmentView?.aboutMe, ABOUTME_MODEL.copy())
         }.launchIn(this)
 
         println("After onEach calls")
@@ -224,7 +228,7 @@ class GetAboutMeTest {
         // act
         println("Before result")
         val result = SUT.getAboutMe(
-            GetHome(),
+            stateEvent,
             false
         )
 
@@ -234,8 +238,7 @@ class GetAboutMeTest {
         result.onEach {
             onEachCalls++
             assertEquals(it.message, MESSAGE_NO_INTERNET_CACHE_EMPTY)
-            assertEquals(it.toFragment, GETHOME)
-            assertEquals(it.data?.homeFragmentView?.aboutMe, null)
+            assertEquals(it.viewState?.homeFragmentView?.aboutMe, null)
         }.launchIn(this)
 
         println("After onEach calls")
@@ -264,7 +267,7 @@ class GetAboutMeTest {
         // act
         println("Before result")
         val result = SUT.getAboutMe(
-            GetHome(),
+            stateEvent,
             true
         )
         println("After result")
@@ -273,8 +276,7 @@ class GetAboutMeTest {
         result.onEach {
             onEachCalls++
             assertEquals(it.message, MESSAGE_NETWORK_ERROR_CACHE_SUCCESS)
-            assertEquals(it.toFragment, GETHOME)
-            assertEquals(it.data?.homeFragmentView?.aboutMe, ABOUTME_MODEL)
+            assertEquals(it.viewState?.homeFragmentView?.aboutMe, ABOUTME_MODEL)
         }.launchIn(this)
         println("After onEach calls")
 
@@ -301,7 +303,7 @@ class GetAboutMeTest {
         // act
         println("Before result")
         val result = SUT.getAboutMe(
-            GetHome(),
+            stateEvent,
             true
         )
         println("After result")
@@ -310,8 +312,7 @@ class GetAboutMeTest {
         result.onEach {
             onEachCalls++
             assertEquals(it.message, MESSAGE_NETWORK_ERROR_CACHE_EMPTY)
-            assertEquals(it.toFragment, GETHOME)
-            assertEquals(it.data?.homeFragmentView?.aboutMe, null)
+            assertEquals(it.viewState?.homeFragmentView?.aboutMe, null)
         }.launchIn(this)
         println("After onEach calls")
 
@@ -334,7 +335,7 @@ class GetAboutMeTest {
         // act
         val result = SUT
             .getAboutMe(
-                GetAboutMe(),
+                stateEvent,
                 false,
                 false
             )
@@ -342,9 +343,8 @@ class GetAboutMeTest {
         // assert
         result.onEach {
             assertEquals(it.message, MESSAGE_NETWORK_NOT_ALLOWED_CACHE_SUCCESS)
-            assertEquals(it.toFragment, GETABOUTME)
             assertEquals(
-                it.data?.homeFragmentView?.aboutMe,
+                it.viewState?.homeFragmentView?.aboutMe,
                 ABOUTME_MODEL
             )
         }.launchIn(this)
@@ -367,7 +367,7 @@ class GetAboutMeTest {
         // act
         val result = SUT
             .getAboutMe(
-                GetAboutMe(),
+                stateEvent,
                 false,
                 false
             )
@@ -375,9 +375,8 @@ class GetAboutMeTest {
         // assert
         result.onEach {
             assertEquals(it.message, MESSAGE_NETWORK_NOT_ALLOWED_CACHE_EMPTY)
-            assertEquals(it.toFragment, GETABOUTME)
             assertEquals(
-                it.data?.homeFragmentView?.aboutMe,
+                it.viewState?.homeFragmentView?.aboutMe,
                 null
             )
         }.launchIn(this)

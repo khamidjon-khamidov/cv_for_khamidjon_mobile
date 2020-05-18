@@ -1,4 +1,4 @@
-package com.hamidjonhamidov.cvforkhamidjon.util.job_manager
+package com.hamidjonhamidov.cvforkhamidjon.util.data_manager
 
 import kotlin.reflect.KClass
 

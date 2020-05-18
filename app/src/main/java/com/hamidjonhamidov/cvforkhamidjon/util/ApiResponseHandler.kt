@@ -8,23 +8,23 @@ import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.NETWOR
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.NETWORK_ERROR_NO_INTERNET
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.NETWORK_ERROR_TIMEOUT
 
-abstract class ApiResponseHandler<ViewState, RemoteResponseObject, CacheResponseObject>(
+abstract class ApiResponseHandler<ViewState, StateEvent, RemoteResponseObject, CacheResponseObject>(
     val remoteResponseObject: ApiResult<List<RemoteResponseObject>?>,
     val stateEvent: StateEvent,
     val cacheResponseObject: List<CacheResponseObject>?,
     val isNetworkAllowed: Boolean
 ) {
 
-    val result: DataState<ViewState> = processResponse()
+    val result: DataState<ViewState, StateEvent> = processResponse()
 
 
-    fun processResponse(): DataState<ViewState> {
+    fun processResponse(): DataState<ViewState, StateEvent> {
         if(!isNetworkAllowed){
             return if(cacheResponseObject?.isNotEmpty()==true){
                 handleNetworkNotAllowedCacheSuccess(stateEvent, cacheResponseObject)
             } else {
                 DataState(
-                    toFragment = stateEvent.whichFragment,
+                    stateEvent = stateEvent,
                     message = MESSAGE_NETWORK_NOT_ALLOWED_CACHE_EMPTY
                 )
             }
@@ -40,7 +40,7 @@ abstract class ApiResponseHandler<ViewState, RemoteResponseObject, CacheResponse
                             handleNetworkFailureCacheSuccess(stateEvent, cacheResponseObject)
                         } else {
                             DataState(
-                                toFragment = stateEvent.whichFragment,
+                                stateEvent = stateEvent,
                                 message = MESSAGE_NETWORK_ERROR_CACHE_EMPTY.copy()
                             )
                         }
@@ -51,7 +51,7 @@ abstract class ApiResponseHandler<ViewState, RemoteResponseObject, CacheResponse
                             handleNoInternetCacheSuccess(stateEvent, cacheResponseObject)
                         } else {
                             DataState(
-                                toFragment = stateEvent.whichFragment,
+                                stateEvent = stateEvent,
                                 message = MESSAGE_NO_INTERNET_CACHE_EMPTY.copy()
                             )
                         }
@@ -62,14 +62,14 @@ abstract class ApiResponseHandler<ViewState, RemoteResponseObject, CacheResponse
                             handleNetworkTimeoutCacheSuccess(stateEvent, cacheResponseObject)
                         } else {
                             DataState(
-                                toFragment = stateEvent.whichFragment,
+                                stateEvent = stateEvent,
                                 message = MESSAGE_NETWORK_TIMEOUT_CACHE_EMPTY
                             )
                         }
                     }
 
                     else -> DataState(
-                        toFragment = stateEvent.whichFragment,
+                        stateEvent = stateEvent,
                         message = MESSAGE_NETWORK_ERROR_CACHE_EMPTY
                     )
                 }
@@ -84,26 +84,26 @@ abstract class ApiResponseHandler<ViewState, RemoteResponseObject, CacheResponse
     abstract fun handleNetworkNotAllowedCacheSuccess(
         stateEvent: StateEvent,
         cacheResponseObject: List<CacheResponseObject>
-    ): DataState<ViewState>
+    ): DataState<ViewState, StateEvent>
 
 
     abstract fun handleNetworkSuccessCacheSuccess(
         stateEvent: StateEvent,
         remoteResponse: List<RemoteResponseObject>
-    ): DataState<ViewState>
+    ): DataState<ViewState, StateEvent>
 
     abstract fun handleNetworkTimeoutCacheSuccess(
         stateEvent: StateEvent,
         cacheResponseObject: List<CacheResponseObject>
-    ): DataState<ViewState>
+    ): DataState<ViewState, StateEvent>
 
     abstract fun handleNoInternetCacheSuccess(
         stateEvent: StateEvent,
         cacheResponseObject: List<CacheResponseObject>
-    ): DataState<ViewState>
+    ): DataState<ViewState, StateEvent>
 
     abstract fun handleNetworkFailureCacheSuccess(
         stateEvent: StateEvent,
         cacheResponseObject: List<CacheResponseObject>
-    ): DataState<ViewState>
+    ): DataState<ViewState, StateEvent>
 }

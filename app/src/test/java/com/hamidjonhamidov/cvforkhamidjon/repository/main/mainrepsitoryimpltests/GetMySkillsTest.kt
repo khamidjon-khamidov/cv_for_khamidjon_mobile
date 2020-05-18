@@ -8,8 +8,9 @@ import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImpl
 import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImplTestConstants.GETMYSKILLS
 import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImplTestConstants.SKILLS_MODEL_LIST
 import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImplTestConstants.SKILLS_REMOTE_MODEL_LIST
+import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainJobsEvent
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainStateEvent
-import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainStateEvent.GetMySkills
+import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainViewDestEvent
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NETWORK_ERROR_CACHE_EMPTY
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NETWORK_ERROR_CACHE_SUCCESS
@@ -54,9 +55,18 @@ class GetMySkillsTest {
     @Mock
     lateinit var skillsDaoTd: SkillsDaoTd
 
+    lateinit var stateEvent: MainStateEvent
+
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
+
+        stateEvent = object : MainStateEvent {
+            override val responsibleJob: MainJobsEvent
+                get() = MainJobsEvent()
+            override val destinationView: MainViewDestEvent
+                get() = MainViewDestEvent.MySkillsFragmentDest()
+        }
         skillsDaoTd =
             SkillsDaoTd()
 
@@ -86,7 +96,7 @@ class GetMySkillsTest {
         // act
         val result =
             SUT.getMySkills(
-                GetMySkills(),
+                stateEvent,
                 true
             )
 
@@ -94,8 +104,7 @@ class GetMySkillsTest {
         // assert
 
         result.onEach {
-            assertEquals(it.toFragment, shouldToFragment)
-            assertEquals(it.data?.mySkillsFragmentView?.mySkills, shouldSkillsModelList)
+            assertEquals(it.viewState?.mySkillsFragmentView?.mySkills, shouldSkillsModelList)
             assertEquals(it.message, shouldMessage)
         }.launchIn(this)
 
@@ -118,7 +127,7 @@ class GetMySkillsTest {
 
         // act
         val result = SUT.getMySkills(
-            GetMySkills(),
+            stateEvent,
             true
         )
 
@@ -126,8 +135,7 @@ class GetMySkillsTest {
         result.onEach {
             onEachCalls++
             assertEquals(it.message, MESSSAGE_NETWORK_TIMEOUT_CACHE_SUCCESS)
-            assertEquals(it.toFragment, GETMYSKILLS)
-            assertEquals(it.data?.mySkillsFragmentView?.mySkills, SKILLS_MODEL_LIST)
+            assertEquals(it.viewState?.mySkillsFragmentView?.mySkills, SKILLS_MODEL_LIST)
         }.launchIn(this)
 
         delay(7000)
@@ -152,7 +160,7 @@ class GetMySkillsTest {
         println("Before result")
 
         val result = SUT.getMySkills(
-            GetMySkills(),
+            stateEvent,
             true
         )
 
@@ -162,8 +170,7 @@ class GetMySkillsTest {
         result.onEach {
             onEachCalls++
             assertEquals(it.message, NetworkConstants.MESSAGE_NETWORK_TIMEOUT_CACHE_EMPTY)
-            assertEquals(it.toFragment, GETMYSKILLS)
-            assertEquals(it.data?.mySkillsFragmentView?.mySkills, null)
+            assertEquals(it.viewState?.mySkillsFragmentView?.mySkills, null)
         }.launchIn(this)
 
         println("After onEach calls")
@@ -183,11 +190,11 @@ class GetMySkillsTest {
             .thenReturn(skillsDaoTd)
         var onEachCalls =  0
 
-        // act
+        // act9
         println("Before result")
 
         val result = SUT.getMySkills(
-            GetMySkills(),
+            stateEvent,
             false
         )
 
@@ -197,8 +204,7 @@ class GetMySkillsTest {
         result.onEach {
             onEachCalls++
             assertEquals(it.message, MESSAGE_NO_INTERNET_CACHE_SUCCESS)
-            assertEquals(it.toFragment, GETMYSKILLS)
-            assertEquals(it.data?.mySkillsFragmentView?.mySkills, SKILLS_MODEL_LIST)
+            assertEquals(it.viewState?.mySkillsFragmentView?.mySkills, SKILLS_MODEL_LIST)
         }.launchIn(this)
 
         println("After onEach calls")
@@ -222,7 +228,7 @@ class GetMySkillsTest {
         // act
         println("Before result")
         val result = SUT.getMySkills(
-            GetMySkills(),
+            stateEvent,
             false
         )
 
@@ -232,8 +238,7 @@ class GetMySkillsTest {
         result.onEach {
             onEachCalls++
             assertEquals(it.message, MESSAGE_NO_INTERNET_CACHE_EMPTY)
-            assertEquals(it.toFragment, GETMYSKILLS)
-            assertEquals(it.data?.mySkillsFragmentView?.mySkills, null)
+            assertEquals(it.viewState?.mySkillsFragmentView?.mySkills, null)
         }.launchIn(this)
 
         println("After onEach calls")
@@ -262,7 +267,7 @@ class GetMySkillsTest {
         // act
         println("Before result")
         val result = SUT.getMySkills(
-            GetMySkills(),
+            stateEvent,
             true
         )
         println("After result")
@@ -271,8 +276,7 @@ class GetMySkillsTest {
         result.onEach {
             onEachCalls++
             assertEquals(it.message, MESSAGE_NETWORK_ERROR_CACHE_SUCCESS)
-            assertEquals(it.toFragment, GETMYSKILLS)
-            assertEquals(it.data?.mySkillsFragmentView?.mySkills, SKILLS_MODEL_LIST)
+            assertEquals(it.viewState?.mySkillsFragmentView?.mySkills, SKILLS_MODEL_LIST)
         }.launchIn(this)
         println("After onEach calls")
 
@@ -299,7 +303,7 @@ class GetMySkillsTest {
         // act
         println("Before result")
         val result = SUT.getMySkills(
-            GetMySkills(),
+            stateEvent,
             true
         )
         println("After result")
@@ -308,8 +312,7 @@ class GetMySkillsTest {
         result.onEach {
             onEachCalls++
             assertEquals(it.message, MESSAGE_NETWORK_ERROR_CACHE_EMPTY)
-            assertEquals(it.toFragment, GETMYSKILLS)
-            assertEquals(it.data?.mySkillsFragmentView?.mySkills, null)
+            assertEquals(it.viewState?.mySkillsFragmentView?.mySkills, null)
         }.launchIn(this)
         println("After onEach calls")
 
@@ -332,7 +335,7 @@ class GetMySkillsTest {
         // act
         val result = SUT
             .getMySkills(
-                GetMySkills(),
+                stateEvent,
                 false,
                 false
             )
@@ -340,9 +343,8 @@ class GetMySkillsTest {
         // assert
         result.onEach {
             assertEquals(it.message, MESSAGE_NETWORK_NOT_ALLOWED_CACHE_SUCCESS)
-            assertEquals(it.toFragment, GETMYSKILLS)
             assertEquals(
-                it.data?.mySkillsFragmentView?.mySkills,
+                it.viewState?.mySkillsFragmentView?.mySkills,
                 SKILLS_MODEL_LIST
             )
         }.launchIn(this)
@@ -365,7 +367,7 @@ class GetMySkillsTest {
         // act
         val result = SUT
             .getMySkills(
-                GetMySkills(),
+                stateEvent,
                 false,
                 false
             )
@@ -373,9 +375,8 @@ class GetMySkillsTest {
         // assert
         result.onEach {
             assertEquals(it.message, MESSAGE_NETWORK_NOT_ALLOWED_CACHE_EMPTY)
-            assertEquals(it.toFragment, GETMYSKILLS)
             assertEquals(
-                it.data?.mySkillsFragmentView?.mySkills,
+                it.viewState?.mySkillsFragmentView?.mySkills,
                 null
             )
         }.launchIn(this)

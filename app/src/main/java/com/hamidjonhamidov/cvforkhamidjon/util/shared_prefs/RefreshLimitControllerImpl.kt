@@ -2,6 +2,7 @@ package com.hamidjonhamidov.cvforkhamidjon.util.shared_prefs
 
 import android.app.Application
 import android.content.Context
+import android.util.Log
 import com.hamidjonhamidov.cvforkhamidjon.util.shared_prefs.SharedPrefConstants.ABOUTME_PREF_KEY
 import com.hamidjonhamidov.cvforkhamidjon.util.shared_prefs.SharedPrefConstants.ACHIEVEMENTS_PREF_KEY
 import com.hamidjonhamidov.cvforkhamidjon.util.shared_prefs.SharedPrefConstants.DAILY_REFRESH_LIMIT
@@ -26,55 +27,33 @@ constructor(
     application: Application
 ) : RefreshLimitController {
 
+    private val TAG = "AppDebug"
+
     private val sharedPreferences =
         application.getSharedPreferences(SHARED_PREF_KEY, Context.MODE_PRIVATE)
 
-    override fun incrementHomeSyncTimes() {
-        incrementSyncTime(HOME_PREF_KEY)
+
+    override fun <DestinationViewEvent : Any> incrementSyncTime(dest: DestinationViewEvent) {
+        incrementSyncTimePref((dest::class).toString())
     }
 
-    override fun canHomeSync() =
-        canSync(HOME_PREF_KEY)
+    override fun <DestinationViewEvent : Any> canSync(dest: DestinationViewEvent): Boolean {
 
-    override fun incrementAboutMeSyncTimes() {
-        incrementSyncTime(ABOUTME_PREF_KEY)
+        return canSyncPref((dest::class).toString())
     }
-
-    override fun canAboutMeSync() =
-        canSync(ABOUTME_PREF_KEY)
-
-
-    override fun incrementMySkillsSyncTimes() {
-        incrementSyncTime(MYSKILLS_PREF_KEY)
-    }
-
-    override fun canMySkillsSync() =
-        canSync(MYSKILLS_PREF_KEY)
-
-
-    override fun incrementAchievmentsSyncTimes() {
-        incrementSyncTime(ACHIEVEMENTS_PREF_KEY)
-    }
-
-    override fun canAchievmentsSync() =
-        canSync(ACHIEVEMENTS_PREF_KEY)
-
-    override fun incrementProjectsSyncTime() {
-        incrementSyncTime(PROJECTS_PREF_KEY)
-    }
-
-    override fun canProjectsSync() =
-        canSync(PROJECTS_PREF_KEY)
-
 
     // this function increments refresh times
-    private fun incrementSyncTime(key: String) {
+    fun incrementSyncTimePref(key: String) {
         val getLastRefreshTime = getLastRefreshTime(key)
         val storeValue: Long
 
         // if last refresh time is 0 or one day has already passed, get current time and increment it
         if (getLastRefreshTime == 0L || isOneDayPassed(getLastRefreshTime / 10)) {
             storeValue = System.currentTimeMillis() * 10L + 1
+        }
+        // if  refresh limit is already done, just leave it as it is
+        else if (getLastRefreshTime%10 >= DAILY_REFRESH_LIMIT) {
+            storeValue = getLastRefreshTime
         }
         // otherwise increment last refresh time
         else {
@@ -85,7 +64,7 @@ constructor(
     }
 
 
-    private fun canSync(key: String): Boolean {
+    fun canSyncPref(key: String): Boolean {
         val lastRefreshTime = getLastRefreshTime(key)
         // if last refresh time is 0, then we can freely refresh
         if (lastRefreshTime == 0L) {

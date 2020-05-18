@@ -7,6 +7,7 @@ import androidx.navigation.fragment.NavHostFragment
 import com.hamidjonhamidov.cvforkhamidjon.MyApplication
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.MainActivity
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.InternalCoroutinesApi
 import javax.inject.Inject
 
@@ -20,6 +21,7 @@ class MainNavHostFragment : NavHostFragment() {
     lateinit var mainFragmentFactory: FragmentFactory
 
 
+    @FlowPreview
     override fun onAttach(context: Context) {
         (activity as MainActivity)
             .mainComponent

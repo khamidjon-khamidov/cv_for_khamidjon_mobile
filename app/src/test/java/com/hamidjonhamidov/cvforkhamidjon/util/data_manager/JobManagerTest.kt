@@ -1,7 +1,7 @@
-package com.hamidjonhamidov.cvforkhamidjon.util.job_manager
+package com.hamidjonhamidov.cvforkhamidjon.util.data_manager
 
-import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainJobs
-import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainJobs.*
+import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainJobsEvent
+import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainJobsEvent.*
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -11,7 +11,7 @@ import org.junit.runners.JUnit4
 @RunWith(JUnit4::class)
 class JobManagerTest{
 
-    lateinit var SUT: JobManager<MainJobs>
+    lateinit var SUT: JobManager<MainJobsEvent>
 
     @Before
     fun setUp() {
@@ -25,10 +25,10 @@ class JobManagerTest{
 
         // act
         SUT.addJob(GetAboutMe())
-        SUT.addJob(GetAchiements())
+        SUT.addJob(GetAchievements())
 
         // assert
-        assertEquals(SUT.isJobActive(GetAchiements()), true)
+        assertEquals(SUT.isJobActive(GetAchievements()), true)
         assertEquals(SUT.isJobActive(GetAboutMe()), true)
 
     }

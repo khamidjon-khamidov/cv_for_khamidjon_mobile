@@ -6,6 +6,7 @@ import android.view.MenuItem
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -13,11 +14,14 @@ import com.hamidjonhamidov.cvforkhamidjon.R
 import com.hamidjonhamidov.cvforkhamidjon.ui.delayInBackgLaunchInMain
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.*
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainStateEvent
+import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainViewDestEvent
 import com.hamidjonhamidov.cvforkhamidjon.ui.showMyDialog
 import com.hamidjonhamidov.cvforkhamidjon.ui.showProgressBar
 import com.hamidjonhamidov.cvforkhamidjon.ui.showToast
-import com.hamidjonhamidov.cvforkhamidjon.util.StateEvent
 import com.hamidjonhamidov.cvforkhamidjon.util.UIType
+import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_ALREADY_IN_PROGRESS
+import com.hamidjonhamidov.cvforkhamidjon.util.data_manager.InboxManager
+import com.hamidjonhamidov.cvforkhamidjon.util.data_manager.UIMessage
 import kotlinx.coroutines.*
 
 @FlowPreview
@@ -26,15 +30,37 @@ import kotlinx.coroutines.*
 abstract class BaseMainFragment<T>(
     fragmentId: Int,
     private val viewModelFactory: ViewModelProvider.Factory,
-    val stateEvent: StateEvent
+    val stateEvent: MainStateEvent
 ) : Fragment(fragmentId) {
 
     private val TAG = "AppDebug"
 
-    private lateinit var whichFragment:String
-
     val viewModel: MainViewModel by activityViewModels {
         viewModelFactory
+    }
+
+    val progressBarObserver = Observer<Boolean> {
+        activity?.showProgressBar(it)
+    }
+
+    val messageObserverForProgressBar = Observer<UIMessage> {
+        if (!(it.equals(MESSAGE_ALREADY_IN_PROGRESS))) {
+            viewModel.inboxManager.setProgressBarStateAndNotify(stateEvent.destinationView, false)
+        }
+    }
+
+
+    val newMessageObserver = Observer<UIMessage> {
+        if (inboxManager.getInboxSize(stateEvent.destinationView) > 0)
+            processNextMessage()
+    }
+
+    val messageNotifierLiveData: LiveData<UIMessage> by lazy {
+        viewModel.inboxManager.getMessagesNotifer(stateEvent.destinationView)
+    }
+
+    val inboxManager: InboxManager<MainViewDestEvent> by lazy {
+        viewModel.inboxManager
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -42,92 +68,90 @@ abstract class BaseMainFragment<T>(
 
         setHasOptionsMenu(true)
 
-        whichFragment = stateEvent.whichFragment
+        addProgressBarObservers()
         subscribeDataObservers()
         subscribeNewMessageObserver()
-        subscribeProgressBar()
         initData()
     }
 
     override fun onResume() {
         super.onResume()
-        activity?.showProgressBar(viewModel.getProgressBarStatus(whichFragment))
+        activity?.showProgressBar(inboxManager.getProgressBarState(stateEvent.destinationView))
         requireActivity().delayInBackgLaunchInMain(lifecycleScope, 500) {
             processNextMessage()
         }
     }
 
-    override fun onStop() {
-        super.onStop()
+    override fun onPause() {
+        super.onPause()
         activity?.showProgressBar(false)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
-//        return when(item.itemId){
-//            R.id.home_mi_refresh -> {
-//                viewModel.setStateEvent(stateEvent as MainStateEvent)
-//                true
-//            }
-//
-//            else ->
-                return super.onOptionsItemSelected(item)
-//        }
-
-    }
-
-    fun subscribeProgressBar(){
-        viewModel.getProgressBarObserver(whichFragment).observe(viewLifecycleOwner, Observer {
-            activity?.showProgressBar(it)
-        })
-    }
-
-    fun subscribeNewMessageObserver() {
-        // observe new message
-        viewModel.newMessageNotifier.observe(viewLifecycleOwner, Observer {
-            Log.d(TAG, "BaseMainFragment: subscribeNewMessageObserver: new message came")
-            requireActivity().delayInBackgLaunchInMain(lifecycleScope, 500) {
-                processNextMessage()
+        return when (item.itemId) {
+            R.id.home_mi_refresh -> {
+                viewModel.setStateEvent(stateEvent)
+                true
             }
-        })
+
+            else -> super.onOptionsItemSelected(item)
+        }
+
+    }
+
+    fun addProgressBarObservers() {
+        inboxManager.getProgressBarNotifier(stateEvent.destinationView)
+            .observe(viewLifecycleOwner, progressBarObserver)
+
+        inboxManager.getMessagesNotifer(stateEvent.destinationView)
+            .observe(viewLifecycleOwner, messageObserverForProgressBar)
+    }
+
+    fun subscribeNewMessageObserver(){
+        messageNotifierLiveData.observe(viewLifecycleOwner, newMessageObserver)
     }
 
     fun processNextMessage() {
-
-        Log.d(TAG, "BaseMainFragment: processNextMessage: $whichFragment, size = ${viewModel.getMessagesSize(whichFragment)}")
-        // if there is any dialog that is being processed, just ignore this
-        if (viewModel.isLastMessageInProgress(whichFragment)){
-            Log.d(
-                TAG,
-                "BaseMainFragment: processNextMessage: returned cos of last message in progress message = ${viewModel.getLastMessage(whichFragment)}"
-            )
+        if (viewModel.inboxManager.getInboxSize(stateEvent.destinationView) == 0) {
+            messageNotifierLiveData.observe(viewLifecycleOwner, newMessageObserver)
             return
         }
 
-        val newMessage = viewModel.getLastMessage(whichFragment) ?: return
+        if(viewModel.inboxManager.isMessageInInboxInProcess(stateEvent.destinationView)){
+            return
+        }
 
-        Log.d(TAG, "BaseMainFragment: processNextMessage: $newMessage")
+        val newMessage = viewModel
+            .inboxManager
+            .getMessageFromInbox(stateEvent.destinationView) ?: return
+
+        messageNotifierLiveData.removeObserver(newMessageObserver)
 
         when (newMessage.message.uiType) {
             is UIType.Dialog -> {
+
+                viewModel.inboxManager.setMessageInInboxToProcess(stateEvent.destinationView)
                 activity?.showMyDialog(
                     newMessage.message.title,
                     newMessage.message.description
-                ) {
-                    Log.d(TAG, "BaseMainFragment: processNextMessage: OK pressed")
-                    viewModel.removeLastMessage(whichFragment)
+                ) { // when ok button clicked function
+
+                    viewModel.inboxManager.removeMessageFromInbox(stateEvent.destinationView)
 
                     // wait for a second to proccess next message
                     requireActivity().delayInBackgLaunchInMain(lifecycleScope, 500) {
                         processNextMessage()
                     }
                 }
-                viewModel.setLastMessageToProgress(whichFragment)
             }
 
             is UIType.Toast -> {
                 activity?.showToast(newMessage.message.description)
-                viewModel.removeLastMessage(whichFragment)
+                viewModel.inboxManager.removeMessageFromInbox(stateEvent.destinationView)
+                requireActivity().delayInBackgLaunchInMain(lifecycleScope, 500) {
+                    processNextMessage()
+                }
             }
         }
 
@@ -137,6 +161,6 @@ abstract class BaseMainFragment<T>(
 
     abstract fun initData()
 
-    abstract fun updateView(myModel: T)
+    abstract fun updateView(myModel: T?)
 
 }

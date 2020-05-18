@@ -3,13 +3,13 @@ package com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepository
-import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainJobs
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainStateEvent
-import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainStateEvent.*
+import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainViewDestEvent.*
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainViewState
 import com.hamidjonhamidov.cvforkhamidjon.util.*
+import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_ALREADY_IN_PROGRESS
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.NETWORK_CACHE_SUCCESS_TITLE
-import com.hamidjonhamidov.cvforkhamidjon.util.job_manager.JobManager
+import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NOT_ALLOWED
 import com.hamidjonhamidov.cvforkhamidjon.util.shared_prefs.RefreshLimitController
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
@@ -24,7 +24,6 @@ import javax.inject.Inject
 class MainViewModel
 @Inject
 constructor(
-    private var jobManger:JobManager<MainJobs> = JobManager(),
     private val mainRepository: MainRepository,
     private val networkConnection: NetworkConnection,
     private val refreshLimitController: RefreshLimitController
@@ -40,156 +39,158 @@ constructor(
         dataChannel
             .asFlow()
             .onEach { dataState ->
+                // new data has come, so time to remove corresponding job
+                jobManger.removeJob(dataState.stateEvent.responsibleJob)
 
-                dataState.data?.let {
-                    handleNewIncomingData(it, dataState.message)
+                // if there is any data update view state
+                dataState.viewState?.let {
+                    handleNewIncomingData(dataState)
                 }
 
-                handleNewMessage(dataState.toFragment, dataState.message)
+                Log.d(TAG, "MainViewModel: setUpChannel: message came")
+
+                // process new message
+                inboxManager.receiveNewMessage(
+                    dataState.stateEvent.destinationView,
+                    dataState.message
+                )
             }
             .launchIn(viewModelScope)
     }
 
 
-    private fun offerToDataChannel(dataState: DataState<MainViewState>) {
+    private fun offerToDataChannel(dataState: DataState<MainViewState, MainStateEvent>) {
         if (!dataChannel.isClosedForSend) {
             dataChannel.offer(dataState)
         }
     }
 
-    fun setStateEvent(stateEvent: MainStateEvent) {
-        // notify progress bar to show
-        setProgressObserverVisibility(stateEvent.whichFragment, true)
+    fun setStateEvent(mainStateEvent: MainStateEvent) {
+        val isNetworkAllowed = refreshLimitController.canSync(mainStateEvent.destinationView)
+        val isNetworkAvailable = isNetworkAllowed and networkConnection.isConectedToInternet()
 
-        val dataInFlow: Flow<DataState<MainViewState>>
-        val activeJob =
-            when (stateEvent) {
+        Log.d(TAG, "MainViewModel: setStateEvent: ${networkConnection.isConectedToInternet()}")
 
-                is GetHome -> {
-                    if (refreshLimitController.canHomeSync()) {
-                        Log.d(TAG, "MainViewModel: setStateEvent: get home: canSync")
-                        dataInFlow = mainRepository
-                            .getAboutMe(stateEvent, networkConnection.isConectedToInternet())
-                    }  else {
-                        setMessage(stateEvent.whichFragment, NOT_ALLOWED_MESSAGE)
-                        Log.d(TAG, "MainViewModel: setStateEvent: get home: NOT canSync")
-                        dataInFlow = mainRepository
-                            .getAboutMe(stateEvent, false, false)
+        // inbox as data is being processed set progress bar state to true
+        inboxManager.setProgressBarStateAndNotify(mainStateEvent.destinationView, true)
+
+        // if the job is active return
+        if (jobManger.isJobActive(mainStateEvent.responsibleJob)) {
+            inboxManager.receiveNewMessage(
+                mainStateEvent.destinationView,
+                MESSAGE_ALREADY_IN_PROGRESS
+            )
+            return
+        }
+
+        if (!isNetworkAllowed) {
+            inboxManager.receiveNewMessage(
+                mainStateEvent.destinationView,
+                MESSAGE_NOT_ALLOWED
+            )
+        }
+
+        val jobFunc: () -> Flow<DataState<MainViewState, MainStateEvent>> =
+            when (mainStateEvent.destinationView) {
+
+                is HomeFragmentDest -> {
+
+                    {
+                        mainRepository.getAboutMe(
+                            mainStateEvent,
+                            isNetworkAvailable,
+                            isNetworkAllowed
+                        )
                     }
-                    MainJobs.GetAboutMe()
                 }
 
-                is GetAboutMe -> {
-                    if (refreshLimitController.canAboutMeSync()) {
-                        dataInFlow = mainRepository
-                            .getAboutMe(stateEvent, networkConnection.isConectedToInternet())
-                    }  else {
-                        setMessage(stateEvent.whichFragment, NOT_ALLOWED_MESSAGE)
-                        dataInFlow = mainRepository
-                            .getAboutMe(stateEvent, false, false)
+                is AboutMeFragmentDest -> {
+                    {
+                        mainRepository.getAboutMe(
+                            mainStateEvent,
+                            isNetworkAvailable,
+                            isNetworkAllowed
+                        )
                     }
-
-                    MainJobs.GetAboutMe()
                 }
 
-                is GetMySkills -> {
-                    if (refreshLimitController.canMySkillsSync()) {
-                        dataInFlow = mainRepository
-                            .getMySkills(stateEvent, networkConnection.isConectedToInternet())
-                    }  else {
-                        setMessage(stateEvent.whichFragment, NOT_ALLOWED_MESSAGE)
-                        dataInFlow = mainRepository
-                            .getMySkills(stateEvent, false, false)
+                is MySkillsFragmentDest -> {
+                    {
+                        mainRepository.getMySkills(
+                            mainStateEvent,
+                            isNetworkAvailable,
+                            isNetworkAllowed
+                        )
                     }
-                    MainJobs.GetMySkills()
+
                 }
 
-                is GetAchievements -> {
-                    if (refreshLimitController.canAchievmentsSync()) {
-                        dataInFlow = mainRepository
-                            .getAchievements(stateEvent, networkConnection.isConectedToInternet())
-                    }  else {
-                        setMessage(stateEvent.whichFragment, NOT_ALLOWED_MESSAGE)
-                        dataInFlow = mainRepository
-                            .getAchievements(stateEvent, false, false)
+                is AchievementsFragmentDest -> {
+                    {
+                        mainRepository.getAchievements(
+                            mainStateEvent,
+                            isNetworkAvailable,
+                            isNetworkAllowed
+                        )
                     }
-
-                    MainJobs.GetAchiements()
                 }
 
-                is GetProjects -> {
-                    if (refreshLimitController.canAchievmentsSync()) {
-                        dataInFlow = mainRepository
-                            .getAchievements(stateEvent, networkConnection.isConectedToInternet())
-                    }  else {
-                        setMessage(stateEvent.whichFragment, NOT_ALLOWED_MESSAGE)
-                        dataInFlow = mainRepository
-                            .getAchievements(stateEvent, false, false)
+                is GetProjectsFragmentDest -> {
+                    {
+                        mainRepository.getProjects(
+                            mainStateEvent,
+                            isNetworkAvailable,
+                            isNetworkAllowed
+                        )
                     }
-
-                    MainJobs.GetProjects()
                 }
             }
 
-        launchJob(activeJob, dataInFlow)
+        launchJob(mainStateEvent, jobFunc)
     }
 
-    private fun launchJob(mJob: MainJobs, jobFunction: Flow<DataState<MainViewState>>) {
-        Log.d(TAG, "MainViewModel: launchJob: ")
-        if (!jobManger.isJobActive(mJob)) {
-            jobManger.addJob(mJob)
-            jobFunction
-                .onEach { dataState ->
+    private fun launchJob(
+        mainStateEvent: MainStateEvent,
+        jobFunction: () -> Flow<DataState<MainViewState, MainStateEvent>>
+    ) {
+        jobManger.addJob(mainStateEvent.responsibleJob)
 
-                    offerToDataChannel(dataState)
-                }
-                .launchIn(viewModelScope)
+        jobFunction
+            .invoke()
+            .onEach { dataState ->
+                offerToDataChannel(dataState)
+            }
+            .launchIn(viewModelScope)
+
+    }
+
+    private fun handleNewIncomingData(dataState: DataState<MainViewState, MainStateEvent>) {
+        val stateEvent = dataState.stateEvent
+        val data = dataState.viewState!!
+        val message = dataState.message
+
+        if (message.title == NETWORK_CACHE_SUCCESS_TITLE) {
+            refreshLimitController.incrementSyncTime(stateEvent.destinationView)
+            refreshLimitController.incrementSyncTime(stateEvent.destinationView)
         }
-    }
 
-    private fun handleNewMessage(whichFragment: String, message: Message) {
-        setMessage(whichFragment, FragmentMessage(message))
-        setProgressObserverVisibility(whichFragment, false)
-    }
-
-    private fun handleNewIncomingData(data: MainViewState, message: Message) {
-
-        data.homeFragmentView.aboutMe?.let {
+        dataState.viewState.homeFragmentView.aboutMe?.let {
             setAboutMe(it)
-            if(message.title==NETWORK_CACHE_SUCCESS_TITLE){
-                refreshLimitController.incrementAboutMeSyncTimes()
-                refreshLimitController.incrementHomeSyncTimes()
-            }
         }
 
-        data.mySkillsFragmentView.mySkills?.let{
+        data.mySkillsFragmentView.mySkills?.let {
             setMySkills(it)
-            if(message.title==NETWORK_CACHE_SUCCESS_TITLE){
-                refreshLimitController.incrementMySkillsSyncTimes()
-            }
         }
 
-        data.achievementsFragmentView.achievements?.let{
+        data.achievementsFragmentView.achievements?.let {
             setAchievments(it)
-            if(message.title==NETWORK_CACHE_SUCCESS_TITLE){
-                refreshLimitController.incrementAchievmentsSyncTimes()
-            }
         }
 
         data.projectsFragmentView.projects?.let {
             setProjects(it)
-            if(message.title==NETWORK_CACHE_SUCCESS_TITLE){
-                refreshLimitController.incrementProjectsSyncTime()
-            }
         }
     }
 
-    val NOT_ALLOWED_MESSAGE = FragmentMessage(Message(
-        "Warning!!!",
-        "As you daily limits has finished, data will be provided from Database",
-        UIType.Dialog(),
-        false
-    ))
 }
 
 

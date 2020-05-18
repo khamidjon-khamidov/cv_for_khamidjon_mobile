@@ -5,7 +5,7 @@ import com.hamidjonhamidov.cvforkhamidjon.util.UIType
 
 object NetworkConstants {
 
-    const val NETWORK_TIMEOUT = 20000L
+    const val NETWORK_TIMEOUT = 10000L
     var NETWORK_DELAY = 0L
 
     // network errors
@@ -28,7 +28,7 @@ object NetworkConstants {
 
     // no internet connection, cache success
     const val NO_INTERNET_CACHE_SUCCESS_TITLE = "Cache Success! No Connection!"
-    const val NO_INTERNET_CACHE_SUCCESS_DES = "Data received from Cache due to Network connection."
+    const val NO_INTERNET_CACHE_SUCCESS_DES = "Data received from Cache due to Network Connection."
 
     // network error, cache success
     const val NETWORK_ERROR_CACHE_SUCCESS_TITLE = "Cache Success! Network Failure!"
@@ -36,7 +36,7 @@ object NetworkConstants {
 
     // no internet connection, cache empty
     const val NO_INTERNET_CACHE_EMPTY_TITLE = "No Connection! Cache Empty!"
-    const val NO_INTERNET_CACHE_EMPTY_DES = "Sorry, No Connection and Cache Empty! Data Unavailable! Please try again!"
+    const val NO_INTERNET_CACHE_EMPTY_DES = "Sorry, No Connection and Cache Empty! Data Unavailable! Please, CHECK your CONNECTION try again!"
 
     // network error, cache empty
     const val NETWORK_ERROR_CACHE_EMPTY_TITLE = "Network Failure! Cache Empty!"
@@ -124,6 +124,25 @@ object NetworkConstants {
         UIType.Dialog(),
         false
     )
+
+    // if refresh limit finished
+    val MESSAGE_NOT_ALLOWED =
+        Message(
+            "Warning!!!",
+            "As you daily limits has finished, data will be provided from Database",
+            UIType.Dialog(),
+            false
+        )
+
+    // message to inform user about butten has already pressed
+    val MESSAGE_ALREADY_IN_PROGRESS =
+        Message(
+            "",
+            "Sorry, It is already in progress!",
+            UIType.Toast(),
+            false
+        )
+
 }
 
 

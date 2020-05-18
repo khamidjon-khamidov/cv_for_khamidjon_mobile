@@ -5,12 +5,12 @@ import com.hamidjonhamidov.cvforkhamidjon.data_requests.persistence.AppDatabase
 import com.hamidjonhamidov.cvforkhamidjon.data_requests.persistence.main.ProjectsDao
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.ProjectModel
 import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImpl
-import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImplTestConstants
 import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImplTestConstants.GETPROJECT
 import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImplTestConstants.PROJECT_MODEL_LIST
 import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImplTestConstants.PROJECT_REMOTE_MODEL_LIST
+import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainJobsEvent
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainStateEvent
-import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainStateEvent.GetProjects
+import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainViewDestEvent
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NETWORK_ERROR_CACHE_EMPTY
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NETWORK_ERROR_CACHE_SUCCESS
@@ -34,7 +34,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import org.mockito.Mock
-import org.mockito.Mockito
 import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
 
@@ -57,9 +56,19 @@ ProjectsDaoTest {
     @Mock
     lateinit var projectsDaoTd: ProjectesDaoTd
 
+    lateinit var stateEvent: MainStateEvent
+
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
+
+        stateEvent = object : MainStateEvent{
+            override val responsibleJob: MainJobsEvent
+                get() = MainJobsEvent()
+            override val destinationView: MainViewDestEvent
+                get() = MainViewDestEvent.GetProjectsFragmentDest()
+        }
+
         projectsDaoTd =
             ProjectesDaoTd()
 
@@ -89,7 +98,7 @@ ProjectsDaoTest {
         // act
         val result =
             SUT.getProjects(
-                GetProjects(),
+                stateEvent,
                 true
             )
 
@@ -97,9 +106,8 @@ ProjectsDaoTest {
         // assert
 
         result.onEach {
-            Assert.assertEquals(it.toFragment, shouldToFragment)
-            Assert.assertEquals(it.data?.projectsFragmentView?.projects, shouldProjectModelList)
-            Assert.assertEquals(it.message, shouldMessage)
+            assertEquals(it.viewState?.projectsFragmentView?.projects, shouldProjectModelList)
+            assertEquals(it.message, shouldMessage)
         }.launchIn(this)
 
         delay(1000)
@@ -121,16 +129,15 @@ ProjectsDaoTest {
 
         // act
         val result = SUT.getProjects(
-            GetProjects(),
+            stateEvent,
             true
         )
 
         // assert
         result.onEach {
             onEachCalls++
-            Assert.assertEquals(it.message, MESSSAGE_NETWORK_TIMEOUT_CACHE_SUCCESS)
-            Assert.assertEquals(it.toFragment, GETPROJECT)
-            Assert.assertEquals(it.data?.projectsFragmentView?.projects, PROJECT_MODEL_LIST)
+            assertEquals(it.message, MESSSAGE_NETWORK_TIMEOUT_CACHE_SUCCESS)
+            assertEquals(it.viewState?.projectsFragmentView?.projects, PROJECT_MODEL_LIST)
         }.launchIn(this)
 
         delay(7000)
@@ -155,7 +162,7 @@ ProjectsDaoTest {
         println("Before result")
 
         val result = SUT.getProjects(
-            GetProjects(),
+            stateEvent,
             true
         )
 
@@ -164,9 +171,8 @@ ProjectsDaoTest {
         // assert
         result.onEach {
             onEachCalls++
-            Assert.assertEquals(it.message, MESSAGE_NETWORK_TIMEOUT_CACHE_EMPTY)
-            Assert.assertEquals(it.toFragment, GETPROJECT)
-            Assert.assertEquals(it.data?.projectsFragmentView?.projects, null)
+            assertEquals(it.message, MESSAGE_NETWORK_TIMEOUT_CACHE_EMPTY)
+            assertEquals(it.viewState?.projectsFragmentView?.projects, null)
         }.launchIn(this)
 
         println("After onEach calls")
@@ -190,7 +196,7 @@ ProjectsDaoTest {
         println("Before result")
 
         val result = SUT.getProjects(
-            GetProjects(),
+            stateEvent,
             false
         )
 
@@ -199,9 +205,8 @@ ProjectsDaoTest {
         // assert
         result.onEach {
             onEachCalls++
-            Assert.assertEquals(it.message, MESSAGE_NO_INTERNET_CACHE_SUCCESS)
-            Assert.assertEquals(it.toFragment, GETPROJECT)
-            Assert.assertEquals(it.data?.projectsFragmentView?.projects, PROJECT_MODEL_LIST)
+            assertEquals(it.message, MESSAGE_NO_INTERNET_CACHE_SUCCESS)
+            assertEquals(it.viewState?.projectsFragmentView?.projects, PROJECT_MODEL_LIST)
         }.launchIn(this)
 
         println("After onEach calls")
@@ -225,7 +230,7 @@ ProjectsDaoTest {
         // act
         println("Before result")
         val result = SUT.getProjects(
-            GetProjects(),
+            stateEvent,
             false
         )
 
@@ -234,9 +239,8 @@ ProjectsDaoTest {
         // assert
         result.onEach {
             onEachCalls++
-            Assert.assertEquals(it.message, MESSAGE_NO_INTERNET_CACHE_EMPTY)
-            Assert.assertEquals(it.toFragment, GETPROJECT)
-            Assert.assertEquals(it.data?.projectsFragmentView?.projects, null)
+            assertEquals(it.message, MESSAGE_NO_INTERNET_CACHE_EMPTY)
+            assertEquals(it.viewState?.projectsFragmentView?.projects, null)
         }.launchIn(this)
 
         println("After onEach calls")
@@ -265,7 +269,7 @@ ProjectsDaoTest {
         // act
         println("Before result")
         val result = SUT.getProjects(
-            GetProjects(),
+            stateEvent,
             true
         )
         println("After result")
@@ -273,18 +277,17 @@ ProjectsDaoTest {
         // assert
         result.onEach {
             onEachCalls++
-            Assert.assertEquals(it.message, MESSAGE_NETWORK_ERROR_CACHE_SUCCESS)
-            Assert.assertEquals(it.toFragment, GETPROJECT)
-            Assert.assertEquals(it.data?.projectsFragmentView?.projects, PROJECT_MODEL_LIST)
+            assertEquals(it.message, MESSAGE_NETWORK_ERROR_CACHE_SUCCESS)
+            assertEquals(it.viewState?.projectsFragmentView?.projects, PROJECT_MODEL_LIST)
         }.launchIn(this)
         println("After onEach calls")
 
         delay(2000)
-        Assert.assertEquals(onEachCalls, 1)
+        assertEquals(onEachCalls, 1)
         verify(apiService, times(1)).getProjectsSync()
-        Assert.assertEquals(projectsDaoTd.funCalls, 1)
-        Assert.assertEquals(projectsDaoTd.getProjectsCalls, 1)
-        Assert.assertEquals(projectsDaoTd.inMemoryData.size, 4)
+        assertEquals(projectsDaoTd.funCalls, 1)
+        assertEquals(projectsDaoTd.getProjectsCalls, 1)
+        assertEquals(projectsDaoTd.inMemoryData.size, 4)
         Unit
     }
 
@@ -302,7 +305,7 @@ ProjectsDaoTest {
         // act
         println("Before result")
         val result = SUT.getProjects(
-            GetProjects(),
+            stateEvent,
             true
         )
         println("After result")
@@ -310,18 +313,17 @@ ProjectsDaoTest {
         // assert
         result.onEach {
             onEachCalls++
-            Assert.assertEquals(it.message, MESSAGE_NETWORK_ERROR_CACHE_EMPTY)
-            Assert.assertEquals(it.toFragment, GETPROJECT)
-            Assert.assertEquals(it.data?.projectsFragmentView?.projects, null)
+            assertEquals(it.message, MESSAGE_NETWORK_ERROR_CACHE_EMPTY)
+            assertEquals(it.viewState?.projectsFragmentView?.projects, null)
         }.launchIn(this)
         println("After onEach calls")
 
         delay(2000)
-        Assert.assertEquals(onEachCalls, 1)
+        assertEquals(onEachCalls, 1)
         verify(apiService, times(1)).getProjectsSync()
-        Assert.assertEquals(projectsDaoTd.funCalls, 1)
-        Assert.assertEquals(projectsDaoTd.getProjectsCalls, 1)
-        Assert.assertEquals(projectsDaoTd.inMemoryData.size, 0)
+        assertEquals(projectsDaoTd.funCalls, 1)
+        assertEquals(projectsDaoTd.getProjectsCalls, 1)
+        assertEquals(projectsDaoTd.inMemoryData.size, 0)
         Unit
     }
 
@@ -335,7 +337,7 @@ ProjectsDaoTest {
         // act
         val result = SUT
             .getProjects(
-                GetProjects(),
+                stateEvent,
                 false,
                 false
             )
@@ -343,9 +345,8 @@ ProjectsDaoTest {
         // assert
         result.onEach {
             assertEquals(it.message, MESSAGE_NETWORK_NOT_ALLOWED_CACHE_SUCCESS)
-            assertEquals(it.toFragment, GETPROJECT)
             assertEquals(
-                it.data?.projectsFragmentView?.projects,
+                it.viewState?.projectsFragmentView?.projects,
                 PROJECT_MODEL_LIST
             )
         }.launchIn(this)
@@ -368,7 +369,7 @@ ProjectsDaoTest {
         // act
         val result = SUT
             .getProjects(
-                GetProjects(),
+                stateEvent,
                 false,
                 false
             )
@@ -376,9 +377,8 @@ ProjectsDaoTest {
         // assert
         result.onEach {
             assertEquals(it.message, MESSAGE_NETWORK_NOT_ALLOWED_CACHE_EMPTY)
-            assertEquals(it.toFragment, GETPROJECT)
             assertEquals(
-                it.data?.projectsFragmentView?.projects,
+                it.viewState?.projectsFragmentView?.projects,
                 null
             )
         }.launchIn(this)

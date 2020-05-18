@@ -6,11 +6,11 @@ import com.hamidjonhamidov.cvforkhamidjon.data_requests.persistence.main.Achieve
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.AchievementModel
 import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImpl
 import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImplTestConstants.ACHIEVEMENT_MODEL_LIST
-import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImplTestConstants.ACHIEVEMENT_REMOTE_MODEL1
-import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImplTestConstants.ACHIEVEMENT_REMOTE_MODEL2
 import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImplTestConstants.ACHIEVEMENT_REMOTE_MODEL_LIST
 import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImplTestConstants.GETACHIEVEMENTS
-import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainStateEvent.GetAchievements
+import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainJobsEvent
+import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainStateEvent
+import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainViewDestEvent
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NETWORK_ERROR_CACHE_EMPTY
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NETWORK_ERROR_CACHE_SUCCESS
@@ -35,8 +35,6 @@ import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
-import java.util.Collections.list
-
 
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
@@ -56,9 +54,18 @@ class AchievementsDaoTest {
     @Mock
     lateinit var achievevementsDaoTd: AchievmenentsDaoTd
 
+    lateinit var stateEvent: MainStateEvent
+
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
+
+        stateEvent = object : MainStateEvent{
+            override val responsibleJob: MainJobsEvent
+                get() = MainJobsEvent()
+            override val destinationView: MainViewDestEvent
+                get() = MainViewDestEvent.AchievementsFragmentDest()
+        }
         achievevementsDaoTd =
             AchievmenentsDaoTd()
 
@@ -76,7 +83,6 @@ class AchievementsDaoTest {
             // arrange
             println("Test started")
 
-            val shouldToFragment = GETACHIEVEMENTS
             val shouldAchievevementModelList = ACHIEVEMENT_MODEL_LIST
             val shouldMessage = MESSAGE_NETWORK_SUCCESS_CACHE_SUCCESSS.copy()
 
@@ -89,7 +95,7 @@ class AchievementsDaoTest {
             // act
             val result =
                 SUT.getAchievements(
-                    GetAchievements(),
+                    stateEvent,
                     true,
                     true
                 )
@@ -98,9 +104,8 @@ class AchievementsDaoTest {
             // assert
 
             result.onEach {
-                assertEquals(it.toFragment, shouldToFragment)
                 assertEquals(
-                    it.data?.achievementsFragmentView?.achievements,
+                    it.viewState?.achievementsFragmentView?.achievements,
                     shouldAchievevementModelList
                 )
                 assertEquals(it.message, shouldMessage)
@@ -125,7 +130,7 @@ class AchievementsDaoTest {
 
         // act
         val result = SUT.getAchievements(
-            GetAchievements(),
+            stateEvent,
             true,
             true
         )
@@ -134,8 +139,7 @@ class AchievementsDaoTest {
         result.onEach {
             onEachCalls++
             assertEquals(it.message, MESSSAGE_NETWORK_TIMEOUT_CACHE_SUCCESS)
-            assertEquals(it.toFragment, GETACHIEVEMENTS)
-            assertEquals(it.data?.achievementsFragmentView?.achievements, ACHIEVEMENT_MODEL_LIST)
+            assertEquals(it.viewState?.achievementsFragmentView?.achievements, ACHIEVEMENT_MODEL_LIST)
         }.launchIn(this)
 
         delay(7000)
@@ -160,7 +164,7 @@ class AchievementsDaoTest {
         println("Before result")
 
         val result = SUT.getAchievements(
-            GetAchievements(),
+            stateEvent,
             true,
             true
         )
@@ -171,8 +175,7 @@ class AchievementsDaoTest {
         result.onEach {
             onEachCalls++
             assertEquals(it.message, NetworkConstants.MESSAGE_NETWORK_TIMEOUT_CACHE_EMPTY)
-            assertEquals(it.toFragment, GETACHIEVEMENTS)
-            assertEquals(it.data?.achievementsFragmentView?.achievements, null)
+            assertEquals(it.viewState?.achievementsFragmentView?.achievements, null)
         }.launchIn(this)
 
         println("After onEach calls")
@@ -196,7 +199,7 @@ class AchievementsDaoTest {
         println("Before result")
 
         val result = SUT.getAchievements(
-            GetAchievements(),
+            stateEvent,
             false,
             true
         )
@@ -207,8 +210,7 @@ class AchievementsDaoTest {
         result.onEach {
             onEachCalls++
             assertEquals(it.message, MESSAGE_NO_INTERNET_CACHE_SUCCESS)
-            assertEquals(it.toFragment, GETACHIEVEMENTS)
-            assertEquals(it.data?.achievementsFragmentView?.achievements, ACHIEVEMENT_MODEL_LIST)
+            assertEquals(it.viewState?.achievementsFragmentView?.achievements, ACHIEVEMENT_MODEL_LIST)
         }.launchIn(this)
 
         println("After onEach calls")
@@ -232,7 +234,7 @@ class AchievementsDaoTest {
         // act
         println("Before result")
         val result = SUT.getAchievements(
-            GetAchievements(),
+            stateEvent,
             false,
             true
         )
@@ -243,8 +245,7 @@ class AchievementsDaoTest {
         result.onEach {
             onEachCalls++
             assertEquals(it.message, MESSAGE_NO_INTERNET_CACHE_EMPTY)
-            assertEquals(it.toFragment, GETACHIEVEMENTS)
-            assertEquals(it.data?.achievementsFragmentView?.achievements, null)
+            assertEquals(it.viewState?.achievementsFragmentView?.achievements, null)
         }.launchIn(this)
 
         println("After onEach calls")
@@ -273,7 +274,7 @@ class AchievementsDaoTest {
         // act
         println("Before result")
         val result = SUT.getAchievements(
-            GetAchievements(),
+            stateEvent,
             true,
             true
         )
@@ -283,8 +284,7 @@ class AchievementsDaoTest {
         result.onEach {
             onEachCalls++
             assertEquals(it.message, MESSAGE_NETWORK_ERROR_CACHE_SUCCESS)
-            assertEquals(it.toFragment, GETACHIEVEMENTS)
-            assertEquals(it.data?.achievementsFragmentView?.achievements, ACHIEVEMENT_MODEL_LIST)
+            assertEquals(it.viewState?.achievementsFragmentView?.achievements, ACHIEVEMENT_MODEL_LIST)
         }.launchIn(this)
         println("After onEach calls")
 
@@ -311,7 +311,7 @@ class AchievementsDaoTest {
         // act
         println("Before result")
         val result = SUT.getAchievements(
-            GetAchievements(),
+            stateEvent,
             true,
             true
         )
@@ -321,8 +321,7 @@ class AchievementsDaoTest {
         result.onEach {
             onEachCalls++
             assertEquals(it.message, MESSAGE_NETWORK_ERROR_CACHE_EMPTY)
-            assertEquals(it.toFragment, GETACHIEVEMENTS)
-            assertEquals(it.data?.achievementsFragmentView?.achievements, null)
+            assertEquals(it.viewState?.achievementsFragmentView?.achievements, null)
         }.launchIn(this)
         println("After onEach calls")
 
@@ -345,7 +344,7 @@ class AchievementsDaoTest {
         // act
         val result = SUT
             .getAchievements(
-                GetAchievements(),
+                stateEvent,
                 false,
                 false
             )
@@ -353,9 +352,8 @@ class AchievementsDaoTest {
         // assert
         result.onEach {
             assertEquals(it.message, MESSAGE_NETWORK_NOT_ALLOWED_CACHE_SUCCESS)
-            assertEquals(it.toFragment, GETACHIEVEMENTS)
             assertEquals(
-                it.data?.achievementsFragmentView?.achievements,
+                it.viewState?.achievementsFragmentView?.achievements,
                 ACHIEVEMENT_MODEL_LIST
             )
         }.launchIn(this)
@@ -381,7 +379,7 @@ class AchievementsDaoTest {
         // act
         val result = SUT
             .getAchievements(
-                GetAchievements(),
+                stateEvent,
                 false,
                 false
             )
@@ -389,9 +387,8 @@ class AchievementsDaoTest {
         // assert
         result.onEach {
             assertEquals(it.message, MESSAGE_NETWORK_NOT_ALLOWED_CACHE_EMPTY)
-            assertEquals(it.toFragment, GETACHIEVEMENTS)
             assertEquals(
-                it.data?.achievementsFragmentView?.achievements,
+                it.viewState?.achievementsFragmentView?.achievements,
                 null
             )
         }.launchIn(this)

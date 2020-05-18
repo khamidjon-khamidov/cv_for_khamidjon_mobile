@@ -22,13 +22,11 @@ import com.hamidjonhamidov.cvforkhamidjon.ui.askPermission
 import com.hamidjonhamidov.cvforkhamidjon.ui.delayInBackgLaunchInMain
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.BaseMainFragment
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.getCurrentViewStateOrNew
-import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.getMessagesSize
+import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainJobsEvent
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainStateEvent
-import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainStateEvent.GetHome
 import com.hamidjonhamidov.cvforkhamidjon.ui.showProgressBar
 import com.hamidjonhamidov.cvforkhamidjon.ui.showToast
 import com.hamidjonhamidov.cvforkhamidjon.util.StateEvent
-import com.hamidjonhamidov.cvforkhamidjon.util.constants.GeneralConstants
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.GeneralConstants.FACEBOOK_LINK
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.GeneralConstants.GIT_LINK
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.GeneralConstants.LINKEDIN_LINK
@@ -37,10 +35,7 @@ import com.hamidjonhamidov.cvforkhamidjon.util.constants.GeneralConstants.WEBSIT
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.GeneralConstants.WRITE_TO_EXTERNAL_STORAGE_CODE
 import com.hamidjonhamidov.cvforkhamidjon.util.glide.GlideManager
 import kotlinx.android.synthetic.main.fragment_home.*
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
 
 @FlowPreview
 @ExperimentalCoroutinesApi
@@ -48,7 +43,7 @@ import kotlinx.coroutines.delay
 class HomeFragment(
     viewModelFactory: ViewModelProvider.Factory,
     private val requestManager: GlideManager,
-    val homeStateEvent: StateEvent
+    val homeStateEvent: MainStateEvent
 ) : BaseMainFragment<AboutMeModel>(R.layout.fragment_home, viewModelFactory, homeStateEvent) {
 
     private val TAG = "AppDebug"
@@ -59,11 +54,13 @@ class HomeFragment(
     }
 
     override fun initData() {
-        if (viewModel.getCurrentViewStateOrNew().homeFragmentView.aboutMe == null) {
-            activity?.showProgressBar(true)
-            viewModel.setStateEvent(GetHome())
+        if (viewModel.getCurrentViewStateOrNew().homeFragmentView.aboutMe == null &&
+            !viewModel.jobManger.isJobActive(homeStateEvent.responsibleJob)
+        ) {
+
+            viewModel.setStateEvent(homeStateEvent)
         } else {
-            updateView(viewModel.getCurrentViewStateOrNew().homeFragmentView.aboutMe!!)
+            updateView(viewModel.getCurrentViewStateOrNew().homeFragmentView.aboutMe)
         }
     }
 
@@ -82,26 +79,10 @@ class HomeFragment(
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.home_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
-
-        lifecycleScope.launchWhenCreated {
-            while(true){
-                delay(5000)
-                Log.d(TAG, "${homeStateEvent.whichFragment} message size = ${viewModel.getMessagesSize(homeStateEvent.whichFragment)}")
-            }
-        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.home_mi_refresh -> {
-                Log.d(
-                    TAG,
-                    "HomeFragment: onOptionsItemSelected: ${viewModel.getMessagesSize(homeStateEvent.whichFragment)}"
-                )
-
-                viewModel.setStateEvent(GetHome())
-                true
-            }
 
             R.id.home_mi_download -> {
                 viewModel.viewState.value?.aboutMeFragmentView?.aboutMe?.cvLink?.let {
@@ -115,12 +96,12 @@ class HomeFragment(
                 }
                 return true
             }
-            else -> return super.onOptionsItemSelected(item)
+            else -> super.onOptionsItemSelected(item)
         }
-
     }
 
-    override fun updateView(myModel: AboutMeModel) {
+    override fun updateView(myModel: AboutMeModel?) {
+        if(myModel==null) return
         activity?.showProgressBar(false)
         requestManager
             .setImage(myModel.pictureLink, home_iv_me)
@@ -147,9 +128,9 @@ class HomeFragment(
             .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
 
         mgr.enqueue(request)
-        with(requireActivity()){
+        with(requireActivity()) {
             showToast("Download Started!")
-            delayInBackgLaunchInMain(lifecycleScope, 1000){
+            delayInBackgLaunchInMain(lifecycleScope, 1000) {
                 activity?.showToast("path: .../${Environment.DIRECTORY_DOWNLOADS}/Khamidjon_Khamidov.docx")
             }
         }
@@ -174,7 +155,7 @@ class HomeFragment(
         }
     }
 
-    fun enableSocialButtons(){
+    fun enableSocialButtons() {
         home_ll_git.setOnClickListener {
             goToLink(GIT_LINK)
         }
@@ -196,7 +177,7 @@ class HomeFragment(
         }
     }
 
-    fun goToLink(link: String){
+    fun goToLink(link: String) {
         val myIntent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
         startActivity(myIntent)
     }

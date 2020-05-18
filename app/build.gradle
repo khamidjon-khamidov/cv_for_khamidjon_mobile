@@ -121,5 +121,7 @@ dependencies {
 
     // circle image view
     implementation 'de.hdodenhof:circleimageview:3.1.0'
-//
+
+    // testing backgr thread
+    testImplementation "androidx.arch.core:core-testing:2.1.0"
 }

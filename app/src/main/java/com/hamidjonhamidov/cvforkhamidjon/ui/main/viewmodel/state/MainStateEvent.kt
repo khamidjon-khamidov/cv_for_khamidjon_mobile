@@ -1,32 +1,5 @@
 package com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state
 
-import kotlin.reflect.KClass
+import com.hamidjonhamidov.cvforkhamidjon.util.StateEvent
 
-sealed class MainStateEvent {
-
-    class GetHome: MainStateEvent()
-
-    class GetAboutMe : MainStateEvent()
-
-    class GetMySkills : MainStateEvent()
-
-    class GetAchievements : MainStateEvent()
-
-    class GetProjects : MainStateEvent()
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+interface MainStateEvent : StateEvent<MainJobsEvent, MainViewDestEvent>

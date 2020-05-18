@@ -16,7 +16,7 @@ import retrofit2.HttpException
  * codingwithmitch.com
  */
 
-abstract class Repository {
+abstract class NetworkApiCall {
 
     suspend fun <T> safeApiCall(
         dispatcher: CoroutineDispatcher,
