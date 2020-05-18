@@ -5,57 +5,109 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 
 import com.hamidjonhamidov.cvforkhamidjon.R
+import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.AboutMeModel
+import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.SkillModel
+import com.hamidjonhamidov.cvforkhamidjon.ui.copyToClipboard
+import com.hamidjonhamidov.cvforkhamidjon.ui.goToLink
+import com.hamidjonhamidov.cvforkhamidjon.ui.main.BaseMainFragment
+import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.getCurrentViewStateOrNew
+import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainStateEvent
+import com.hamidjonhamidov.cvforkhamidjon.ui.showToast
+import com.hamidjonhamidov.cvforkhamidjon.util.DateUtil
+import com.hamidjonhamidov.cvforkhamidjon.util.glide.GlideManager
+import kotlinx.android.synthetic.main.fragment_about_me.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.InternalCoroutinesApi
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [AboutMeFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class AboutMeFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+@ExperimentalCoroutinesApi
+@FlowPreview
+@InternalCoroutinesApi
+class AboutMeFragment(
+    viewModelFactory: ViewModelProvider.Factory,
+    private val requestManager: GlideManager,
+    val aboutMeStateEvent: MainStateEvent
+) : BaseMainFragment<AboutMeModel>(
+    R.layout.fragment_about_me,
+    R.menu.only_refresh_menu,
+    viewModelFactory,
+    aboutMeStateEvent
+) {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+
+    override fun subscribeDataObservers() {
+        // observe data in about me
+        viewModel.viewState.observe(viewLifecycleOwner, Observer { viewState ->
+            viewState?.aboutMeFragmentView?.let {
+                it.aboutMe?.let { aboutMe ->
+                    updateView(aboutMe)
+                }
+            }
+        })
+    }
+
+    override fun initData() {
+        if (viewModel.getCurrentViewStateOrNew().homeFragmentView.aboutMe == null &&
+            !viewModel.jobManger.isJobActive(aboutMeStateEvent.responsibleJob)
+        ) {
+            viewModel.setStateEvent(aboutMeStateEvent)
+        } else {
+            updateView(viewModel.getCurrentViewStateOrNew().homeFragmentView.aboutMe)
+        }
+
+        aboutme_tv_experience.text = DateUtil.getDifferenceWithCurrentDate()
+
+        aboutme_tv_lsbu.setOnClickListener {
+            activity?.showToast("Sorry, data have not been received yet!")
+        }
+
+        aboutme_tv_tuit.setOnClickListener {
+            activity?.showToast("Sorry, data have not been received yet!")
+        }
+
+        aboutme_tv_phone.setOnClickListener {
+            activity?.copyToClipboard("+44 075653 36207")
+            activity?.showToast("Copied to Clipboard")
+        }
+
+        aboutme_tv_email.setOnClickListener {
+            activity?.copyToClipboard("hamidovhamid1998@gmail.com")
+            activity?.showToast("Copied to Clipboard")
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment **
-        return inflater.inflate(R.layout.fragment_about_me, container, false)
-    }
+    override fun updateView(myModel: AboutMeModel?) {
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment AboutMeFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            AboutMeFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+        myModel?.education?.get(0)?.link?.let { edu ->
+            aboutme_tv_lsbu.setOnClickListener {
+                activity?.goToLink(edu)
             }
+        }
+
+
+        myModel?.education?.get(1)?.link?.let { edu ->
+            aboutme_tv_tuit.setOnClickListener {
+                activity?.goToLink(edu)
+            }
+        }
+
+        myModel?.phone?.let { phone->
+            aboutme_tv_phone.setOnClickListener {
+                activity?.copyToClipboard(phone)
+                activity?.showToast("Copied to Clipboard")
+            }
+        }
+
+        myModel?.email?.let { email->
+            aboutme_tv_email.setOnClickListener {
+                activity?.copyToClipboard(email)
+                activity?.showToast("Copied to Clipboard")
+            }
+        }
     }
 }

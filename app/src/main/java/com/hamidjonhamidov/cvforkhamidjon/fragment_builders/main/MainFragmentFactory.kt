@@ -5,6 +5,7 @@ import androidx.fragment.app.FragmentFactory
 import androidx.lifecycle.ViewModelProvider
 import com.hamidjonhamidov.cvforkhamidjon.di.main_subcomponent.MainActivityScope
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.a_home.HomeFragment
+import com.hamidjonhamidov.cvforkhamidjon.ui.main.b_aboutme.AboutMeFragment
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainJobsEvent
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainStateEvent
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainViewDestEvent
@@ -37,6 +38,17 @@ constructor(
                             get() = MainViewDestEvent.HomeFragmentDest()
                     }
                 )
+            }
+
+            AboutMeFragment::class.java.name -> {
+                AboutMeFragment(viewModelProviderFactory, glideManager,
+                object : MainStateEvent {
+                    override val responsibleJob: MainJobsEvent
+                        get() = MainJobsEvent.GetAboutMe()
+                    override val destinationView: MainViewDestEvent
+                        get() = MainViewDestEvent.AboutMeFragmentDest()
+                }
+                    )
             }
 
             else -> {
