@@ -9,8 +9,6 @@ sealed class MainViewDestEvent {
 
     class MySkillsFragmentDest : MainViewDestEvent()
 
-    class AchievementsFragmentDest : MainViewDestEvent()
-
     class GetProjectsFragmentDest : MainViewDestEvent()
 
     class GetPostsFragmentDest: MainViewDestEvent()

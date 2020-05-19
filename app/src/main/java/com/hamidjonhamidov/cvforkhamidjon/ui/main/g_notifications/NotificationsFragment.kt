@@ -1,4 +1,4 @@
-package com.hamidjonhamidov.cvforkhamidjon.ui.main.f_notifications
+package com.hamidjonhamidov.cvforkhamidjon.ui.main.g_notifications
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

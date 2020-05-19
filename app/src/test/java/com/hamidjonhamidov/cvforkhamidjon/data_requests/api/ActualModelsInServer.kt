@@ -1,9 +1,9 @@
 package com.hamidjonhamidov.cvforkhamidjon.data_requests.api
 
+import com.hamidjonhamidov.cvforkhamidjon.models.api.achievments.AchievementRemoteModel
 import com.hamidjonhamidov.cvforkhamidjon.models.api.main.*
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.Education
-import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.Honor
-import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.PostModel
+import com.hamidjonhamidov.cvforkhamidjon.models.offline.achievements.Honor
 
 object ActualModelsInServer {
 
@@ -21,14 +21,25 @@ object ActualModelsInServer {
         "https://firebasestorage.googleapis.com/v0/b/who-is-khamidjon.appspot.com/o/cv%2FCV_Programming.docx?alt=media&token=0ab13a3a-9ad4-4741-a44d-700bb211cad9"
     )
 
-    val ACHIEVEMENT2INSERVER = AchievementRemoteModel(
-        2003,
-        "Others",
-        listOf(
-            Honor(3014, "Chess Regional Competition", "College Years", "https://firebasestorage.googleapis.com/v0/b/who-is-khamidjon.appspot.com/o/cv%2Fothers%2Fchess_certificate_modified.JPG?alt=media&token=c1808aa6-07a1-4caf-8d90-ccd6ff89b5dc"),
-            Honor(3015, "English International Certificate", "IELTS", "https://firebasestorage.googleapis.com/v0/b/who-is-khamidjon.appspot.com/o/cv%2Fothers%2Fielts_certificate_modified.jpg?alt=media&token=4ab5607e-1b56-48df-b73e-d82686ee68b9")
+    val ACHIEVEMENT2INSERVER =
+        AchievementRemoteModel(
+            2003,
+            "Others",
+            listOf(
+                Honor(
+                    3014,
+                    "Chess Regional Competition",
+                    "College Years",
+                    "https://firebasestorage.googleapis.com/v0/b/who-is-khamidjon.appspot.com/o/cv%2Fothers%2Fchess_certificate_modified.JPG?alt=media&token=c1808aa6-07a1-4caf-8d90-ccd6ff89b5dc"
+                ),
+                Honor(
+                    3015,
+                    "English International Certificate",
+                    "IELTS",
+                    "https://firebasestorage.googleapis.com/v0/b/who-is-khamidjon.appspot.com/o/cv%2Fothers%2Fielts_certificate_modified.jpg?alt=media&token=4ab5607e-1b56-48df-b73e-d82686ee68b9"
+                )
+            )
         )
-    )
 
     val PROJECT3INSERVER = ProjectRemoteModel(
         7004,

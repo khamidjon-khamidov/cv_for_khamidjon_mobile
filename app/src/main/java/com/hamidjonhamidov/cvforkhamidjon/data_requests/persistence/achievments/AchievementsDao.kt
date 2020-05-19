@@ -1,7 +1,7 @@
-package com.hamidjonhamidov.cvforkhamidjon.data_requests.persistence.main
+package com.hamidjonhamidov.cvforkhamidjon.data_requests.persistence.achievments
 
 import androidx.room.*
-import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.AchievementModel
+import com.hamidjonhamidov.cvforkhamidjon.models.offline.achievements.AchievementModel
 
 /*
 ********************** REQUIREMENTS *****************

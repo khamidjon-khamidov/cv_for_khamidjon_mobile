@@ -1,6 +1,9 @@
 package com.hamidjonhamidov.cvforkhamidjon.repository.main
 
+import com.hamidjonhamidov.cvforkhamidjon.models.api.achievments.AchievementRemoteModel
 import com.hamidjonhamidov.cvforkhamidjon.models.api.main.*
+import com.hamidjonhamidov.cvforkhamidjon.models.offline.achievements.AchievementModel
+import com.hamidjonhamidov.cvforkhamidjon.models.offline.achievements.Honor
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.*
 import com.hamidjonhamidov.cvforkhamidjon.util.Message
 
@@ -164,105 +167,265 @@ object MainRepositoryImplTestConstants {
             SKILL_MODEL5
         )
 
-    val ACHIEVEMENT_REMOTE_MODEL1 = AchievementRemoteModel(
-        1,
-        "title 1",
-        listOf(
-            Honor(1, "title 1", "des 1", "link 1"),
-            Honor(2, "title 2", "des 1", "link 1"),
-            Honor(3, "title 3", "des 1", "link 1")
+    val ACHIEVEMENT_REMOTE_MODEL1 =
+        AchievementRemoteModel(
+            1,
+            "title 1",
+            listOf(
+                Honor(
+                    1,
+                    "title 1",
+                    "des 1",
+                    "link 1"
+                ),
+                Honor(
+                    2,
+                    "title 2",
+                    "des 1",
+                    "link 1"
+                ),
+                Honor(
+                    3,
+                    "title 3",
+                    "des 1",
+                    "link 1"
+                )
+            )
         )
-    )
 
-    val ACHIEVEMENT_REMOTE_MODEL2 = AchievementRemoteModel(
-        2,
-        "title 2",
-        listOf(
-            Honor(4, "title 1", "des 1", "link 1"),
-            Honor(5, "title 2", "des 1", "link 1"),
-            Honor(6, "title 3", "des 1", "link 1")
+    val ACHIEVEMENT_REMOTE_MODEL2 =
+        AchievementRemoteModel(
+            2,
+            "title 2",
+            listOf(
+                Honor(
+                    4,
+                    "title 1",
+                    "des 1",
+                    "link 1"
+                ),
+                Honor(
+                    5,
+                    "title 2",
+                    "des 1",
+                    "link 1"
+                ),
+                Honor(
+                    6,
+                    "title 3",
+                    "des 1",
+                    "link 1"
+                )
+            )
         )
-    )
 
-    val ACHIEVEMENT_REMOTE_MODEL3 = AchievementRemoteModel(
-        3,
-        "title 3",
-        listOf(
-            Honor(21, "title 1", "des 1", "link 1"),
-            Honor(23, "title 2", "des 1", "link 1"),
-            Honor(32, "title 3", "des 1", "link 1")
+    val ACHIEVEMENT_REMOTE_MODEL3 =
+        AchievementRemoteModel(
+            3,
+            "title 3",
+            listOf(
+                Honor(
+                    21,
+                    "title 1",
+                    "des 1",
+                    "link 1"
+                ),
+                Honor(
+                    23,
+                    "title 2",
+                    "des 1",
+                    "link 1"
+                ),
+                Honor(
+                    32,
+                    "title 3",
+                    "des 1",
+                    "link 1"
+                )
+            )
         )
-    )
 
-    val ACHIEVEMENT_REMOTE_MODEL4 = AchievementRemoteModel(
-        4,
-        "title 4",
-        listOf(
-            Honor(32, "title 1", "des 1", "link 1"),
-            Honor(21, "title 2", "des 1", "link 1"),
-            Honor(12, "title 3", "des 1", "link 1")
+    val ACHIEVEMENT_REMOTE_MODEL4 =
+        AchievementRemoteModel(
+            4,
+            "title 4",
+            listOf(
+                Honor(
+                    32,
+                    "title 1",
+                    "des 1",
+                    "link 1"
+                ),
+                Honor(
+                    21,
+                    "title 2",
+                    "des 1",
+                    "link 1"
+                ),
+                Honor(
+                    12,
+                    "title 3",
+                    "des 1",
+                    "link 1"
+                )
+            )
         )
-    )
 
-    val ACHIEVEMENT_REMOTE_MODEL5 = AchievementRemoteModel(
-        5,
-        "title 5",
-        listOf(
-            Honor(98, "title 1", "des 1", "link 1"),
-            Honor(980, "title 2", "des 1", "link 1"),
-            Honor(987, "title 3", "des 1", "link 1")
+    val ACHIEVEMENT_REMOTE_MODEL5 =
+        AchievementRemoteModel(
+            5,
+            "title 5",
+            listOf(
+                Honor(
+                    98,
+                    "title 1",
+                    "des 1",
+                    "link 1"
+                ),
+                Honor(
+                    980,
+                    "title 2",
+                    "des 1",
+                    "link 1"
+                ),
+                Honor(
+                    987,
+                    "title 3",
+                    "des 1",
+                    "link 1"
+                )
+            )
         )
-    )
 
-    val ACHIEVEMENT_MODEL1 = AchievementModel(
-        1,
-        "title 1",
-        listOf(
-            Honor(1, "title 1", "des 1", "link 1"),
-            Honor(2, "title 2", "des 1", "link 1"),
-            Honor(3, "title 3", "des 1", "link 1")
+    val ACHIEVEMENT_MODEL1 =
+        AchievementModel(
+            1,
+            "title 1",
+            listOf(
+                Honor(
+                    1,
+                    "title 1",
+                    "des 1",
+                    "link 1"
+                ),
+                Honor(
+                    2,
+                    "title 2",
+                    "des 1",
+                    "link 1"
+                ),
+                Honor(
+                    3,
+                    "title 3",
+                    "des 1",
+                    "link 1"
+                )
+            )
         )
-    )
 
-    val ACHIEVEMENT_MODEL2 = AchievementModel(
-        2,
-        "title 2",
-        listOf(
-            Honor(4, "title 1", "des 1", "link 1"),
-            Honor(5, "title 2", "des 1", "link 1"),
-            Honor(6, "title 3", "des 1", "link 1")
+    val ACHIEVEMENT_MODEL2 =
+        AchievementModel(
+            2,
+            "title 2",
+            listOf(
+                Honor(
+                    4,
+                    "title 1",
+                    "des 1",
+                    "link 1"
+                ),
+                Honor(
+                    5,
+                    "title 2",
+                    "des 1",
+                    "link 1"
+                ),
+                Honor(
+                    6,
+                    "title 3",
+                    "des 1",
+                    "link 1"
+                )
+            )
         )
-    )
 
-    val ACHIEVEMENT_MODEL3 = AchievementModel(
-        3,
-        "title 3",
-        listOf(
-            Honor(21, "title 1", "des 1", "link 1"),
-            Honor(23, "title 2", "des 1", "link 1"),
-            Honor(32, "title 3", "des 1", "link 1")
+    val ACHIEVEMENT_MODEL3 =
+        AchievementModel(
+            3,
+            "title 3",
+            listOf(
+                Honor(
+                    21,
+                    "title 1",
+                    "des 1",
+                    "link 1"
+                ),
+                Honor(
+                    23,
+                    "title 2",
+                    "des 1",
+                    "link 1"
+                ),
+                Honor(
+                    32,
+                    "title 3",
+                    "des 1",
+                    "link 1"
+                )
+            )
         )
-    )
 
-    val ACHIEVEMENT_MODEL4 = AchievementModel(
-        4,
-        "title 4",
-        listOf(
-            Honor(32, "title 1", "des 1", "link 1"),
-            Honor(21, "title 2", "des 1", "link 1"),
-            Honor(12, "title 3", "des 1", "link 1")
+    val ACHIEVEMENT_MODEL4 =
+        AchievementModel(
+            4,
+            "title 4",
+            listOf(
+                Honor(
+                    32,
+                    "title 1",
+                    "des 1",
+                    "link 1"
+                ),
+                Honor(
+                    21,
+                    "title 2",
+                    "des 1",
+                    "link 1"
+                ),
+                Honor(
+                    12,
+                    "title 3",
+                    "des 1",
+                    "link 1"
+                )
+            )
         )
-    )
 
-    val ACHIEVEMENT_MODEL5 = AchievementModel(
-        5,
-        "title 5",
-        listOf(
-            Honor(98, "title 1", "des 1", "link 1"),
-            Honor(980, "title 2", "des 1", "link 1"),
-            Honor(987, "title 3", "des 1", "link 1")
+    val ACHIEVEMENT_MODEL5 =
+        AchievementModel(
+            5,
+            "title 5",
+            listOf(
+                Honor(
+                    98,
+                    "title 1",
+                    "des 1",
+                    "link 1"
+                ),
+                Honor(
+                    980,
+                    "title 2",
+                    "des 1",
+                    "link 1"
+                ),
+                Honor(
+                    987,
+                    "title 3",
+                    "des 1",
+                    "link 1"
+                )
+            )
         )
-    )
 
     val ACHIEVEMENT_MODEL_LIST =
         listOf(

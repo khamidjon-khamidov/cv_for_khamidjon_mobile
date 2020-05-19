@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/android_nav_graph"
+    app:startDestination="@id/androidFragment">
+
+    <fragment
+        android:id="@+id/androidFragment"
+        android:name="com.hamidjonhamidov.cvforkhamidjon.ui.achievments.a_android.AndroidFragment"
+        android:label="fragment_android_fragmetn"
+        tools:layout="@layout/fragment_android_fragmetn" >
+        <action
+            android:id="@+id/action_androidFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailsFragment"
+        android:name="com.hamidjonhamidov.cvforkhamidjon.ui.achievments.d_detail.DetailsFragment"
+        android:label="fragment_details"
+        tools:layout="@layout/fragment_details" />
+</navigation>

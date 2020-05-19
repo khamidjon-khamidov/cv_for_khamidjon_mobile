@@ -1,5 +1,6 @@
 package com.hamidjonhamidov.cvforkhamidjon.data_requests.api.main
 
+import com.hamidjonhamidov.cvforkhamidjon.models.api.achievments.AchievementRemoteModel
 import com.hamidjonhamidov.cvforkhamidjon.models.api.main.*
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.API_URLS.GET_ABOUTME_PATH
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.API_URLS.GET_ACHIEVEMENTS_PATH

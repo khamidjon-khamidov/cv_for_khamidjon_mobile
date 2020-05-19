@@ -47,4 +47,6 @@
     <string name="go_to_source_code">Go to Source code</string>
     <string name="posts">Posts</string>
     <string name="skills">Skills</string>
+    <string name="android">Android</string>
+    <string name="others">Others</string>
 </resources>

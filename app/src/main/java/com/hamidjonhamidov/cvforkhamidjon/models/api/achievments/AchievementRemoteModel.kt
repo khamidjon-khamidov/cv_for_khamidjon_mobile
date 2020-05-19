@@ -1,10 +1,9 @@
-package com.hamidjonhamidov.cvforkhamidjon.models.api.main
+package com.hamidjonhamidov.cvforkhamidjon.models.api.achievments
 
-import androidx.room.ColumnInfo
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.AchievementModel
-import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.Honor
+import com.hamidjonhamidov.cvforkhamidjon.models.offline.achievements.AchievementModel
+import com.hamidjonhamidov.cvforkhamidjon.models.offline.achievements.Honor
 import kotlinx.android.parcel.RawValue
 
 data class AchievementRemoteModel(

@@ -37,7 +37,7 @@
 
     <fragment
         android:id="@+id/notificationsFragment"
-        android:name="com.hamidjonhamidov.cvforkhamidjon.ui.main.f_notifications.NotificationsFragment"
+        android:name="com.hamidjonhamidov.cvforkhamidjon.ui.main.g_notifications.NotificationsFragment"
         android:label="Notifications"
         tools:layout="@layout/fragment_notifications" />
     <fragment
@@ -47,7 +47,7 @@
         tools:layout="@layout/fragment_projects" />
     <fragment
         android:id="@+id/postsFragment"
-        android:name="com.hamidjonhamidov.cvforkhamidjon.ui.main.e_posts.PostsFragment"
+        android:name="com.hamidjonhamidov.cvforkhamidjon.ui.main.f_posts.PostsFragment"
         android:label="Personal Posts"
         tools:layout="@layout/fragment_posts" />
 

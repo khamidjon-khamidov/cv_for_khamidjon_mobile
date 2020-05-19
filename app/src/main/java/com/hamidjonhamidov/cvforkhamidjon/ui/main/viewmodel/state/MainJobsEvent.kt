@@ -8,8 +8,6 @@ open class MainJobsEvent() {
 
     class GetMySkills: MainJobsEvent()
 
-    class GetAchievements: MainJobsEvent()
-
     class GetProjects: MainJobsEvent()
 
     class GetPosts: MainJobsEvent()

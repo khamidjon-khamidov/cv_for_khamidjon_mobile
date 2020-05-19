@@ -2,12 +2,11 @@ package com.hamidjonhamidov.cvforkhamidjon.repository.main.mainrepsitoryimpltest
 
 import com.hamidjonhamidov.cvforkhamidjon.data_requests.api.main.MainApiService
 import com.hamidjonhamidov.cvforkhamidjon.data_requests.persistence.AppDatabase
-import com.hamidjonhamidov.cvforkhamidjon.data_requests.persistence.main.AchievementsDao
-import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.AchievementModel
+import com.hamidjonhamidov.cvforkhamidjon.data_requests.persistence.achievments.AchievementsDao
+import com.hamidjonhamidov.cvforkhamidjon.models.offline.achievements.AchievementModel
 import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImpl
 import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImplTestConstants.ACHIEVEMENT_MODEL_LIST
 import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImplTestConstants.ACHIEVEMENT_REMOTE_MODEL_LIST
-import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImplTestConstants.GETACHIEVEMENTS
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainJobsEvent
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainStateEvent
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainViewDestEvent
@@ -402,7 +401,8 @@ class AchievementsDaoTest {
     }
 
     ////////////////// Helper Classes ///////////////
-    class AchievmenentsDaoTd : AchievementsDao {
+    class AchievmenentsDaoTd :
+        AchievementsDao {
         var funCalls = 0
         var insertCalls = 0
         var deleteAllCalls = 0

@@ -3,7 +3,9 @@ package com.hamidjonhamidov.cvforkhamidjon.data_requests.persistence
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.hamidjonhamidov.cvforkhamidjon.data_requests.persistence.achievments.AchievementsDao
 import com.hamidjonhamidov.cvforkhamidjon.data_requests.persistence.main.*
+import com.hamidjonhamidov.cvforkhamidjon.models.offline.achievements.AchievementModel
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.*
 
 @Database(

@@ -5,7 +5,7 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.Education
-import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.Honor
+import com.hamidjonhamidov.cvforkhamidjon.models.offline.achievements.Honor
 
 class Converters {
 

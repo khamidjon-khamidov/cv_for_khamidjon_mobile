@@ -1,10 +1,12 @@
 package com.hamidjonhamidov.cvforkhamidjon.repository.main
 
-import android.util.Log
 import com.hamidjonhamidov.cvforkhamidjon.data_requests.api.main.MainApiService
 import com.hamidjonhamidov.cvforkhamidjon.data_requests.persistence.AppDatabase
 import com.hamidjonhamidov.cvforkhamidjon.di.main_subcomponent.MainActivityScope
+import com.hamidjonhamidov.cvforkhamidjon.models.api.achievments.AchievementRemoteModel
+import com.hamidjonhamidov.cvforkhamidjon.models.api.achievments.convertToAchievmentModel
 import com.hamidjonhamidov.cvforkhamidjon.models.api.main.*
+import com.hamidjonhamidov.cvforkhamidjon.models.offline.achievements.AchievementModel
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.*
 import com.hamidjonhamidov.cvforkhamidjon.repository.NetworkApiCall
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainStateEvent
@@ -249,121 +251,6 @@ constructor(
                         stateEvent = stateEvent,
                         viewState = MainViewState(
                             mySkillsFragmentView = MySkillsFragmentView(cacheResponseObject)
-                        ),
-                        message = MESSAGE_NETWORK_NOT_ALLOWED_CACHE_SUCCESS
-                    )
-                }
-            }.result
-        }
-
-        emit(result)
-
-    }
-
-    override fun getAchievements(
-        stateEvent: MainStateEvent,
-        isNetworkAvailable: Boolean,
-        isNetworkAllowed: Boolean
-    ): Flow<DataState<MainViewState, MainStateEvent>> = flow {
-
-        // set remote response to network error no internet available as default
-        var response: ApiResult<List<AchievementRemoteModel>?> =
-            ApiResult.GenericError(
-                null,
-                NetworkConstants.NETWORK_ERROR_NO_INTERNET
-            )
-
-
-        // if internet is available, request from internet
-        if (isNetworkAvailable)
-            response =
-                safeApiCall(Dispatchers.IO) { apiService.getAchievementsSync() }
-
-
-        // set cache response to empty list as default
-        var cacheRepsonse: List<AchievementModel>? =
-            listOf()
-
-        // if there has been some error from internet try to receive it from cache
-        if (response is ApiResult.GenericError) {
-            cacheRepsonse = withContext(Dispatchers.IO) {
-                appDatabase.getAchievementsDao().getAllAchievements()
-            }
-        }
-
-        val result = withContext(Dispatchers.Default) {
-            object :
-                ApiResponseHandler<MainViewState, MainStateEvent, AchievementRemoteModel, AchievementModel>(
-                    response,
-                    stateEvent,
-                    cacheRepsonse,
-                    isNetworkAllowed
-                ) {
-                override fun handleNetworkSuccessCacheSuccess(
-                    stateEvent: MainStateEvent,
-                    remoteResponse: List<AchievementRemoteModel>
-                ): DataState<MainViewState, MainStateEvent> {
-                    val achievementList = remoteResponse.map { it.convertToAchievmentModel() }
-
-                    GlobalScope.launch((Dispatchers.IO)) {
-                        appDatabase.getAchievementsDao().insertManyAndReplace(achievementList)
-                    }
-                    return DataState(
-                        stateEvent = stateEvent,
-                        viewState = MainViewState(
-                            achievementsFragmentView = AchievementsFragmentView(achievementList)
-                        ),
-                        message = MESSAGE_NETWORK_SUCCESS_CACHE_SUCCESSS.copy()
-                    )
-                }
-
-                override fun handleNetworkTimeoutCacheSuccess(
-                    stateEvent: MainStateEvent,
-                    cacheResponseObject: List<AchievementModel>
-                ): DataState<MainViewState, MainStateEvent> {
-                    return DataState(
-                        stateEvent = stateEvent,
-                        viewState = MainViewState(
-                            achievementsFragmentView = AchievementsFragmentView(cacheResponseObject)
-                        ),
-                        message = MESSSAGE_NETWORK_TIMEOUT_CACHE_SUCCESS
-                    )
-                }
-
-                override fun handleNoInternetCacheSuccess(
-                    stateEvent: MainStateEvent,
-                    cacheResponseObject: List<AchievementModel>
-                ): DataState<MainViewState, MainStateEvent> {
-                    return DataState(
-                        stateEvent = stateEvent,
-                        viewState = MainViewState(
-                            achievementsFragmentView = AchievementsFragmentView(cacheResponseObject)
-                        ),
-                        message = MESSAGE_NO_INTERNET_CACHE_SUCCESS
-                    )
-                }
-
-                override fun handleNetworkFailureCacheSuccess(
-                    stateEvent: MainStateEvent,
-                    cacheResponseObject: List<AchievementModel>
-                ): DataState<MainViewState, MainStateEvent> {
-                    return DataState(
-                        stateEvent = stateEvent,
-                        viewState = MainViewState(
-                            achievementsFragmentView = AchievementsFragmentView(cacheResponseObject)
-                        ),
-                        message = MESSAGE_NETWORK_ERROR_CACHE_SUCCESS
-                    )
-                }
-
-                override fun handleNetworkNotAllowedCacheSuccess(
-                    stateEvent: MainStateEvent,
-                    cacheResponseObject: List<AchievementModel>
-                ): DataState<MainViewState, MainStateEvent> {
-                    return DataState(
-                        stateEvent = stateEvent,
-                        viewState = MainViewState(
-                            achievementsFragmentView = AchievementsFragmentView(cacheResponseObject)
                         ),
                         message = MESSAGE_NETWORK_NOT_ALLOWED_CACHE_SUCCESS
                     )

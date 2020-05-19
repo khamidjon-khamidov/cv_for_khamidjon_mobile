@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/algorithms_nav_graph"
+    app:startDestination="@id/algorithmsFragment">
+
+    <fragment
+        android:id="@+id/algorithmsFragment"
+        android:name="com.hamidjonhamidov.cvforkhamidjon.ui.achievments.b_algorithms.AlgorithmsFragment"
+        android:label="fragment_algorithms"
+        tools:layout="@layout/fragment_algorithms" >
+        <action
+            android:id="@+id/action_algorithmsFragment_to_detailsFragment2"
+            app:destination="@id/detailsFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailsFragment2"
+        android:name="com.hamidjonhamidov.cvforkhamidjon.ui.achievments.d_detail.DetailsFragment"
+        android:label="fragment_details"
+        tools:layout="@layout/fragment_details" />
+</navigation>

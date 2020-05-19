@@ -1,4 +1,4 @@
-package com.hamidjonhamidov.cvforkhamidjon.models.offline.main
+package com.hamidjonhamidov.cvforkhamidjon.models.offline.achievements
 
 import android.os.Parcelable
 import androidx.room.ColumnInfo

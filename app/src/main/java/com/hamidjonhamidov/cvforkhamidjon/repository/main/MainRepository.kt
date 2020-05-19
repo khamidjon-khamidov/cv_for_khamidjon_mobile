@@ -21,13 +21,6 @@ interface MainRepository {
     )
             : Flow<DataState<MainViewState, MainStateEvent>>
 
-    fun getAchievements(
-        stateEvent: MainStateEvent,
-        isNetworkAvailable: Boolean,
-        isNetworkAllowed: Boolean = true
-    )
-            : Flow<DataState<MainViewState, MainStateEvent>>
-
     fun getProjects(
         stateEvent: MainStateEvent,
         isNetworkAvailable: Boolean,

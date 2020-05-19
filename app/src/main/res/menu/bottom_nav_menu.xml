@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/mi_android_bottom"
+        android:icon="@drawable/android_bottom"
+        android:title="@string/android"
+        android:contentDescription="@string/android"/>
+
+    <item
+        android:id="@+id/mi_algorithms_bottom"
+        android:icon="@drawable/algorithms_bottom_nav"
+        android:title="@string/algorithms"
+        android:contentDescription="@string/algorithms"/>
+
+
+    <item
+        android:id="@+id/mi_others_bottom"
+        android:icon="@drawable/more_bottom_nav"
+        android:title="@string/others"
+        android:contentDescription="@string/others"/>
+</menu>

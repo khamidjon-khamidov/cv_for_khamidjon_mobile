@@ -6,7 +6,6 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.hamidjonhamidov.cvforkhamidjon.data_requests.persistence.AppDatabase
 import com.hamidjonhamidov.cvforkhamidjon.data_requests.persistence.main.ProjectsDao
-import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.AchievementModel
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.ProjectModel
 import kotlinx.coroutines.runBlocking
 import org.junit.After

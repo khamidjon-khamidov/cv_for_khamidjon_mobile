@@ -5,9 +5,9 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.hamidjonhamidov.cvforkhamidjon.data_requests.persistence.AppDatabase
-import com.hamidjonhamidov.cvforkhamidjon.data_requests.persistence.main.AchievementsDao
-import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.AchievementModel
-import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.Honor
+import com.hamidjonhamidov.cvforkhamidjon.data_requests.persistence.achievments.AchievementsDao
+import com.hamidjonhamidov.cvforkhamidjon.models.offline.achievements.AchievementModel
+import com.hamidjonhamidov.cvforkhamidjon.models.offline.achievements.Honor
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -35,16 +35,67 @@ class AchievementsDaoTest {
     private lateinit var appDatabase: AppDatabase
     private lateinit var SUT: AchievementsDao
 
-    val HONOR1 = Honor(1, "title 1", "des 1", "link 1")
-    val HONOR2 = Honor(2, "title 2", "des 2", "link 2")
-    val HONOR3 = Honor(3, "title 3", "des 3", "link 3")
-    val HONOR4 = Honor(4, "title 4", "des 4", "link 4")
-    val HONOR5 = Honor(5, "title 5", "des 5", "link 5")
-    val HONOR6 = Honor(6, "title 6", "des 6", "link 6")
+    val HONOR1 =
+        Honor(
+            1,
+            "title 1",
+            "des 1",
+            "link 1"
+        )
+    val HONOR2 =
+        Honor(
+            2,
+            "title 2",
+            "des 2",
+            "link 2"
+        )
+    val HONOR3 =
+        Honor(
+            3,
+            "title 3",
+            "des 3",
+            "link 3"
+        )
+    val HONOR4 =
+        Honor(
+            4,
+            "title 4",
+            "des 4",
+            "link 4"
+        )
+    val HONOR5 =
+        Honor(
+            5,
+            "title 5",
+            "des 5",
+            "link 5"
+        )
+    val HONOR6 =
+        Honor(
+            6,
+            "title 6",
+            "des 6",
+            "link 6"
+        )
 
-    val ACHIEVEMENT1 = AchievementModel(1, "title 1", listOf(HONOR1, HONOR2))
-    val ACHIEVEMENT2 = AchievementModel(2, "title 2", listOf(HONOR3, HONOR4))
-    val ACHIEVEMENT3 = AchievementModel(3, "title 3", listOf(HONOR5, HONOR6))
+    val ACHIEVEMENT1 =
+        AchievementModel(
+            1,
+            "title 1",
+            listOf(HONOR1, HONOR2)
+        )
+    val ACHIEVEMENT2 =
+        AchievementModel(
+            2,
+            "title 2",
+            listOf(HONOR3, HONOR4)
+        )
+    val ACHIEVEMENT3 =
+        AchievementModel(
+            3,
+            "title 3",
+            listOf(HONOR5, HONOR6)
+        )
 
     @Before
     fun setUp() {
@@ -87,8 +138,18 @@ class AchievementsDaoTest {
     @Test
     fun insert_sameItems_assertSecondInserted() = runBlocking {
         // arrange
-        val item1 = AchievementModel(1, "item1", listOf())
-        val item2 = AchievementModel(1, "item2", listOf())
+        val item1 =
+            AchievementModel(
+                1,
+                "item1",
+                listOf()
+            )
+        val item2 =
+            AchievementModel(
+                1,
+                "item2",
+                listOf()
+            )
 
         // act
         SUT.insert(item1)

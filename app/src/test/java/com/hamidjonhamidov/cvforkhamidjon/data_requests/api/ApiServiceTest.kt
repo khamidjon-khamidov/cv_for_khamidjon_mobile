@@ -8,6 +8,7 @@ import com.hamidjonhamidov.cvforkhamidjon.data_requests.api.ActualModelsInServer
 import com.hamidjonhamidov.cvforkhamidjon.data_requests.api.ActualModelsInServer.PROJECT3INSERVER
 import com.hamidjonhamidov.cvforkhamidjon.data_requests.api.ActualModelsInServer.SKILL7INSERVER
 import com.hamidjonhamidov.cvforkhamidjon.data_requests.api.main.MainApiService
+import com.hamidjonhamidov.cvforkhamidjon.models.api.achievments.AchievementRemoteModel
 import com.hamidjonhamidov.cvforkhamidjon.models.api.main.*
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.API_URLS.BASE_URL
 import kotlinx.coroutines.Dispatchers

@@ -1,6 +1,6 @@
 package com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel
 
-import android.util.Log
+import com.hamidjonhamidov.cvforkhamidjon.models.offline.achievements.AchievementModel
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.*
 import com.hamidjonhamidov.cvforkhamidjon.util.DoublePostModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi

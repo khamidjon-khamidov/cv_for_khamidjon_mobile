@@ -1,6 +1,7 @@
 package com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state
 
 import android.os.Parcelable
+import com.hamidjonhamidov.cvforkhamidjon.models.offline.achievements.AchievementModel
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.*
 import com.hamidjonhamidov.cvforkhamidjon.util.DoublePostModel
 import kotlinx.android.parcel.Parcelize
@@ -15,8 +16,6 @@ data class MainViewState(
     var aboutMeFragmentView: AboutMeFragmentView = AboutMeFragmentView(),
 
     var mySkillsFragmentView: MySkillsFragmentView = MySkillsFragmentView(),
-
-    var achievementsFragmentView: AchievementsFragmentView = AchievementsFragmentView(),
 
     var projectsFragmentView: ProjectsFragmentView = ProjectsFragmentView(),
 
@@ -36,11 +35,6 @@ data class MainViewState(
     @Parcelize
     data class MySkillsFragmentView(
         var mySkills: List<SkillModel>? = null
-    ): Parcelable
-
-    @Parcelize
-    data class AchievementsFragmentView(
-        var achievements: List<AchievementModel>? = null
     ): Parcelable
 
     @Parcelize
