@@ -62,7 +62,8 @@ class MainActivity : AppCompatActivity(), MainUiCommunicationListener {
                 R.id.achievementsFragment,
                 R.id.aboutAppFragment,
                 R.id.notificationsFragment,
-                R.id.projectsFragment
+                R.id.projectsFragment,
+                R.id.postsFragment
             ), drawerLayout = drawer_layout)
 
         findViewById<Toolbar>(R.id.main_toolbar)

@@ -144,6 +144,16 @@ constructor(
                         )
                     }
                 }
+
+                is GetPostsFragmentDest -> {
+                    {
+                        mainRepository.getPosts(
+                            mainStateEvent,
+                            isNetworkAvailable,
+                            isNetworkAllowed
+                        )
+                    }
+                }
             }
 
         launchJob(mainStateEvent, jobFunc)
@@ -188,6 +198,10 @@ constructor(
 
         data.projectsFragmentView.projects?.let {
             setProjects(it)
+        }
+
+        data.postsFragmentView.posts?.let {
+            setPosts(it)
         }
     }
 

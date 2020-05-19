@@ -31,7 +31,7 @@
 
     <fragment
         android:id="@+id/aboutAppFragment"
-        android:name="com.hamidjonhamidov.cvforkhamidjon.ui.main.e_aboutapp.AboutAppFragment"
+        android:name="com.hamidjonhamidov.cvforkhamidjon.ui.main.f_aboutapp.AboutAppFragment"
         android:label="App Details"
         tools:layout="@layout/fragment_about_app" />
 
@@ -45,5 +45,10 @@
         android:name="com.hamidjonhamidov.cvforkhamidjon.ui.main.e_projects.ProjectsFragment"
         android:label="Projects"
         tools:layout="@layout/fragment_projects" />
+    <fragment
+        android:id="@+id/postsFragment"
+        android:name="com.hamidjonhamidov.cvforkhamidjon.ui.main.e_posts.PostsFragment"
+        android:label="Personal Posts"
+        tools:layout="@layout/fragment_posts" />
 
 </navigation>

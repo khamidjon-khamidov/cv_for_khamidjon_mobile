@@ -1,4 +1,4 @@
-package com.hamidjonhamidov.cvforkhamidjon.ui.main.e_aboutapp
+package com.hamidjonhamidov.cvforkhamidjon.ui.main.f_aboutapp
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

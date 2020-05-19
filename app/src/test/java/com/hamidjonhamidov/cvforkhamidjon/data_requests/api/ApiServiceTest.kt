@@ -3,13 +3,12 @@ package com.hamidjonhamidov.cvforkhamidjon.data_requests.api
 import com.google.gson.GsonBuilder
 import com.hamidjonhamidov.cvforkhamidjon.data_requests.api.ActualModelsInServer.ABOUTME0INSERVER
 import com.hamidjonhamidov.cvforkhamidjon.data_requests.api.ActualModelsInServer.ACHIEVEMENT2INSERVER
+import com.hamidjonhamidov.cvforkhamidjon.data_requests.api.ActualModelsInServer.POST0INSERVER
+import com.hamidjonhamidov.cvforkhamidjon.data_requests.api.ActualModelsInServer.POST1INSERVER
 import com.hamidjonhamidov.cvforkhamidjon.data_requests.api.ActualModelsInServer.PROJECT3INSERVER
 import com.hamidjonhamidov.cvforkhamidjon.data_requests.api.ActualModelsInServer.SKILL7INSERVER
 import com.hamidjonhamidov.cvforkhamidjon.data_requests.api.main.MainApiService
-import com.hamidjonhamidov.cvforkhamidjon.models.api.main.AboutMeRemoteModel
-import com.hamidjonhamidov.cvforkhamidjon.models.api.main.AchievementRemoteModel
-import com.hamidjonhamidov.cvforkhamidjon.models.api.main.ProjectsRemoteModel
-import com.hamidjonhamidov.cvforkhamidjon.models.api.main.SkillRemoteModel
+import com.hamidjonhamidov.cvforkhamidjon.models.api.main.*
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.API_URLS.BASE_URL
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -106,7 +105,7 @@ class MainApiServiceTest {
     @Test
     fun getProjectsSync_getFromRemoteServer_compareWithActual() = runBlocking {
         // arrange
-        var projectsList = listOf<ProjectsRemoteModel>()
+        var projectsList = listOf<ProjectRemoteModel>()
 
         // act
         withContext(Dispatchers.IO) {
@@ -120,6 +119,26 @@ class MainApiServiceTest {
         // assert
         assertEquals(projectsList.size, 4)
         assertEquals(projectsList[3], PROJECT3INSERVER)
+    }
+
+    @Test
+    fun getPostsSync_getFromRemoteServer_compareWithActual() = runBlocking {
+        // arrange
+        var postList = listOf<PostRemoteModel>()
+
+        // act
+        withContext(Dispatchers.IO) {
+            try {
+                postList = SUT.getPostsSync()
+            } catch (throwable: Throwable){
+                throw Exception(throwable.message)
+            }
+        }
+
+        // assert
+        assertEquals(postList.size, 18)
+        assertEquals(postList[0], POST0INSERVER)
+        assertEquals(postList[1], POST1INSERVER)
     }
 }
 

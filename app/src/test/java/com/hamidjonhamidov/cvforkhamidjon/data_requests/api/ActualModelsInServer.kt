@@ -1,11 +1,9 @@
 package com.hamidjonhamidov.cvforkhamidjon.data_requests.api
 
-import com.hamidjonhamidov.cvforkhamidjon.models.api.main.AboutMeRemoteModel
-import com.hamidjonhamidov.cvforkhamidjon.models.api.main.AchievementRemoteModel
-import com.hamidjonhamidov.cvforkhamidjon.models.api.main.ProjectsRemoteModel
-import com.hamidjonhamidov.cvforkhamidjon.models.api.main.SkillRemoteModel
+import com.hamidjonhamidov.cvforkhamidjon.models.api.main.*
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.Education
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.Honor
+import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.PostModel
 
 object ActualModelsInServer {
 
@@ -32,7 +30,7 @@ object ActualModelsInServer {
         )
     )
 
-    val PROJECT3INSERVER = ProjectsRemoteModel(
+    val PROJECT3INSERVER = ProjectRemoteModel(
         7004,
         "June 2019",
         "English-Uzbek Dictionary",
@@ -46,5 +44,17 @@ object ActualModelsInServer {
         "Chess",
         80,
         listOf("Chess contests", "3rd place", "Play in free time")
+    )
+
+    val POST0INSERVER = PostRemoteModel(
+        5001,
+        "Chess competition across universities(3rd place)",
+        "https://firebasestorage.googleapis.com/v0/b/who-is-khamidjon.appspot.com/o/cv%2Fposts%2F4.jpg?alt=media&token=da760c4c-f085-48f9-b74a-5ec894af6467"
+    )
+
+    val POST1INSERVER = PostRemoteModel(
+        5002,
+        "Young enthusiastic programmer",
+        "https://firebasestorage.googleapis.com/v0/b/who-is-khamidjon.appspot.com/o/cv%2Fposts%2F2.jpeg?alt=media&token=1548335e-3a2c-4cc2-8640-09ea870fb195"
     )
 }

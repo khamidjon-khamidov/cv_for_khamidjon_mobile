@@ -45,4 +45,6 @@
     <string name="project_dummy_des">This is some kind project description if you need ajfdal adfl aasdf a sdf asdfaas as dfa. Yeah this is quite dummy description. So I dont care what I am typing. But, You may need it, after some time if you want. But you might not be able to understand it quite easily.</string>
     <string name="go_to_app">Go to app</string>
     <string name="go_to_source_code">Go to Source code</string>
+    <string name="posts">Posts</string>
+    <string name="skills">Skills</string>
 </resources>

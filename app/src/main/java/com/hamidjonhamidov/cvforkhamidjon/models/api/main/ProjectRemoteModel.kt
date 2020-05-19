@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.ProjectModel
 
 
-data class ProjectsRemoteModel(
+data class ProjectRemoteModel(
     @SerializedName("projectId")
     @Expose
     var projectId: Int = 0,
@@ -31,7 +31,7 @@ data class ProjectsRemoteModel(
     var projectGitLink: String = "......"
 )
 
-fun ProjectsRemoteModel.convertToProjectModel() =
+fun ProjectRemoteModel.convertToProjectModel() =
     ProjectModel(
         projectId,
         projectTime,
