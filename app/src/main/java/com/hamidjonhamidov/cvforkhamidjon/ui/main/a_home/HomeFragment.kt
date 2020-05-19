@@ -169,11 +169,9 @@ class HomeFragment(
         }
     }
 
-    override fun updateView(modelList: List<AboutMeModel>) {
-
-    }
+    override fun updateView(modelList: List<AboutMeModel>) {}
 }
-// empty commit
+
 
 
 
