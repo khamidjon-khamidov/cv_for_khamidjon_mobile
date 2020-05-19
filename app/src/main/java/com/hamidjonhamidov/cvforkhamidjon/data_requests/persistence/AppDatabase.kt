@@ -3,21 +3,16 @@ package com.hamidjonhamidov.cvforkhamidjon.data_requests.persistence
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.hamidjonhamidov.cvforkhamidjon.data_requests.persistence.main.AboutMeDao
-import com.hamidjonhamidov.cvforkhamidjon.data_requests.persistence.main.AchievementsDao
-import com.hamidjonhamidov.cvforkhamidjon.data_requests.persistence.main.ProjectsDao
-import com.hamidjonhamidov.cvforkhamidjon.data_requests.persistence.main.SkillsDao
-import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.AboutMeModel
-import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.AchievementModel
-import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.ProjectModel
-import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.SkillModel
+import com.hamidjonhamidov.cvforkhamidjon.data_requests.persistence.main.*
+import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.*
 
 @Database(
     entities = [
         AboutMeModel::class,
         SkillModel::class,
         AchievementModel::class,
-        ProjectModel::class
+        ProjectModel::class,
+        PostModel::class
     ],
     version = 1
 )
@@ -31,4 +26,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun getAchievementsDao(): AchievementsDao
 
     abstract fun getProjectsDao(): ProjectsDao
+
+    abstract fun getPostsDao(): PostsDao
 }

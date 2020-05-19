@@ -12,6 +12,8 @@ sealed class MainViewDestEvent {
     class AchievementsFragmentDest : MainViewDestEvent()
 
     class GetProjectsFragmentDest : MainViewDestEvent()
+
+    class GetPostsFragmentDest: MainViewDestEvent()
 }
 
 

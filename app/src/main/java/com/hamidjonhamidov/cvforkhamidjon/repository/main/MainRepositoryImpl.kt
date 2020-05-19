@@ -5,10 +5,7 @@ import com.hamidjonhamidov.cvforkhamidjon.data_requests.api.main.MainApiService
 import com.hamidjonhamidov.cvforkhamidjon.data_requests.persistence.AppDatabase
 import com.hamidjonhamidov.cvforkhamidjon.di.main_subcomponent.MainActivityScope
 import com.hamidjonhamidov.cvforkhamidjon.models.api.main.*
-import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.AboutMeModel
-import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.AchievementModel
-import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.ProjectModel
-import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.SkillModel
+import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.*
 import com.hamidjonhamidov.cvforkhamidjon.repository.NetworkApiCall
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainStateEvent
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainViewState
@@ -385,7 +382,7 @@ constructor(
     ): Flow<DataState<MainViewState, MainStateEvent>> = flow {
 
         // set remote response to network error no internet available as default
-        var response: ApiResult<List<ProjectsRemoteModel>?> =
+        var response: ApiResult<List<ProjectRemoteModel>?> =
             ApiResult.GenericError(
                 null,
                 NetworkConstants.NETWORK_ERROR_NO_INTERNET
@@ -408,7 +405,7 @@ constructor(
 
         val result = withContext(Dispatchers.Default) {
             object :
-                ApiResponseHandler<MainViewState, MainStateEvent, ProjectsRemoteModel, ProjectModel>(
+                ApiResponseHandler<MainViewState, MainStateEvent, ProjectRemoteModel, ProjectModel>(
                     response,
                     stateEvent,
                     cacheRepsonse,
@@ -416,7 +413,7 @@ constructor(
                 ) {
                 override fun handleNetworkSuccessCacheSuccess(
                     stateEvent: MainStateEvent,
-                    remoteResponse: List<ProjectsRemoteModel>
+                    remoteResponse: List<ProjectRemoteModel>
                 ): DataState<MainViewState, MainStateEvent> {
                     val projectList = remoteResponse.map { it.convertToProjectModel() }
 
@@ -488,6 +485,119 @@ constructor(
 
         emit(result)
     }
+
+    override fun getPosts(
+        stateEvent: MainStateEvent,
+        isNetworkAvailable: Boolean,
+        isNetworkAllowed: Boolean
+    ): Flow<DataState<MainViewState, MainStateEvent>> = flow {
+
+
+        // set remote response to network error no internet available as default
+        var response: ApiResult<List<PostRemoteModel>?> =
+            ApiResult.GenericError(
+                null,
+                NetworkConstants.NETWORK_ERROR_NO_INTERNET
+            )
+
+        // if internet is available, request from internet
+        if (isNetworkAvailable)
+            response =
+                safeApiCall(Dispatchers.IO) { apiService.getPostsSync() }
+
+        // set cache response to empty list as default
+        var cacheRepsonse: List<PostModel>? =
+            listOf()
+
+        // if there has been some error from internet try to receive it from cache
+        if (response is ApiResult.GenericError) {
+            cacheRepsonse =
+                withContext(Dispatchers.IO) { appDatabase.getPostsDao().getAllPosts() }
+        }
+
+        val result = withContext(Dispatchers.Default) {
+            object :
+                ApiResponseHandler<MainViewState, MainStateEvent, PostRemoteModel, PostModel>(
+                    response,
+                    stateEvent,
+                    cacheRepsonse,
+                    isNetworkAllowed
+                ) {
+                override fun handleNetworkSuccessCacheSuccess(
+                    stateEvent: MainStateEvent,
+                    remoteResponse: List<PostRemoteModel>
+                ): DataState<MainViewState, MainStateEvent> {
+                    val postList = remoteResponse.map { it.convertToPostModel() }
+
+                    GlobalScope.launch((Dispatchers.IO)) {
+                        appDatabase.getPostsDao().insertManyAndReplace(postList)
+                    }
+                    return DataState(
+                        stateEvent = stateEvent,
+                        viewState = MainViewState(
+                            postsFragmentView = PostsFragmentView(postList)
+                        ),
+                        message = MESSAGE_NETWORK_SUCCESS_CACHE_SUCCESSS.copy()
+                    )
+                }
+
+                override fun handleNetworkTimeoutCacheSuccess(
+                    stateEvent: MainStateEvent,
+                    cacheResponseObject: List<PostModel>
+                ): DataState<MainViewState, MainStateEvent> {
+                    return DataState(
+                        stateEvent = stateEvent,
+                        viewState = MainViewState(
+                            postsFragmentView = PostsFragmentView(cacheResponseObject)
+                        ),
+                        message = MESSSAGE_NETWORK_TIMEOUT_CACHE_SUCCESS
+                    )
+                }
+
+                override fun handleNoInternetCacheSuccess(
+                    stateEvent: MainStateEvent,
+                    cacheResponseObject: List<PostModel>
+                ): DataState<MainViewState, MainStateEvent> {
+                    return DataState(
+                        stateEvent = stateEvent,
+                        viewState = MainViewState(
+                            postsFragmentView = PostsFragmentView(cacheResponseObject)
+                        ),
+                        message = MESSAGE_NO_INTERNET_CACHE_SUCCESS
+                    )
+                }
+
+                override fun handleNetworkFailureCacheSuccess(
+                    stateEvent: MainStateEvent,
+                    cacheResponseObject: List<PostModel>
+                ): DataState<MainViewState, MainStateEvent> {
+                    return DataState(
+                        stateEvent = stateEvent,
+                        viewState = MainViewState(
+                            postsFragmentView = PostsFragmentView(cacheResponseObject)
+                        ),
+                        message = MESSAGE_NETWORK_ERROR_CACHE_SUCCESS
+                    )
+                }
+
+                override fun handleNetworkNotAllowedCacheSuccess(
+                    stateEvent: MainStateEvent,
+                    cacheResponseObject: List<PostModel>
+                ): DataState<MainViewState, MainStateEvent> {
+                    return DataState(
+                        stateEvent = stateEvent,
+                        viewState = MainViewState(
+                            postsFragmentView = PostsFragmentView(cacheResponseObject)
+                        ),
+                        message = MESSAGE_NETWORK_NOT_ALLOWED_CACHE_SUCCESS
+                    )
+                }
+            }.result
+        }
+
+        emit(result)
+    }
+
 
 }
 

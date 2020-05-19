@@ -7,6 +7,7 @@ import com.hamidjonhamidov.cvforkhamidjon.di.main_subcomponent.MainActivityScope
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.a_home.HomeFragment
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.b_aboutme.AboutMeFragment
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.c_myskills.MySkillsFragment
+import com.hamidjonhamidov.cvforkhamidjon.ui.main.e_posts.PostsFragment
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.e_projects.ProjectsFragment
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainJobsEvent
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainStateEvent
@@ -74,6 +75,17 @@ constructor(
                 })
             }
 
+
+            PostsFragment::class.java.name -> {
+                PostsFragment(viewModelProviderFactory, glideManager,
+                object : MainStateEvent {
+                    override val destinationView: MainViewDestEvent
+                        get() = MainViewDestEvent.GetPostsFragmentDest()
+
+                    override val responsibleJob: MainJobsEvent
+                        get() = MainJobsEvent.GetPosts()
+                })
+            }
             else -> {
                 super.instantiate(classLoader, className)
             }

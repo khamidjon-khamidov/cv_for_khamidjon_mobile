@@ -1,9 +1,6 @@
 package com.hamidjonhamidov.cvforkhamidjon.repository.main
 
-import com.hamidjonhamidov.cvforkhamidjon.models.api.main.AboutMeRemoteModel
-import com.hamidjonhamidov.cvforkhamidjon.models.api.main.AchievementRemoteModel
-import com.hamidjonhamidov.cvforkhamidjon.models.api.main.ProjectsRemoteModel
-import com.hamidjonhamidov.cvforkhamidjon.models.api.main.SkillRemoteModel
+import com.hamidjonhamidov.cvforkhamidjon.models.api.main.*
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.*
 import com.hamidjonhamidov.cvforkhamidjon.util.Message
 
@@ -285,7 +282,7 @@ object MainRepositoryImplTestConstants {
             ACHIEVEMENT_REMOTE_MODEL5
         )
 
-    val PROJECT_REMOTE_MODEL1 = ProjectsRemoteModel(
+    val PROJECT_REMOTE_MODEL1 = ProjectRemoteModel(
         1,
         "time 1",
         "title 1",
@@ -294,7 +291,7 @@ object MainRepositoryImplTestConstants {
         "gitlink 1"
     )
 
-    val PROJECT_REMOTE_MODEL2 = ProjectsRemoteModel(
+    val PROJECT_REMOTE_MODEL2 = ProjectRemoteModel(
         2,
         "time 2",
         "title 2",
@@ -303,7 +300,7 @@ object MainRepositoryImplTestConstants {
         "gitlink 2"
     )
 
-    val PROJECT_REMOTE_MODEL3 = ProjectsRemoteModel(
+    val PROJECT_REMOTE_MODEL3 = ProjectRemoteModel(
         3,
         "time 3",
         "title 3",
@@ -312,7 +309,7 @@ object MainRepositoryImplTestConstants {
         "gitlink 3"
     )
 
-    val PROJECT_REMOTE_MODEL4 = ProjectsRemoteModel(
+    val PROJECT_REMOTE_MODEL4 = ProjectRemoteModel(
         4,
         "time 4",
         "title 4",
@@ -373,6 +370,20 @@ object MainRepositoryImplTestConstants {
             PROJECT_REMOTE_MODEL3,
             PROJECT_REMOTE_MODEL4
         )
+
+
+    val POST_MODEL1 = PostModel(1, "des1", "link1")
+    val POST_MODEL2 = PostModel(2, "des2", "link2")
+    val POST_MODEL3 = PostModel(3, "des3", "link3")
+    val POST_MODEL4 = PostModel(4, "des4", "link4")
+
+    val POST_REMOTE_MODEL1 = PostRemoteModel(1, "des1", "link1")
+    val POST_REMOTE_MODEL2 = PostRemoteModel(2, "des2", "link2")
+    val POST_REMOTE_MODEL3 = PostRemoteModel(3, "des3", "link3")
+    val POST_REMOTE_MODEL4 = PostRemoteModel(4, "des4", "link4")
+
+    var POST_MODEL_LIST = listOf(POST_MODEL1, POST_MODEL2, POST_MODEL3, POST_MODEL4)
+    var POST_REMOTE_LIST = listOf(POST_REMOTE_MODEL1, POST_REMOTE_MODEL2, POST_REMOTE_MODEL3, POST_REMOTE_MODEL4)
 }
 
 

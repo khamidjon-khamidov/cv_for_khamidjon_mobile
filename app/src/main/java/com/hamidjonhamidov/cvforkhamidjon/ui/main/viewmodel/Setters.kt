@@ -1,9 +1,6 @@
 package com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel
 
-import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.AboutMeModel
-import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.AchievementModel
-import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.ProjectModel
-import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.SkillModel
+import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.InternalCoroutinesApi
@@ -44,6 +41,15 @@ fun MainViewModel.setAchievments(achievments: List<AchievementModel>){
 fun MainViewModel.setProjects(projects: List<ProjectModel>){
     val update = getCurrentViewStateOrNew()
     update.projectsFragmentView.projects = projects
+    setViewState(update)
+}
+
+@FlowPreview
+@ExperimentalCoroutinesApi
+@InternalCoroutinesApi
+fun MainViewModel.setPosts(posts: List<PostModel>){
+    val update = getCurrentViewStateOrNew()
+    update.postsFragmentView.posts = posts
     setViewState(update)
 }
 
