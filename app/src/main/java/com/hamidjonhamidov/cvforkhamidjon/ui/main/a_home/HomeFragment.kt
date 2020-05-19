@@ -168,6 +168,10 @@ class HomeFragment(
             activity?.goToLink(WEBSITE_LINK)
         }
     }
+
+    override fun updateView(modelList: List<AboutMeModel>) {
+
+    }
 }
 
 

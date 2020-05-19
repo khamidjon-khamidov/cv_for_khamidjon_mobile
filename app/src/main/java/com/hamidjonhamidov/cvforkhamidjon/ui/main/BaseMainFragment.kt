@@ -29,7 +29,7 @@ import kotlinx.coroutines.*
 @FlowPreview
 @InternalCoroutinesApi
 @ExperimentalCoroutinesApi
-abstract class BaseMainFragment<T>(
+abstract class BaseMainFragment<Model>(
     fragmentId: Int,
     val menuId: Int,
     private val viewModelFactory: ViewModelProvider.Factory,
@@ -169,6 +169,8 @@ abstract class BaseMainFragment<T>(
 
     abstract fun initData()
 
-    abstract fun updateView(myModel: T?)
+    abstract fun updateView(myModel: Model?)
+
+    abstract fun updateView(modelList: List<Model>)
 
 }

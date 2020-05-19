@@ -110,4 +110,8 @@ class AboutMeFragment(
             }
         }
     }
+
+    override fun updateView(modelList: List<AboutMeModel>) {
+
+    }
 }
