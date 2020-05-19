@@ -23,7 +23,7 @@
             android:title="@string/menu_title_achievements" />
 
         <item
-            android:id="@+id/mi_projects"
+            android:id="@+id/projectsFragment"
             android:icon="@drawable/projects"
             android:title="@string/menu_title_projects" />
 

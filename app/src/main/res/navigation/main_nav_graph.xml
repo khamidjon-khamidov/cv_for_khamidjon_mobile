@@ -40,5 +40,10 @@
         android:name="com.hamidjonhamidov.cvforkhamidjon.ui.main.f_notifications.NotificationsFragment"
         android:label="Notifications"
         tools:layout="@layout/fragment_notifications" />
+    <fragment
+        android:id="@+id/projectsFragment"
+        android:name="com.hamidjonhamidov.cvforkhamidjon.ui.main.e_projects.ProjectsFragment"
+        android:label="Projects"
+        tools:layout="@layout/fragment_projects" />
 
 </navigation>
