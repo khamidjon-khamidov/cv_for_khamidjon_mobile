@@ -20,4 +20,10 @@ constructor(
             .into(imageView)
     }
 
+    override fun preloadImg(img: String){
+        requestManager
+            .load(img)
+            .preload(500, 600)
+    }
+
 }

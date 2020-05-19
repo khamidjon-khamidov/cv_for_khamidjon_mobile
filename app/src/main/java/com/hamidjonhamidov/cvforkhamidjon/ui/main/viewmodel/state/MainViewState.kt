@@ -2,6 +2,7 @@ package com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state
 
 import android.os.Parcelable
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.*
+import com.hamidjonhamidov.cvforkhamidjon.util.DoublePostModel
 import kotlinx.android.parcel.Parcelize
 
 const val MAIN_VIEW_STATE_BUNDLE_KEY = "com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainViewState"
@@ -49,7 +50,8 @@ data class MainViewState(
 
     @Parcelize
     data class PostsFragmentView(
-        var posts: List<PostModel>? = null
+        var posts: List<PostModel>? = null,
+        var doublePosts: List<DoublePostModel>? = null
     ): Parcelable
 
 }

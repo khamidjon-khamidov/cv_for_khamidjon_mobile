@@ -15,6 +15,7 @@ import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.PostModel
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.BaseMainFragment
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.getCurrentViewStateOrNew
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainStateEvent
+import com.hamidjonhamidov.cvforkhamidjon.util.DoublePostModel
 import com.hamidjonhamidov.cvforkhamidjon.util.glide.GlideManager
 import com.hamidjonhamidov.cvforkhamidjon.util.recycler.PostAdapter
 import kotlinx.android.synthetic.main.fragment_posts.*
@@ -39,8 +40,9 @@ class PostsFragment(
         // observe data in about me
         viewModel.viewState.observe(viewLifecycleOwner, Observer { viewState ->
             viewState?.postsFragmentView?.let {
-                it.posts?.let { posts ->
-                    updateView(posts)
+                it.doublePosts?.let { posts ->
+                    Log.d(TAG, "PostsFragment: subscribeDataObservers: ${posts[0].postModel2}")
+                    updateRecylerView(posts)
                 }
             }
         })
@@ -58,7 +60,7 @@ class PostsFragment(
         ) {
             viewModel.setStateEvent(postsStateEvent)
         } else {
-            updateView(viewModel.getCurrentViewStateOrNew().postsFragmentView.posts!!)
+            updateRecylerView(viewModel.getCurrentViewStateOrNew().postsFragmentView.doublePosts!!)
         }
 
     }
@@ -67,9 +69,10 @@ class PostsFragment(
 
     }
 
-    override fun updateView(modelList: List<PostModel>) {
-        Log.d(TAG, "PostsFragment: updateView: size = ${modelList.size}")
-        listAdapter.submitList(modelList)
+    override fun updateView(modelList: List<PostModel>) {}
+
+    fun updateRecylerView(doubleList: List<DoublePostModel>){
+        listAdapter.submitList(doubleList)
     }
 
 }

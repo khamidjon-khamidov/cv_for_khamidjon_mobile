@@ -5,4 +5,6 @@ import android.widget.ImageView
 interface GlideManager {
 
     fun setImage(imageUrl: String, imageView: ImageView)
+
+    fun preloadImg(img: String)
 }

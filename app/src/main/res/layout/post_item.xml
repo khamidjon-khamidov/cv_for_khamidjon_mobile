@@ -9,29 +9,24 @@
     android:paddingEnd="30dp"
     android:background="@android:color/transparent">
 
-   <com.google.android.material.card.MaterialCardView
-       android:id="@+id/post_card_front"
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       app:cardElevation="7dp"
-       app:cardCornerRadius="7dp"
-       app:strokeColor="#92000000"
-       app:strokeWidth="1dp"
-       android:alpha="1"
-       app:layout_constraintTop_toTopOf="parent"
-       app:layout_constraintLeft_toLeftOf="parent"
-       app:layout_constraintRight_toRightOf="parent"
-       app:layout_constraintBottom_toBottomOf="parent">
 
        <androidx.constraintlayout.widget.ConstraintLayout
+           android:id="@+id/post_card_front"
            android:layout_width="match_parent"
-           android:layout_height="300dp">
+           android:layout_height="300dp"
+           android:alpha="1"
+           android:background="#F4F4F4"
+           app:layout_constraintTop_toTopOf="parent"
+           app:layout_constraintLeft_toLeftOf="parent"
+           app:layout_constraintRight_toRightOf="parent"
+           app:layout_constraintBottom_toBottomOf="parent">
 
            <ImageView
                android:id="@+id/post_img_front"
                android:layout_width="match_parent"
+               android:background="@color/white"
                android:layout_height="match_parent"
-               android:scaleType="fitCenter"
+               android:scaleType="centerCrop"
                android:src="@drawable/hamidjon"/>
 
            <TextView
@@ -62,31 +57,24 @@
 
        </androidx.constraintlayout.widget.ConstraintLayout>
 
-   </com.google.android.material.card.MaterialCardView>
-
-   <com.google.android.material.card.MaterialCardView
-       android:id="@+id/post_card_back"
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       app:cardElevation="7dp"
-       app:cardCornerRadius="7dp"
-       app:strokeColor="#92000000"
-       app:strokeWidth="1dp"
-       android:alpha="0"
-       app:layout_constraintTop_toTopOf="parent"
-       app:layout_constraintLeft_toLeftOf="parent"
-       app:layout_constraintRight_toRightOf="parent"
-       app:layout_constraintBottom_toBottomOf="parent">
 
        <androidx.constraintlayout.widget.ConstraintLayout
+           android:id="@+id/post_card_back"
            android:layout_width="match_parent"
-           android:layout_height="300dp">
+           android:layout_height="300dp"
+           android:background="#F4F4F4"
+           app:layout_constraintTop_toTopOf="parent"
+           app:layout_constraintLeft_toLeftOf="parent"
+           app:layout_constraintRight_toRightOf="parent"
+           app:layout_constraintBottom_toBottomOf="parent"
+           android:alpha="0">
 
            <ImageView
                android:id="@+id/post_img_back"
                android:layout_width="match_parent"
+               android:background="@color/white"
                android:layout_height="match_parent"
-               android:scaleType="fitCenter"
+               android:scaleType="centerCrop"
                android:src="@drawable/sorry"/>
 
            <TextView
@@ -95,7 +83,7 @@
                android:layout_height="wrap_content"
                app:layout_constraintLeft_toLeftOf="parent"
                app:layout_constraintBottom_toBottomOf="parent"
-               android:text="This is the end of my posts. Please rotate!"
+               android:text="Sorry, data unavailable or finished!"
                android:padding="5dp"
                android:background="#92000000"
                app:layout_constraintRight_toLeftOf="@id/post_btn_rotate_back"
@@ -116,7 +104,5 @@
 
 
        </androidx.constraintlayout.widget.ConstraintLayout>
-
-   </com.google.android.material.card.MaterialCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
