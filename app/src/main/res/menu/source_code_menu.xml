@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_expand_all_source_code"
+        android:title="@string/expand_all"
+        android:icon="@drawable/ic_expand_all"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/menu_reduce_all_source_code"
+        android:title="@string/reduce_all"
+        android:icon="@drawable/ic_reduce_all"
+        app:showAsAction="always"/>
+
+</menu>

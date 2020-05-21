@@ -49,4 +49,6 @@
     <string name="skills">Skills</string>
     <string name="android">Android</string>
     <string name="others">Others</string>
+    <string name="expand_all">Expand All</string>
+    <string name="reduce_all">Reduce All</string>
 </resources>
