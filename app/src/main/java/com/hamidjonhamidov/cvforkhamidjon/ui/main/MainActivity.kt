@@ -22,6 +22,7 @@ import com.hamidjonhamidov.cvforkhamidjon.R
 import com.hamidjonhamidov.cvforkhamidjon.di.main_subcomponent.MainComponent
 import com.hamidjonhamidov.cvforkhamidjon.ui.achievments.AchievmentsActivity
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.MainViewModel
+import com.hamidjonhamidov.cvforkhamidjon.ui.source_code.SourceCodeActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -85,8 +86,13 @@ class MainActivity : AppCompatActivity() {
 
             when (it.itemId) {
                 R.id.mi_achievments -> {
-                    Log.d(TAG, "MainActivity: onOptionsItemSelected: achievments item clicked")
                     val mIntent = Intent(this, AchievmentsActivity::class.java)
+                    startActivity(mIntent)
+                    true
+                }
+
+                R.id.mi_source_code -> {
+                    val mIntent = Intent(this, SourceCodeActivity::class.java)
                     startActivity(mIntent)
                     true
                 }

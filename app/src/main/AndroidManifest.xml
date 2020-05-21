@@ -15,7 +15,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.achievments.AchievmentsActivity"></activity>
+        <activity android:name=".ui.source_code.CodeViewActivity"/>
+        <activity android:name=".ui.source_code.SourceCodeActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.achievments.AchievmentsActivity" />
         <activity android:name=".ui.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

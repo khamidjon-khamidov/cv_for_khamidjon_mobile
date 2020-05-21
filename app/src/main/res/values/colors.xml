@@ -13,4 +13,7 @@
     <color name="white">#fff</color>
     <color name="text_grey">#939C9D</color>
 
+    <color name="black">#000</color>
+    <color name="blue">#068DF8</color>
+
 </resources>

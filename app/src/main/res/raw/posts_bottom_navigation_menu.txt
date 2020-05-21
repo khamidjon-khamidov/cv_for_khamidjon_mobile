@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_blog"
+        android:title="@string/home"
+        android:icon="@drawable/ic_home_white_24dp"/>
+
+    <item
+        android:id="@+id/nav_update_blog"
+        android:title="@string/update"
+        android:icon="@drawable/ic_add_circle_outline_white_24dp"/>
+
+    <item
+        android:id="@+id/nav_delete_blog"
+        android:title="@string/delete"
+        android:icon="@drawable/ic_account_circle_white_24dp"/>
+
+</menu>
