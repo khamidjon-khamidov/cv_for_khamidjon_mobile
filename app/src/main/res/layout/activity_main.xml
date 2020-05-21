@@ -24,7 +24,7 @@
             app:title="Home"/>
 
 
-        <androidx.fragment.app.FragmentContainerView
+        <fragment
             android:id="@+id/nav_host_fragment"
             android:name="com.hamidjonhamidov.cvforkhamidjon.fragment_builders.main.MainNavHostFragment"
             android:layout_width="match_parent"

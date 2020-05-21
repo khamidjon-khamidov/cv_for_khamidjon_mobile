@@ -7,7 +7,7 @@ import javax.inject.Inject
 import javax.inject.Provider
 
 @AchievmentsScope
-class AchievmentsFragmentFactory
+class AchievementsViewModelFactory
 @Inject
 constructor(
     private val creators: Map<Class<out ViewModel>, @JvmSuppressWildcards Provider<ViewModel>>

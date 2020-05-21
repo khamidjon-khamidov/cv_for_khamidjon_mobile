@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/othersFragment"
         android:name="com.hamidjonhamidov.cvforkhamidjon.ui.achievments.c_others.OthersFragment"
-        android:label="fragment_others"
+        android:label="Others"
         tools:layout="@layout/fragment_others" >
         <action
             android:id="@+id/action_othersFragment_to_detailsFragment3"
@@ -17,6 +17,6 @@
     <fragment
         android:id="@+id/detailsFragment3"
         android:name="com.hamidjonhamidov.cvforkhamidjon.ui.achievments.d_detail.DetailsFragment"
-        android:label="fragment_details"
+        android:label="Details"
         tools:layout="@layout/fragment_details" />
 </navigation>

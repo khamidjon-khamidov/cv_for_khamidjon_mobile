@@ -1,10 +1,14 @@
 package com.hamidjonhamidov.cvforkhamidjon.ui.main
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.FragmentFactory
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -15,7 +19,7 @@ import com.google.android.material.navigation.NavigationView
 import com.hamidjonhamidov.cvforkhamidjon.MyApplication
 import com.hamidjonhamidov.cvforkhamidjon.R
 import com.hamidjonhamidov.cvforkhamidjon.di.main_subcomponent.MainComponent
-import com.hamidjonhamidov.cvforkhamidjon.ui.MainUiCommunicationListener
+import com.hamidjonhamidov.cvforkhamidjon.ui.achievments.AchievmentsActivity
 import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -26,7 +30,7 @@ import javax.inject.Inject
 @FlowPreview
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
-class MainActivity : AppCompatActivity(), MainUiCommunicationListener {
+class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -55,27 +59,47 @@ class MainActivity : AppCompatActivity(), MainUiCommunicationListener {
         setSupportActionBar(main_toolbar)
 
         val appBarConfiguration =
-            AppBarConfiguration(setOf(
-                R.id.homeFragment,
-                R.id.aboutMeFragment,
-                R.id.mySkillsFragment,
-                R.id.achievementsFragment,
-                R.id.aboutAppFragment,
-                R.id.notificationsFragment,
-                R.id.projectsFragment,
-                R.id.postsFragment
-            ), drawerLayout = drawer_layout)
+            AppBarConfiguration(
+                setOf(
+                    R.id.homeFragment,
+                    R.id.aboutMeFragment,
+                    R.id.mySkillsFragment,
+                    R.id.achievementsFragment,
+                    R.id.aboutAppFragment,
+                    R.id.notificationsFragment,
+                    R.id.projectsFragment,
+                    R.id.postsFragment
+                ), drawerLayout = drawer_layout
+            )
 
         findViewById<Toolbar>(R.id.main_toolbar)
             .setupWithNavController(navController, appBarConfiguration)
-        findViewById<NavigationView>(R.id.nav_view)
+        nav_view
             .setupWithNavController(navController)
+
+        setListenerForNavView()
     }
+
+    private fun setListenerForNavView() {
+        nav_view.setNavigationItemSelectedListener {
+            when (it.itemId) {
+                R.id.mi_achievments -> {
+                    Log.d(TAG, "MainActivity: onOptionsItemSelected: achievments item clicked")
+                    val mIntent = Intent(this, AchievmentsActivity::class.java)
+                    startActivity(mIntent)
+                    true
+                }
+
+                else -> false
+            }
+        }
+    }
+
+    private val TAG = "AppDebug"
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)
     }
-
 }
 
 

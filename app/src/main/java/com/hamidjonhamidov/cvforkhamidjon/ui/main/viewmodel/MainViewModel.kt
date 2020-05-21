@@ -47,8 +47,6 @@ constructor(
                     handleNewIncomingData(dataState)
                 }
 
-                Log.d(TAG, "MainViewModel: setUpChannel: message came")
-
                 // process new message
                 inboxManager.receiveNewMessage(
                     dataState.stateEvent.destinationView,
@@ -68,8 +66,6 @@ constructor(
     fun setStateEvent(mainStateEvent: MainStateEvent) {
         val isNetworkAllowed = refreshLimitController.canSync(mainStateEvent.destinationView)
         val isNetworkAvailable = isNetworkAllowed and networkConnection.isConectedToInternet()
-
-        Log.d(TAG, "MainViewModel: setStateEvent: ${networkConnection.isConectedToInternet()}")
 
         // inbox as data is being processed set progress bar state to true
         inboxManager.setProgressBarStateAndNotify(mainStateEvent.destinationView, true)
@@ -125,16 +121,6 @@ constructor(
 
                 }
 
-                is AchievementsFragmentDest -> {
-                    {
-                        mainRepository.getAchievements(
-                            mainStateEvent,
-                            isNetworkAvailable,
-                            isNetworkAllowed
-                        )
-                    }
-                }
-
                 is GetProjectsFragmentDest -> {
                     {
                         mainRepository.getProjects(
@@ -179,8 +165,8 @@ constructor(
         val data = dataState.viewState!!
         val message = dataState.message
 
+        // if data is from network, increase sync time
         if (message.title == NETWORK_CACHE_SUCCESS_TITLE) {
-            refreshLimitController.incrementSyncTime(stateEvent.destinationView)
             refreshLimitController.incrementSyncTime(stateEvent.destinationView)
         }
 
@@ -190,10 +176,6 @@ constructor(
 
         data.mySkillsFragmentView.mySkills?.let {
             setMySkills(it)
-        }
-
-        data.achievementsFragmentView.achievements?.let {
-            setAchievments(it)
         }
 
         data.projectsFragmentView.projects?.let {

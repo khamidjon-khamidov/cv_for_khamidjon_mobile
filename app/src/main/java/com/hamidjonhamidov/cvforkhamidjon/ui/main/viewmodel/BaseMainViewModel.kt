@@ -41,6 +41,4 @@ abstract class BaseMainViewModel(
     fun setViewState(newViewState: MainViewState) {
         _viewState.value = newViewState
     }
-
-
 }

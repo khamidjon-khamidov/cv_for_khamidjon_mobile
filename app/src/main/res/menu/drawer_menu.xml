@@ -18,7 +18,7 @@
             android:title="@string/skills" />
 
         <item
-            android:id="@+id/achievementsFragment"
+            android:id="@+id/mi_achievments"
             android:icon="@drawable/achievements"
             android:title="@string/menu_title_achievements" />
 

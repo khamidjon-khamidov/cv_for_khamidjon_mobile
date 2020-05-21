@@ -1,13 +1,11 @@
 package com.hamidjonhamidov.cvforkhamidjon.util.recycler
 
-import android.content.Context
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.hamidjonhamidov.cvforkhamidjon.R
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.ProjectModel
-import kotlinx.android.synthetic.main.project_list_item.view.*
 
 class ProjectsViewHolder(
     itemView: View,

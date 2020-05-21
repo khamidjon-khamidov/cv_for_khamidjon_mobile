@@ -68,7 +68,29 @@ data class Honor(
     @SerializedName("itemLink")
     @Expose
     var itemLink: String
-)
+){
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Honor
+
+        if (itemId != other.itemId) return false
+        if (itemTitle != other.itemTitle) return false
+        if (itemDescription != other.itemDescription) return false
+        if (itemLink != other.itemLink) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = itemId
+        result = 31 * result + itemTitle.hashCode()
+        result = 31 * result + itemDescription.hashCode()
+        result = 31 * result + itemLink.hashCode()
+        return result
+    }
+}
 
 
 

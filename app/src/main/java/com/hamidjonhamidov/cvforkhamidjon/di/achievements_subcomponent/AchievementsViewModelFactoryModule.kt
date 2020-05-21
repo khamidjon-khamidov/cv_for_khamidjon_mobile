@@ -3,7 +3,8 @@ package com.hamidjonhamidov.cvforkhamidjon.di.achievements_subcomponent
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.hamidjonhamidov.cvforkhamidjon.di.ViewModelKey
-import com.hamidjonhamidov.cvforkhamidjon.ui.achievments.viewmodel.AchievmentsViewModel
+import com.hamidjonhamidov.cvforkhamidjon.ui.achievments.viewmodel.AchievementsViewModel
+import com.hamidjonhamidov.cvforkhamidjon.viewmodelfactory.AchievementsViewModelFactory
 import com.hamidjonhamidov.cvforkhamidjon.viewmodelfactory.MainViewModelFactory
 import dagger.Binds
 import dagger.Module
@@ -20,9 +21,9 @@ abstract class AchievementsViewModelFactoryModule {
     @FlowPreview
     @Binds
     @IntoMap
-    @ViewModelKey(AchievmentsViewModel::class)
-    abstract fun bindMainViewModel(viewModel: AchievmentsViewModel): ViewModel
+    @ViewModelKey(AchievementsViewModel::class)
+    abstract fun bindMainViewModel(viewModel: AchievementsViewModel): ViewModel
 
     @Binds
-    abstract fun bindViewModelFactory(vmFactoryMain: MainViewModelFactory): ViewModelProvider.Factory
+    abstract fun bindViewModelFactory(vmFactoryMain: AchievementsViewModelFactory): ViewModelProvider.Factory
 }

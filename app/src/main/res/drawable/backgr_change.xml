@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:exitFadeDuration="500"
+    android:enterFadeDuration="500">
+
+    <item
+        android:color="#92000000"
+        android:state_pressed="true"/>
+
+    <item
+        android:color="@android:color/transparent"
+        />
+
+</selector>

@@ -1,6 +1,7 @@
 package com.hamidjonhamidov.cvforkhamidjon.di
 
 import android.app.Application
+import com.hamidjonhamidov.cvforkhamidjon.di.achievements_subcomponent.AchievementsComponent
 import com.hamidjonhamidov.cvforkhamidjon.di.main_subcomponent.MainComponent
 import com.hamidjonhamidov.cvforkhamidjon.util.NetworkConnection
 import dagger.BindsInstance
@@ -33,4 +34,6 @@ interface AppComponent {
     }
 
     fun mainComponent(): MainComponent.Factory
+
+    fun achievmentsComponent(): AchievementsComponent.Factory
 }

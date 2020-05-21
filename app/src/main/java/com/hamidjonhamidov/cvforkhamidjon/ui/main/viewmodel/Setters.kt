@@ -31,15 +31,6 @@ fun MainViewModel.setMySkills(skills: List<SkillModel>){
 @FlowPreview
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
-fun MainViewModel.setAchievments(achievments: List<AchievementModel>){
-    val update = getCurrentViewStateOrNew()
-    update.achievementsFragmentView.achievements = achievments
-    setViewState(update)
-}
-
-@FlowPreview
-@ExperimentalCoroutinesApi
-@InternalCoroutinesApi
 fun MainViewModel.setProjects(projects: List<ProjectModel>){
     val update = getCurrentViewStateOrNew()
     update.projectsFragmentView.projects = projects

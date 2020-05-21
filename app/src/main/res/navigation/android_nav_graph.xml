@@ -8,8 +8,8 @@
     <fragment
         android:id="@+id/androidFragment"
         android:name="com.hamidjonhamidov.cvforkhamidjon.ui.achievments.a_android.AndroidFragment"
-        android:label="fragment_android_fragmetn"
-        tools:layout="@layout/fragment_android_fragmetn" >
+        android:label="Android"
+        tools:layout="@layout/fragment_android_fragment" >
         <action
             android:id="@+id/action_androidFragment_to_detailsFragment"
             app:destination="@id/detailsFragment" />
@@ -17,6 +17,6 @@
     <fragment
         android:id="@+id/detailsFragment"
         android:name="com.hamidjonhamidov.cvforkhamidjon.ui.achievments.d_detail.DetailsFragment"
-        android:label="fragment_details"
+        android:label="Details"
         tools:layout="@layout/fragment_details" />
 </navigation>

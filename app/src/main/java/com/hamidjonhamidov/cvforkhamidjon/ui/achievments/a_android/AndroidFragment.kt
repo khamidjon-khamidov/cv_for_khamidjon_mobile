@@ -2,60 +2,74 @@ package com.hamidjonhamidov.cvforkhamidjon.ui.achievments.a_android
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.hamidjonhamidov.cvforkhamidjon.R
+import com.hamidjonhamidov.cvforkhamidjon.models.offline.achievements.AchievementModel
+import com.hamidjonhamidov.cvforkhamidjon.ui.achievments.AchievmentsActivity
+import com.hamidjonhamidov.cvforkhamidjon.ui.achievments.viewmodel.AchievementsViewModel
+import com.hamidjonhamidov.cvforkhamidjon.util.glide.GlideManager
+import com.hamidjonhamidov.cvforkhamidjon.util.recycler.AchievementAdapter
+import com.hamidjonhamidov.cvforkhamidjon.util.recycler.AchievementListener
+import kotlinx.android.synthetic.main.fragment_android_fragment.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.InternalCoroutinesApi
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+@FlowPreview
+@ExperimentalCoroutinesApi
+@InternalCoroutinesApi
+class AndroidFragment(
+    viewModelFactory: ViewModelProvider.Factory,
+    val glideManager: GlideManager
+)
+    : Fragment(R.layout.fragment_android_fragment), AchievementListener {
 
-/**
- * A simple [Fragment] subclass.
- * Use the [AndroidFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class AndroidFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    val viewModel: AchievementsViewModel by activityViewModels{
+        viewModelFactory
+    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    lateinit var listAdapter: AchievementAdapter
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initData()
+        subscribeObservers()
+    }
+
+    fun initData(){
+        android_recycler_view.apply {
+            layoutManager = LinearLayoutManager(this@AndroidFragment.context)
+            listAdapter = AchievementAdapter(this@AndroidFragment, glideManager)
+            adapter = listAdapter
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_android_fragmetn, container, false)
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment AndroidFragmetn.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            AndroidFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    fun subscribeObservers(){
+        viewModel.viewState.observe(viewLifecycleOwner, Observer { viewState->
+            viewState?.achievementsFragmentView?.let {
+                it.achievements?.let {
+                    updateView(it[0])
                 }
             }
+        })
     }
+
+    private fun updateView(achievementModel: AchievementModel) {
+        listAdapter.submitList(achievementModel.honorsList)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (requireActivity() as AchievmentsActivity).shouldRefresh()
+    }
+
+    override fun onAchievmentClick(position: Int) {
+
+    }
+
 }
