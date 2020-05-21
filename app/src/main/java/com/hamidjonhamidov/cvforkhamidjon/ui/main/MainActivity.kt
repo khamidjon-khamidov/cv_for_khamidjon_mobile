@@ -8,6 +8,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.GravityCompat
 import androidx.fragment.app.FragmentFactory
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -64,7 +65,6 @@ class MainActivity : AppCompatActivity() {
                     R.id.homeFragment,
                     R.id.aboutMeFragment,
                     R.id.mySkillsFragment,
-                    R.id.achievementsFragment,
                     R.id.aboutAppFragment,
                     R.id.notificationsFragment,
                     R.id.projectsFragment,
@@ -82,6 +82,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setListenerForNavView() {
         nav_view.setNavigationItemSelectedListener {
+
             when (it.itemId) {
                 R.id.mi_achievments -> {
                     Log.d(TAG, "MainActivity: onOptionsItemSelected: achievments item clicked")
@@ -90,7 +91,10 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
 
-                else -> false
+                else -> {
+                    drawer_layout.closeDrawer(GravityCompat.START)
+                    it.onNavDestinationSelected(navController)
+                }
             }
         }
     }

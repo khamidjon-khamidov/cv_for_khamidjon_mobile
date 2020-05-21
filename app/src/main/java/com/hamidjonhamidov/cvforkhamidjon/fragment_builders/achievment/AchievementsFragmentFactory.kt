@@ -33,15 +33,15 @@ constructor(
             }
 
             AlgorithmsFragment::class.java.name -> {
-                AlgorithmsFragment()
+                AlgorithmsFragment(viewModelProviderFactory, glideManager)
             }
 
             OthersFragment::class.java.name -> {
-                OthersFragment()
+                OthersFragment(viewModelProviderFactory, glideManager)
             }
 
             DetailsFragment::class.java.name -> {
-                DetailsFragment()
+                DetailsFragment(glideManager)
             }
 
             else -> super.instantiate(classLoader, className)

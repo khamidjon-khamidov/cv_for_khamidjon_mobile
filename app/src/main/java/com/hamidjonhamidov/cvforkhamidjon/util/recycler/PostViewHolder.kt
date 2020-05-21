@@ -77,7 +77,7 @@ class PostViewHolder(
             glideManager.setImage(it.postLink, img1)
 
             // bind title
-            val title1 = itemView.findViewById<TextView>(R.id.post_tv__title_front)
+            val title1 = itemView.findViewById<TextView>(R.id.post_tv__title_back)
             title1.text = it.postDescription
         }
 

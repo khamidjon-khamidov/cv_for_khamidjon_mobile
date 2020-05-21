@@ -13,7 +13,6 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:title="Achievements"
-        app:menu="@menu/only_refresh_menu"
         app:titleTextColor="@color/white" />
 
 

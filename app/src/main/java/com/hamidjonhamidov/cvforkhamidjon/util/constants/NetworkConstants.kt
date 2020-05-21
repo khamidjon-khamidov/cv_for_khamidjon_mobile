@@ -130,7 +130,7 @@ object NetworkConstants {
         Message(
             "Warning!!!",
             "As you daily limits has finished, data will be provided from Database",
-            UIType.Dialog(),
+            UIType.Toast(),
             false
         )
 

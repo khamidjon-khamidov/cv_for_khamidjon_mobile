@@ -4,11 +4,7 @@
     android:enterFadeDuration="500">
 
     <item
-        android:color="#92000000"
+        android:drawable="@drawable/selected_state"
         android:state_pressed="true"/>
-
-    <item
-        android:color="@android:color/transparent"
-        />
 
 </selector>

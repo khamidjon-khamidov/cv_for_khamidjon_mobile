@@ -24,12 +24,6 @@
         tools:layout="@layout/fragment_my_skills" />
 
     <fragment
-        android:id="@+id/achievementsFragment"
-        android:name="com.hamidjonhamidov.cvforkhamidjon.ui.main.d_achievements.AchievementsFragment"
-        android:label="Achievments"
-        tools:layout="@layout/fragment_achievements" />
-
-    <fragment
         android:id="@+id/aboutAppFragment"
         android:name="com.hamidjonhamidov.cvforkhamidjon.ui.main.f_aboutapp.AboutAppFragment"
         android:label="App Details"

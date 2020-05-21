@@ -38,6 +38,16 @@ class AchievementViewHolder(
             achievmentListener.onAchievmentClick(layoutPosition)
         }
 
+        // animate item view
+        itemView.apply {
+            alpha = 0.toFloat()
+
+            animate()
+                .alpha(1.toFloat())
+                .setDuration(800L)
+                .setListener(null)
+        }
+
         Unit
     }
 }

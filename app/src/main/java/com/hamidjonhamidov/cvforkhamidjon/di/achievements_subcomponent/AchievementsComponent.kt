@@ -1,5 +1,6 @@
 package com.hamidjonhamidov.cvforkhamidjon.di.achievements_subcomponent
 
+import com.hamidjonhamidov.cvforkhamidjon.fragment_builders.achievment.AchievmentsNavHostFragment
 import com.hamidjonhamidov.cvforkhamidjon.ui.achievments.AchievmentsActivity
 import dagger.Subcomponent
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -27,4 +28,6 @@ interface AchievementsComponent {
 
     // subcomponent to be injected from here
     fun inject(achievmentsActivity: AchievmentsActivity)
+
+    fun inject(navhostFragment: AchievmentsNavHostFragment)
 }

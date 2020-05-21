@@ -2,6 +2,8 @@ package com.hamidjonhamidov.cvforkhamidjon.ui.achievments
 
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.fragment.app.FragmentFactory
 import androidx.lifecycle.LiveData
@@ -62,23 +64,37 @@ class AchievmentsActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_achievments)
 
+        setSupportActionBar(achievments_toolbar)
+
 
         if (savedInstanceState == null) {
             setupBottomNavigationBar()
-
-            setSupportActionBar(achievments_toolbar)
         }
 
         shouldRefresh()
         addProgressBarObservers()
     }
 
-
     override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
         super.onRestoreInstanceState(savedInstanceState!!)
         setupBottomNavigationBar()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        getMenuInflater().inflate(R.menu.only_refresh_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.mi_refresh -> {
+                viewModel.setStateEvent(stateEvent)
+                return true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
 
     val messageObserverForProgressBar = Observer<UIMessage> {
         if (!(it.equals(MESSAGE_ALREADY_IN_PROGRESS))) {
@@ -195,8 +211,7 @@ class AchievmentsActivity : BaseActivity() {
             navGraphIds = navGraphIds,
             fragmentManager = supportFragmentManager,
             containerId = R.id.nav_host_container,
-            intent = intent,
-            fragmentFactory = fragmentFactory
+            intent = intent
         )
 
         // Whenever the selected controller changes, setup the action bar.

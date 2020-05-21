@@ -1,6 +1,7 @@
 package com.hamidjonhamidov.cvforkhamidjon.util
 
 import android.content.Intent
+import android.os.Bundle
 import android.util.SparseArray
 import androidx.core.util.forEach
 import androidx.core.util.set
@@ -12,12 +13,18 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.hamidjonhamidov.cvforkhamidjon.R
+import com.hamidjonhamidov.cvforkhamidjon.fragment_builders.achievment.AchievmentsNavHostFragment
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.InternalCoroutinesApi
+
+@ExperimentalCoroutinesApi
+@OptIn(InternalCoroutinesApi::class)
+@InternalCoroutinesApi
 fun BottomNavigationView.setupWithMyNavController(
     navGraphIds: List<Int>,
     fragmentManager: FragmentManager,
     containerId: Int,
-    intent: Intent,
-    fragmentFactory: FragmentFactory
+    intent: Intent
 ): LiveData<NavController> {
 
     // Map of tags
@@ -36,8 +43,7 @@ fun BottomNavigationView.setupWithMyNavController(
             fragmentManager,
             fragmentTag,
             navGraphId,
-            containerId,
-            fragmentFactory
+            containerId
         )
 
         // Obtain its id
@@ -54,7 +60,7 @@ fun BottomNavigationView.setupWithMyNavController(
         if (this.selectedItemId == graphId) {
             // Update livedata with the selected graph
             selectedNavController.value = navHostFragment.navController
-            attachNavHostFragment(fragmentFactory, fragmentManager, navHostFragment, index == 0)
+            attachNavHostFragment(fragmentManager, navHostFragment, index == 0)
         } else {
             detachNavHostFragment(fragmentManager, navHostFragment)
         }
@@ -117,7 +123,7 @@ fun BottomNavigationView.setupWithMyNavController(
     setupItemReselected(graphIdToTagMap, fragmentManager)
 
     // Handle deep link
-    setupDeepLinks(navGraphIds, fragmentManager, containerId, intent, fragmentFactory)
+    setupDeepLinks(navGraphIds, fragmentManager, containerId, intent)
 
     // Finally, ensure that we update our BottomNavigationView when the back stack changes
     fragmentManager.addOnBackStackChangedListener {
@@ -136,12 +142,14 @@ fun BottomNavigationView.setupWithMyNavController(
     return selectedNavController
 }
 
+@ExperimentalCoroutinesApi
+@OptIn(InternalCoroutinesApi::class)
+@InternalCoroutinesApi
 private fun BottomNavigationView.setupDeepLinks(
     navGraphIds: List<Int>,
     fragmentManager: FragmentManager,
     containerId: Int,
-    intent: Intent,
-    fragmentFactory: FragmentFactory
+    intent: Intent
 ) {
     navGraphIds.forEachIndexed { index, navGraphId ->
         val fragmentTag = getFragmentTag(index)
@@ -151,8 +159,7 @@ private fun BottomNavigationView.setupDeepLinks(
             fragmentManager,
             fragmentTag,
             navGraphId,
-            containerId,
-            fragmentFactory
+            containerId
         )
         // Handle Intent
         if (navHostFragment.navController.handleDeepLink(intent)
@@ -188,7 +195,6 @@ private fun detachNavHostFragment(
 }
 
 private fun attachNavHostFragment(
-    fragmentFactory: FragmentFactory,
     fragmentManager: FragmentManager,
     navHostFragment: NavHostFragment,
     isPrimaryNavFragment: Boolean
@@ -196,7 +202,6 @@ private fun attachNavHostFragment(
     fragmentManager.beginTransaction()
         .attach(navHostFragment)
         .apply {
-            navHostFragment.childFragmentManager.fragmentFactory = fragmentFactory
             if (isPrimaryNavFragment) {
                 setPrimaryNavigationFragment(navHostFragment)
             }
@@ -204,20 +209,25 @@ private fun attachNavHostFragment(
         .commitNow()
 }
 
+@ExperimentalCoroutinesApi
+@OptIn(InternalCoroutinesApi::class)
+@InternalCoroutinesApi
 private fun obtainNavHostFragment(
     fragmentManager: FragmentManager,
     fragmentTag: String,
     navGraphId: Int,
-    containerId: Int,
-    fragmentFactory: FragmentFactory
+    containerId: Int
 ): NavHostFragment {
     // If the Nav Host fragment exists, return it
     val existingFragment = fragmentManager.findFragmentByTag(fragmentTag) as NavHostFragment?
     existingFragment?.let { return it }
 
     // Otherwise, create it and return it.
-    val navHostFragment = NavHostFragment.create(navGraphId)
-    navHostFragment.childFragmentManager.fragmentFactory = fragmentFactory
+    val bundle = Bundle()
+    bundle.putInt("android-support-nav:fragment:graphId", navGraphId)
+    val navHostFragment = AchievmentsNavHostFragment()
+    navHostFragment.arguments = bundle
+
     fragmentManager.beginTransaction()
         .add(containerId, navHostFragment, fragmentTag)
         .commitNow()
