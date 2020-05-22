@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.d_contact.ContactActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/contact_toolbar"
+        android:layout_width="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_height="55dp"
+        app:titleTextColor="@color/white"
+        android:background="@color/colorPrimary"
+        app:title="Contact"/>
+
+
+    <fragment
+        android:id="@+id/contact_nav_host_fragment"
+        android:name="com.hamidjonhamidov.cvforkhamidjon.fragment_builders.contact.ContactsNavHostFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/contact_nav_graph"
+        />
+
+</LinearLayout>

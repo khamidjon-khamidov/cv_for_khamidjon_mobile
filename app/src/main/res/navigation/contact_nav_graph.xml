@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/contact_nav_graph"
+    app:startDestination="@id/contactMeFragment">
+    <fragment
+        android:id="@+id/contactMeFragment"
+        android:name="com.hamidjonhamidov.cvforkhamidjon.ui.d_contact.a_contact_me.ContactMeFragment"
+        android:label="Contact Me"
+        tools:layout="@layout/fragment_contact_me" />
+    <fragment
+        android:id="@+id/notificationsFragment"
+        android:name="com.hamidjonhamidov.cvforkhamidjon.ui.d_contact.b_notifications.NotificationsFragment"
+        android:label="Notifications"
+        tools:layout="@layout/fragment_notifications" />
+</navigation>

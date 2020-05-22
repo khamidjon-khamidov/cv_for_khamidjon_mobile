@@ -51,7 +51,7 @@
                 android:title="@string/menu_title_contact" />
 
             <item
-                android:id="@+id/notificationsFragment"
+                android:id="@+id/mi_notifications"
                 android:icon="@drawable/notification"
                 android:title="@string/notifications" />
 

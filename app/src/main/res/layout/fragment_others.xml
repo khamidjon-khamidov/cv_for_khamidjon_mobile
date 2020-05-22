@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.achievments.c_others.OthersFragment">
+    tools:context=".ui.b_achievments.c_others.OthersFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/others_recycler_view"

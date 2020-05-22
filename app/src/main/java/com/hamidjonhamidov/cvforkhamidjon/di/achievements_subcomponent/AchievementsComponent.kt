@@ -1,7 +1,7 @@
 package com.hamidjonhamidov.cvforkhamidjon.di.achievements_subcomponent
 
 import com.hamidjonhamidov.cvforkhamidjon.fragment_builders.achievment.AchievmentsNavHostFragment
-import com.hamidjonhamidov.cvforkhamidjon.ui.achievments.AchievmentsActivity
+import com.hamidjonhamidov.cvforkhamidjon.ui.b_achievments.AchievmentsActivity
 import dagger.Subcomponent
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview

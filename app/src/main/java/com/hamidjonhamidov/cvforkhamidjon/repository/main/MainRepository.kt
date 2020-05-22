@@ -1,7 +1,7 @@
 package com.hamidjonhamidov.cvforkhamidjon.repository.main
 
-import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainStateEvent
-import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainViewState
+import com.hamidjonhamidov.cvforkhamidjon.ui.a_main.viewmodel.state.MainStateEvent
+import com.hamidjonhamidov.cvforkhamidjon.ui.a_main.viewmodel.state.MainViewState
 import com.hamidjonhamidov.cvforkhamidjon.util.DataState
 import kotlinx.coroutines.flow.Flow
 

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F4F4F4"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.d_contact.a_contact_me.ContactMeFragment">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/contact_rv_contact_me"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@android:color/transparent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/contact_et_send"/>
+
+    <EditText
+        android:id="@+id/contact_et_send"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="40dp"
+        android:maxLines="4"
+        android:maxLength="2000"
+        android:textCursorDrawable="@drawable/color_cursor_et"
+        android:background="@drawable/custom_send_et"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+    <ImageView
+        android:id="@+id/contact_iv_send_ic"
+        android:layout_width="25dp"
+        android:layout_height="30dp"
+        android:layout_marginBottom="9dp"
+        android:layout_marginRight="7dp"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        app:layout_constraintBottom_toBottomOf="@id/contact_et_send"
+        app:layout_constraintRight_toRightOf="@id/contact_et_send"
+        android:src="@drawable/send_btn"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

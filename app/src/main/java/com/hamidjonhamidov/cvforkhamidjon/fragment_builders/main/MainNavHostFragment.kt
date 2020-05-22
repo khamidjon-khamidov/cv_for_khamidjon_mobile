@@ -4,8 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.FragmentFactory
 import androidx.navigation.fragment.NavHostFragment
-import com.hamidjonhamidov.cvforkhamidjon.MyApplication
-import com.hamidjonhamidov.cvforkhamidjon.ui.main.MainActivity
+import com.hamidjonhamidov.cvforkhamidjon.ui.a_main.MainActivity
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.InternalCoroutinesApi
