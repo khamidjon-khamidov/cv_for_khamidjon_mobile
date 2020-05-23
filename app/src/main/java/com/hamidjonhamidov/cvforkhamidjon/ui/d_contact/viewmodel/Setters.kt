@@ -30,14 +30,14 @@ fun ContactViewModel.setNotifications(notifications: ArrayList<NotificationsMode
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
 fun ContactViewModel.udpateMessageChange(res: MessageResponse) {
-    if (getCurrentViewStateOrNew().contactMeFragmentView.messages == null) return
+    if (getMessages().isEmpty()) return
     if (!res.isSent) return
 
-    for (i in getCurrentViewStateOrNew().contactMeFragmentView.messages!!.indices) {
-        val message = getCurrentViewStateOrNew().contactMeFragmentView.messages!![i]
+    for (i in getMessages().indices) {
+        val message = getMessages()[i]
         if (res.order == message.order) {
             message.status = true
-            notifiyActiveFragmentWithChanges()
+            notifyMessageUpdate(i)
             break
         }
     }
@@ -47,12 +47,8 @@ fun ContactViewModel.udpateMessageChange(res: MessageResponse) {
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
 fun ContactViewModel.addMessageToList(message: MessageModel){
-    if(getCurrentViewStateOrNew().contactMeFragmentView.messages==null){
-        getCurrentViewStateOrNew().contactMeFragmentView.messages = ArrayList()
-    }
-
-    getCurrentViewStateOrNew().contactMeFragmentView.messages!!.add(0, message)
-    notifiyActiveFragmentWithChanges()
+    getMessages().add(0, message)
+    notifyMessageInsertion(0)
 }
 
 

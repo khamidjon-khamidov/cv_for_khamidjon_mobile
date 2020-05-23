@@ -14,11 +14,11 @@ data class ContactsViewState(
 
     @Parcelize
     data class ContactMeFragmentView(
-        var messages: ArrayList<MessageModel>? = null
+        var messages: ArrayList<MessageModel> = ArrayList()
     ): Parcelable
 
     @Parcelize
     data class NotificationsFragmentView(
-        var notifications: ArrayList<NotificationsModel>? = null
+        var notifications: ArrayList<NotificationsModel> = ArrayList()
     ): Parcelable
 }

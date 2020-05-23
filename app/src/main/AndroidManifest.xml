@@ -15,7 +15,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.d_contact.ContactActivity"></activity>
+        <activity android:name=".ui.d_contact.ContactActivity"
+            android:windowSoftInputMode="adjustResize"></activity>
         <activity android:name=".ui.c_source_code.CodeViewActivity" />
         <activity
             android:name=".ui.c_source_code.SourceCodeActivity"

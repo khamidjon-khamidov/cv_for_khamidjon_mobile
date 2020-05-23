@@ -7,18 +7,18 @@ import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.hamidjonhamidov.cvforkhamidjon.R
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.contact.MessageModel
 import com.hamidjonhamidov.cvforkhamidjon.ui.d_contact.viewmodel.ContactViewModel
-import com.hamidjonhamidov.cvforkhamidjon.ui.d_contact.viewmodel.addMessageToList
+import com.hamidjonhamidov.cvforkhamidjon.ui.d_contact.viewmodel.getMessages
 import com.hamidjonhamidov.cvforkhamidjon.ui.d_contact.viewmodel.state.ContactsStateEvent
+import com.hamidjonhamidov.cvforkhamidjon.ui.d_contact.viewmodel.state.ContactsStateEvent.GetMessages
 import com.hamidjonhamidov.cvforkhamidjon.util.recycler.ContactMeAdapter
 import kotlinx.android.synthetic.main.fragment_contact_me.*
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.*
 
 @ExperimentalCoroutinesApi
 @FlowPreview
@@ -40,40 +40,68 @@ class ContactMeFragment(
         super.onViewCreated(view, savedInstanceState)
         initData()
         initRecyclerView()
-        bindButtons()
+        bindViews()
         subscribeObservers()
     }
 
-    private fun initRecyclerView(){
+    override fun onResume() {
+        super.onResume()
+        viewModel.sendUnsentMessages()
+    }
+
+    private fun initRecyclerView() {
         contact_rv_contact_me.apply {
-            layoutManager = LinearLayoutManager(this@ContactMeFragment.context, LinearLayoutManager.VERTICAL, true)
+            val mLayoutManager = LinearLayoutManager(
+                this@ContactMeFragment.context
+            )
+//            mLayoutManager.stackFromEnd = true
+            setHasFixedSize(true)
+            mLayoutManager.reverseLayout = true
+
+            layoutManager = mLayoutManager
             listAdapter = ContactMeAdapter()
             adapter = listAdapter
+        }
+
+        // when keyboard changes it should be scrolled accordingly
+        contact_rv_contact_me.addOnLayoutChangeListener { _, _, _, _, bottom, _, _, _, oldBottom ->
+            if (bottom > oldBottom || oldBottom > bottom) {
+                scrollToPosAfterDelay(0)
+            }
         }
     }
 
     private fun initData() {
-        ifMessagesNotNullSubmit()
-        if(getMessages()==null){
-            viewModel.setStateEvent(ContactsStateEvent.GetMessages())
+        if (viewModel.getMessages().isNotEmpty()) {
+            listAdapter.submitList(viewModel.getMessages())
+        } else {
+            viewModel.setStateEvent(GetMessages())
         }
     }
 
     private fun subscribeObservers() {
         viewModel.viewState.observe(viewLifecycleOwner, Observer {
-            ifMessagesNotNullSubmit()
+            listAdapter.submitList(viewModel.getMessages())
+            viewModel.sendUnsentMessages()
         })
 
-        viewModel.notifier.observe(viewLifecycleOwner, Observer {
-            Log.d(TAG, "ContactMeFragment: subscribeObservers: message notified")
-            ifMessagesNotNullSubmit()
+        viewModel.updateNotifier.observe(viewLifecycleOwner, Observer {
+            listAdapter.submitList(viewModel.getMessages())
+            if (it.insertedPos != -1) {
+                listAdapter.notifyItemInserted(it.insertedPos)
+                scrollToPosAfterDelay(0)
+
+            } else if (it.updatedPos != -1) {
+                listAdapter.submitList(viewModel.getMessages())
+                listAdapter.notifyItemChanged(it.updatedPos)
+            }
         })
     }
 
-    private fun bindButtons() {
+    private fun bindViews() {
         contact_iv_send_ic.setOnClickListener {
-            contact_et_send.text?.toString()?.trim()?.let{
-                if(it!=""){
+            contact_et_send.text?.toString()?.trim()?.let {
+                if (it != "") {
                     val mMessage = MessageModel(
                         getOrder(),
                         MessageModel.WHO_HIM,
@@ -81,8 +109,6 @@ class ContactMeFragment(
                         MessageModel.STATUS_NOT_SENT
                     )
                     contact_et_send.setText("")
-                    viewModel.addMessageToList(mMessage)
-                    listAdapter.notifyItemInserted(0)
                     viewModel.setStateEvent(ContactsStateEvent.SendMessage(mMessage))
                 }
             }
@@ -90,22 +116,22 @@ class ContactMeFragment(
     }
 
     private fun getOrder(): Int {
-        if(getMessages().isNullOrEmpty()){
-            return 1
+        return if (viewModel.getMessages().isEmpty()) {
+            1
         } else {
-            return getMessages()!![0].order+1
+            viewModel.getMessages()[0].order + 1
         }
     }
 
-    private fun ifMessagesNotNullSubmit(){
-        getMessages()?.let {
-            if(it.size>0) contact_rv_contact_me.scrollToPosition(0)
-            listAdapter.submitList(it)
+    private fun scrollToPosAfterDelay(pos: Int) {
+        // something not working need some delay
+        lifecycleScope.launch {
+            delay(100)
+            withContext(Dispatchers.Main) {
+                contact_rv_contact_me.smoothScrollToPosition(pos)
+            }
         }
     }
-
-    private fun getMessages() =
-        viewModel.viewState.value?.contactMeFragmentView?.messages
 }
 
 

@@ -7,13 +7,13 @@ import androidx.lifecycle.viewModelScope
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.contact.MessageModel
 import com.hamidjonhamidov.cvforkhamidjon.repository.contacs.ContactsRepository
 import com.hamidjonhamidov.cvforkhamidjon.repository.contacs.MessageResponse
+import com.hamidjonhamidov.cvforkhamidjon.ui.d_contact.MessageNotifyModel
 import com.hamidjonhamidov.cvforkhamidjon.ui.d_contact.viewmodel.state.ContactsStateEvent
 import com.hamidjonhamidov.cvforkhamidjon.ui.d_contact.viewmodel.state.ContactsStateEvent.*
 import com.hamidjonhamidov.cvforkhamidjon.ui.d_contact.viewmodel.state.ContactsViewState
 import com.hamidjonhamidov.cvforkhamidjon.util.NetworkConnection
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.BroadcastChannel
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.launchIn
@@ -46,14 +46,17 @@ constructor(
         _viewState.value = newViewState
     }
 
-    // ************* update for a single message/notifications *************
-    private val _notifier: MutableLiveData<Boolean> = MutableLiveData(false)
+    // ************* message update notifier for a single message *************
+    val updateNotifier: MutableLiveData<MessageNotifyModel> = MutableLiveData(
+        MessageNotifyModel(-1, -1)
+    )
 
-    val notifier: LiveData<Boolean>
-        get() = _notifier
+    fun notifyMessageUpdate(position: Int) {
+        updateNotifier.value = MessageNotifyModel(position, -1)
+    }
 
-    fun notifiyActiveFragmentWithChanges() {
-        _notifier.value = !(_notifier.value!!)
+    fun notifyMessageInsertion(position: Int) {
+        updateNotifier.value = MessageNotifyModel(-1, position)
     }
 
     init {
@@ -86,14 +89,14 @@ constructor(
             is GetMessages -> {
                 viewModelScope.launch {
                     val messages = contactsRepository.getMessages()
-                    withContext(Dispatchers.Main){setMessages(messages)}
+                    withContext(Dispatchers.Main) { setMessages(messages) }
                 }
             }
 
             is GetNotifications -> {
                 viewModelScope.launch {
                     val notifications = contactsRepository.getNotificatins()
-                    withContext(Dispatchers.Main){setNotifications(notifications)}
+                    withContext(Dispatchers.Main) { setNotifications(notifications) }
                 }
             }
 
@@ -116,8 +119,10 @@ constructor(
 
     private fun launchJob(message: MessageModel, jobFunc: () -> Flow<MessageResponse>) {
         val msgSet = getCurrentViewStateOrNew().messagesInProcess
-        if(msgSet.contains(message.order))
+        if (msgSet.contains(message.order))
             return
+
+        addMessageToList(message)
 
         jobFunc.invoke()
             .onEach {
@@ -125,7 +130,30 @@ constructor(
             }
             .launchIn(viewModelScope)
     }
+
+    fun sendUnsentMessages() {
+        viewModelScope.launch(Dispatchers.IO) {
+            for (i in getMessages().indices) {
+                if(viewState.value?.messagesInProcess?.contains(i) == true)
+                    continue
+
+                val messsageModel = getMessages()[i]
+                if (messsageModel.status == MessageModel.STATUS_NOT_SENT) {
+                    contactsRepository.sendMessage(
+                        messsageModel,
+                        networkConnection.isConectedToInternet()
+                    ).onEach {
+                        offerToDataChannel(it)
+                    }
+                        .launchIn(viewModelScope)
+                }
+            }
+
+        }
+
+    }
 }
+
 
 
 
