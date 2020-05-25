@@ -1,14 +1,419 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.a_main.f_aboutapp.AboutAppFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    android:orientation="vertical">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:background="@color/pale_grey"
+        android:layout_margin="10dp"
+        android:paddingBottom="50dp">
 
-</FrameLayout>
+        <TextView
+            android:id="@+id/tv_main_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimary"
+            android:layout_margin="10dp"
+            android:textSize="24sp"
+            android:padding="10dp"
+            android:text="Technologies Used For The Application"
+            android:gravity="center_horizontal"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
+
+
+        <ImageView
+            android:id="@+id/iv_kotlin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/dot"
+            android:layout_margin="20dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_main_title"/>
+
+        <TextView
+            android:id="@+id/tv_kotlin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/iv_kotlin"
+            app:layout_constraintBottom_toBottomOf="@id/iv_kotlin"
+            app:layout_constraintLeft_toRightOf="@id/iv_kotlin"
+            android:text="Kotlin"
+            android:textColor="@color/colorAccent"
+            android:textSize="23sp"/>
+
+        <TextView
+            android:id="@+id/tv_coroutines"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="- Coroutines"
+            app:layout_constraintTop_toBottomOf="@id/tv_kotlin"
+            app:layout_constraintLeft_toLeftOf="@id/tv_kotlin"
+            android:layout_marginTop="8dp"
+            android:textSize="20sp"
+            android:textColor="@color/text_grey"
+            />
+
+        <TextView
+            android:id="@+id/tv_extensive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="- Kotlin Extensions"
+            app:layout_constraintTop_toBottomOf="@id/tv_coroutines"
+            app:layout_constraintLeft_toLeftOf="@id/tv_kotlin"
+            android:layout_marginTop="8dp"
+            android:textSize="20sp"
+            android:textColor="@color/text_grey"
+            />
+
+        <TextView
+            android:id="@+id/tv_recursive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="- Recursive Function"
+            app:layout_constraintTop_toBottomOf="@id/tv_extensive"
+            app:layout_constraintLeft_toLeftOf="@id/tv_kotlin"
+            android:layout_marginTop="8dp"
+            android:textSize="20sp"
+            android:textColor="@color/text_grey" />
+
+        <TextView
+            android:id="@+id/tv_channel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="- Channels"
+            app:layout_constraintTop_toBottomOf="@id/tv_recursive"
+            app:layout_constraintLeft_toLeftOf="@id/tv_kotlin"
+            android:layout_marginTop="8dp"
+            android:textSize="20sp"
+            android:textColor="@color/text_grey"/>
+
+        <TextView
+            android:id="@+id/tv_flows"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="- Flows"
+            app:layout_constraintTop_toBottomOf="@id/tv_channel"
+            app:layout_constraintLeft_toLeftOf="@id/tv_kotlin"
+            android:layout_marginTop="8dp"
+            android:textSize="20sp"
+            android:textColor="@color/text_grey"/>
+
+
+        <ImageView
+            android:id="@+id/iv_jetpack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/dot"
+            android:layout_margin="20dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_flows"/>
+
+        <TextView
+            android:id="@+id/tv_jetpack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/iv_jetpack"
+            app:layout_constraintBottom_toBottomOf="@id/iv_jetpack"
+            app:layout_constraintLeft_toRightOf="@id/iv_jetpack"
+            android:text="JetPack Architecture"
+            android:textColor="@color/colorAccent"
+            android:textSize="23sp"/>
+
+
+        <TextView
+            android:id="@+id/tv_viewmodel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="- ViewModel"
+            app:layout_constraintTop_toBottomOf="@id/tv_jetpack"
+            app:layout_constraintLeft_toLeftOf="@id/tv_jetpack"
+            android:layout_marginTop="8dp"
+            android:textSize="20sp"
+            android:textColor="@color/text_grey"
+            />
+
+        <TextView
+            android:id="@+id/tv_livedata"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="- LiveData"
+            app:layout_constraintTop_toBottomOf="@id/tv_viewmodel"
+            app:layout_constraintLeft_toLeftOf="@id/tv_jetpack"
+            android:layout_marginTop="8dp"
+            android:textSize="20sp"
+            android:textColor="@color/text_grey"
+            />
+
+        <TextView
+            android:id="@+id/tv_dagger2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="- Dagger2"
+            app:layout_constraintTop_toBottomOf="@id/tv_livedata"
+            app:layout_constraintLeft_toLeftOf="@id/tv_jetpack"
+            android:layout_marginTop="8dp"
+            android:textSize="20sp"
+            android:textColor="@color/text_grey"
+            />
+
+        <TextView
+            android:id="@+id/tv_room"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="- Room"
+            app:layout_constraintTop_toBottomOf="@id/tv_dagger2"
+            app:layout_constraintLeft_toLeftOf="@id/tv_jetpack"
+            android:layout_marginTop="8dp"
+            android:textSize="20sp"
+            android:textColor="@color/text_grey"
+            />
+
+        <TextView
+            android:id="@+id/tv_navigation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="- Navigation Components"
+            app:layout_constraintTop_toBottomOf="@id/tv_room"
+            app:layout_constraintLeft_toLeftOf="@id/tv_jetpack"
+            android:layout_marginTop="8dp"
+            android:textSize="20sp"
+            android:textColor="@color/text_grey"
+            />
+
+        <TextView
+            android:id="@+id/tv_saving"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:text="- Caching Network Data to Local Storage"
+            app:layout_constraintTop_toBottomOf="@id/tv_navigation"
+            app:layout_constraintLeft_toLeftOf="@id/tv_jetpack"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="8dp"
+            android:textSize="20sp"
+            android:textColor="@color/text_grey"
+            />
+
+        <TextView
+            android:id="@+id/tv_firebase"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:text="- Firebase Cloud Messaging(NodeJS)"
+            app:layout_constraintTop_toBottomOf="@id/tv_saving"
+            app:layout_constraintLeft_toLeftOf="@id/tv_jetpack"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="8dp"
+            android:textSize="20sp"
+            android:textColor="@color/text_grey"
+            />
+
+        <TextView
+            android:id="@+id/tv_mvi"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:text="- MVI Architecture"
+            app:layout_constraintTop_toBottomOf="@id/tv_firebase"
+            app:layout_constraintLeft_toLeftOf="@id/tv_jetpack"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="8dp"
+            android:textSize="20sp"
+            android:textColor="@color/text_grey"
+            />
+
+        <TextView
+            android:id="@+id/tv_bottom_nav"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:text="- Bottom Navigation With Multiple Stack"
+            app:layout_constraintTop_toBottomOf="@id/tv_mvi"
+            app:layout_constraintLeft_toLeftOf="@id/tv_jetpack"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="8dp"
+            android:textSize="20sp"
+            android:textColor="@color/text_grey"
+            />
+
+        <TextView
+            android:id="@+id/tv_viewmodel_factory"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:text="- ViewModelFactory"
+            app:layout_constraintTop_toBottomOf="@id/tv_bottom_nav"
+            app:layout_constraintLeft_toLeftOf="@id/tv_jetpack"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="8dp"
+            android:textSize="20sp"
+            android:textColor="@color/text_grey" />
+
+
+        <ImageView
+            android:id="@+id/iv_ui"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/dot"
+            android:layout_margin="20dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_viewmodel_factory"/>
+
+        <TextView
+            android:id="@+id/tv_ui"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/iv_ui"
+            app:layout_constraintBottom_toBottomOf="@id/iv_ui"
+            app:layout_constraintLeft_toRightOf="@id/iv_jetpack"
+            android:text="UI"
+            android:textColor="@color/colorAccent"
+            android:textSize="23sp"/>
+
+
+        <TextView
+            android:id="@+id/tv_fragment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:text="- Fragment Factory"
+            app:layout_constraintTop_toBottomOf="@id/tv_ui"
+            app:layout_constraintLeft_toLeftOf="@id/tv_ui"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="8dp"
+            android:textSize="20sp"
+            android:textColor="@color/text_grey"
+            />
+
+        <TextView
+            android:id="@+id/tv_animations"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:text="- Various Types of Animations"
+            app:layout_constraintTop_toBottomOf="@id/tv_fragment"
+            app:layout_constraintLeft_toLeftOf="@id/tv_ui"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="8dp"
+            android:textSize="20sp"
+            android:textColor="@color/text_grey"
+            />
+
+        <TextView
+            android:id="@+id/tv_dynamic_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:text="- Dynamic Layouts"
+            app:layout_constraintTop_toBottomOf="@id/tv_animations"
+            app:layout_constraintLeft_toLeftOf="@id/tv_ui"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="8dp"
+            android:textSize="20sp"
+            android:textColor="@color/text_grey"
+            />
+
+        <TextView
+            android:id="@+id/tv_recycler_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="- "
+            app:layout_constraintTop_toBottomOf="@id/tv_dynamic_layout"
+            app:layout_constraintLeft_toLeftOf="@id/tv_ui"
+            android:layout_marginTop="8dp"
+            android:textSize="20sp"
+            android:textColor="@color/text_grey"
+            />
+
+        <TextView
+            android:id="@+id/tv_recycler_view2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingEnd="10dp"
+            android:text="RecyclerViews With Multiple ViewHolders"
+            app:layout_constraintTop_toBottomOf="@id/tv_dynamic_layout"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/tv_recycler_view"
+            android:layout_marginTop="8dp"
+            android:textSize="20sp"
+            android:textColor="@color/text_grey"
+            />
+
+        <ImageView
+            android:id="@+id/iv_testing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/dot"
+            android:layout_margin="20dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_recycler_view2"/>
+
+        <TextView
+            android:id="@+id/tv_testing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/iv_testing"
+            app:layout_constraintBottom_toBottomOf="@id/iv_testing"
+            app:layout_constraintLeft_toRightOf="@id/iv_jetpack"
+            android:text="Testing"
+            android:textColor="@color/colorAccent"
+            android:textSize="23sp"/>
+
+        <TextView
+            android:id="@+id/tv_unit_testing"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:text="- Unit Testing"
+            app:layout_constraintTop_toBottomOf="@id/tv_testing"
+            app:layout_constraintLeft_toLeftOf="@id/tv_ui"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="8dp"
+            android:textSize="20sp"
+            android:textColor="@color/text_grey"
+            />
+
+        <TextView
+            android:id="@+id/tv_tdd"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:text="- TDD Practises"
+            app:layout_constraintTop_toBottomOf="@id/tv_unit_testing"
+            app:layout_constraintLeft_toLeftOf="@id/tv_ui"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="8dp"
+            android:textSize="20sp"
+            android:textColor="@color/text_grey"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</ScrollView>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

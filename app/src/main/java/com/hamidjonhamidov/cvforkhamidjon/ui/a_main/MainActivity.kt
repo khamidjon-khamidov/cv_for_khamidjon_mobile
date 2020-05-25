@@ -31,6 +31,8 @@ import javax.inject.Inject
 @InternalCoroutinesApi
 class MainActivity : AppCompatActivity() {
 
+    private val TAG = "AppDebug"
+
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
@@ -111,8 +113,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
-    private val TAG = "AppDebug"
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)

@@ -16,7 +16,7 @@
             android:background="@color/colorPrimary"
             android:padding="10dp"
             android:text="Error"
-            android:textColor="@color/colorPrimaryDark"
+            android:textColor="@color/white"
             android:textSize="25sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

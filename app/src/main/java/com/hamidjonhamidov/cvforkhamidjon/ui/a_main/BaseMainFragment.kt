@@ -147,7 +147,7 @@ abstract class BaseMainFragment<Model>(
                     viewModel.inboxManager.removeMessageFromInbox(stateEvent.destinationView)
 
                     // wait for a second to proccess next message
-                    requireActivity().delayInBackgLaunchInMain(lifecycleScope, 500) {
+                    requireActivity().delayInBackgLaunchInMain(lifecycleScope, 2000) {
                         processNextMessage()
                     }
                 }
@@ -156,7 +156,7 @@ abstract class BaseMainFragment<Model>(
             is UIType.Toast -> {
                 activity?.showToast(newMessage.message.description)
                 viewModel.inboxManager.removeMessageFromInbox(stateEvent.destinationView)
-                requireActivity().delayInBackgLaunchInMain(lifecycleScope, 500) {
+                requireActivity().delayInBackgLaunchInMain(lifecycleScope, 2000) {
                     processNextMessage()
                 }
             }

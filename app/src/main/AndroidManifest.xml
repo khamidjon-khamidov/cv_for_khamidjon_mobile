@@ -10,9 +10,9 @@
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/profile_4"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/profile_4"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".ui.d_contact.ContactActivity"
