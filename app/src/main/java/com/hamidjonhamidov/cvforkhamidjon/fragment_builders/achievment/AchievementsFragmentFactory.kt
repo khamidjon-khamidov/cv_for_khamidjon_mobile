@@ -41,7 +41,7 @@ constructor(
             }
 
             DetailsFragment::class.java.name -> {
-                DetailsFragment(glideManager)
+                DetailsFragment(glideManager, viewModelProviderFactory)
             }
 
             else -> super.instantiate(classLoader, className)

@@ -3,14 +3,19 @@ package com.hamidjonhamidov.cvforkhamidjon.ui.b_achievments.b_algorithms
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-
 import com.hamidjonhamidov.cvforkhamidjon.R
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.achievements.AchievementModel
 import com.hamidjonhamidov.cvforkhamidjon.ui.b_achievments.AchievmentsActivity
+import com.hamidjonhamidov.cvforkhamidjon.ui.b_achievments.d_detail.DetailsFragment
+import com.hamidjonhamidov.cvforkhamidjon.ui.b_achievments.d_detail.DetailsFragment.Companion.RES_NAME_ALGORITHMS
+import com.hamidjonhamidov.cvforkhamidjon.ui.b_achievments.d_detail.DetailsFragment.Companion.RES_NAME_ANDROID
+import com.hamidjonhamidov.cvforkhamidjon.ui.b_achievments.d_detail.DetailsFragmentArgs
 import com.hamidjonhamidov.cvforkhamidjon.ui.b_achievments.viewmodel.AchievementsViewModel
 import com.hamidjonhamidov.cvforkhamidjon.util.glide.GlideManager
 import com.hamidjonhamidov.cvforkhamidjon.util.recycler.AchievementAdapter
@@ -68,6 +73,10 @@ class AlgorithmsFragment(
     }
 
     override fun onAchievmentClick(position: Int) {
-
+        val bundle = bundleOf(
+            "resName" to RES_NAME_ALGORITHMS,
+            "position" to position
+        )
+        findNavController().navigate(R.id.action_algorithmsFragment_to_detailsFragment2, bundle)
     }
 }

@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: "androidx.navigation.safeargs"
 apply plugin: 'com.google.gms.google-services'
 android {
     compileSdkVersion 29
@@ -128,6 +129,9 @@ dependencies {
 
     // testing backgr thread
     testImplementation "androidx.arch.core:core-testing:2.1.0"
+
+    // zoom in image view
+    implementation 'com.github.chrisbanes:PhotoView:2.1.3'
 
     // google services setup
     implementation 'com.google.firebase:firebase-messaging:20.2.0'

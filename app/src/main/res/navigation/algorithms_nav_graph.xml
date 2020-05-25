@@ -9,14 +9,27 @@
         android:id="@+id/algorithmsFragment"
         android:name="com.hamidjonhamidov.cvforkhamidjon.ui.b_achievments.b_algorithms.AlgorithmsFragment"
         android:label="Algorithms"
-        tools:layout="@layout/fragment_algorithms" >
+        tools:layout="@layout/fragment_algorithms">
         <action
             android:id="@+id/action_algorithmsFragment_to_detailsFragment2"
-            app:destination="@id/detailsFragment2" />
+            app:destination="@id/detailsFragment2"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
     </fragment>
     <fragment
         android:id="@+id/detailsFragment2"
         android:name="com.hamidjonhamidov.cvforkhamidjon.ui.b_achievments.d_detail.DetailsFragment"
         android:label="Details"
-        tools:layout="@layout/fragment_details" />
+        tools:layout="@layout/fragment_details">
+        <argument
+            android:name="resName"
+            android:defaultValue="nothing"
+            app:argType="string" />
+        <argument
+            android:name="position"
+            android:defaultValue="-1"
+            app:argType="integer" />
+    </fragment>
 </navigation>

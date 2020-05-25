@@ -15,5 +15,6 @@
 
     <color name="black">#000</color>
     <color name="blue">#068DF8</color>
+    <color name="pale_grey">#F4F4F4</color>
 
 </resources>

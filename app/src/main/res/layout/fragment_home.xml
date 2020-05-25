@@ -20,7 +20,7 @@
             android:focusable="true"
             android:clickable="true"
             android:foreground="?selectableItemBackgroundBorderless"
-            android:background="#F4F4F4"
+            android:background="@color/pale_grey"
             tools:ignore="UnusedAttribute">
 
             <TextView

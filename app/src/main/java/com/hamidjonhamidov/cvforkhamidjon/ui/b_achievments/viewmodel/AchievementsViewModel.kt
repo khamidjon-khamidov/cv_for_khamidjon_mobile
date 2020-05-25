@@ -126,7 +126,7 @@ constructor(
             refreshLimitController.incrementSyncTime(stateEvent.destinationView)
         }
 
-        dataState.viewState.achievementsFragmentView.achievements?.let {
+        data.achievementsFragmentView.achievements?.let {
             setAchievments(it)
         }
     }
