@@ -99,6 +99,11 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
 
+                R.id.mi_exit -> {
+                    finish()
+                    true
+                }
+
                 else -> {
                     drawer_layout.closeDrawer(GravityCompat.START)
                     it.onNavDestinationSelected(navController)
