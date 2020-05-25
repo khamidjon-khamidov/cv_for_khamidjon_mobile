@@ -1,6 +1,6 @@
 #my files
 **/SOME_CONSTANTS.kt
-
+**/google-services.json
 # Built application files
 *.apk
 *.aar

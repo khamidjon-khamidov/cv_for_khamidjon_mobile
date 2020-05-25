@@ -20,12 +20,12 @@ class ContactMeAdapter
         }
 
         override fun areItemsTheSame(oldItem: MessageModel, newItem: MessageModel): Boolean {
-            return newItem.order == oldItem.order && newItem.status == oldItem.status && newItem.msg==oldItem.msg
+            return newItem.order == oldItem.order && newItem.status == oldItem.status && newItem.msg == oldItem.msg
         }
     }
 
     private val differ = AsyncListDiffer(this, DIFF_CALLBACK)
-    
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         Log.d(TAG, "ContactMeAdapter: onCreateViewHolder: ")
         return when (viewType) {
@@ -67,7 +67,7 @@ class ContactMeAdapter
 
 
     override fun getItemViewType(position: Int) =
-        if (differ.currentList[position].toWhom == WHO_ME) {
+        if (differ.currentList[position].whoSent == WHO_ME) {
             VIEW_TYPE_ME
         } else {
             VIEW_TYPE_HIM
@@ -82,7 +82,11 @@ class ContactMeAdapter
     private val TAG = "AppDebug"
 
     fun submitList(list: List<MessageModel>) {
-        differ.submitList(list)
+        if (list.isNotEmpty()) {
+            val t = list.map { it.msg }.reduce { acc, it -> "$acc, $it" }
+            Log.d(TAG, "ContactMeAdapter: submitList: $t")
+        }
+        differ . submitList (list)
     }
 
     companion object {

@@ -1,6 +1,7 @@
 package com.hamidjonhamidov.cvforkhamidjon.util.recycler
 
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.hamidjonhamidov.cvforkhamidjon.R
@@ -19,8 +20,8 @@ class ContactMeViewHolderHim (
         msgTv.text = item.msg
 
         // bind isRead status
-        val msgIvRead = itemView.findViewById<CircleImageView>(R.id.contactme_iv_read_him)
-        val msgIvUnread = itemView.findViewById<CircleImageView>(R.id.contactme_iv_unread_him)
+        val msgIvRead = itemView.findViewById<ImageView>(R.id.contactme_iv_read_him)
+        val msgIvUnread = itemView.findViewById<ImageView>(R.id.contactme_iv_unread_him)
         if(item.status==MessageModel.STATUS_SENT){
             msgIvRead.visibility = View.VISIBLE
             msgIvUnread.visibility = View.GONE

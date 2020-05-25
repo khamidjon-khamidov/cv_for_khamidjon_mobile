@@ -1,7 +1,6 @@
 package com.hamidjonhamidov.cvforkhamidjon.ui.d_contact.viewmodel
 
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.contact.MessageModel
-import com.hamidjonhamidov.cvforkhamidjon.models.offline.contact.NotificationsModel
 import com.hamidjonhamidov.cvforkhamidjon.repository.contacs.MessageResponse
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -17,14 +16,6 @@ fun ContactViewModel.setMessages(messages: ArrayList<MessageModel>) {
     setViewState(update)
 }
 
-@FlowPreview
-@ExperimentalCoroutinesApi
-@InternalCoroutinesApi
-fun ContactViewModel.setNotifications(notifications: ArrayList<NotificationsModel>) {
-    val update = getCurrentViewStateOrNew()
-    update.notificationsFragmentView.notifications = notifications
-    setViewState(update)
-}
 
 @FlowPreview
 @ExperimentalCoroutinesApi

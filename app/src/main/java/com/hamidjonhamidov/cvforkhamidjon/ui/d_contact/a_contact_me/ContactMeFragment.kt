@@ -9,13 +9,11 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-
 import com.hamidjonhamidov.cvforkhamidjon.R
-import com.hamidjonhamidov.cvforkhamidjon.models.offline.contact.MessageModel
 import com.hamidjonhamidov.cvforkhamidjon.ui.d_contact.viewmodel.ContactViewModel
 import com.hamidjonhamidov.cvforkhamidjon.ui.d_contact.viewmodel.getMessages
-import com.hamidjonhamidov.cvforkhamidjon.ui.d_contact.viewmodel.state.ContactsStateEvent
 import com.hamidjonhamidov.cvforkhamidjon.ui.d_contact.viewmodel.state.ContactsStateEvent.GetMessages
+import com.hamidjonhamidov.cvforkhamidjon.ui.d_contact.viewmodel.state.ContactsStateEvent.SendMessage
 import com.hamidjonhamidov.cvforkhamidjon.util.recycler.ContactMeAdapter
 import kotlinx.android.synthetic.main.fragment_contact_me.*
 import kotlinx.coroutines.*
@@ -35,9 +33,10 @@ class ContactMeFragment(
 
     lateinit var listAdapter: ContactMeAdapter
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setHasOptionsMenu(true)
+
         initData()
         initRecyclerView()
         bindViews()
@@ -54,7 +53,6 @@ class ContactMeFragment(
             val mLayoutManager = LinearLayoutManager(
                 this@ContactMeFragment.context
             )
-//            mLayoutManager.stackFromEnd = true
             setHasFixedSize(true)
             mLayoutManager.reverseLayout = true
 
@@ -81,7 +79,9 @@ class ContactMeFragment(
 
     private fun subscribeObservers() {
         viewModel.viewState.observe(viewLifecycleOwner, Observer {
+            Log.d(TAG, "ContactMeFragment: subscribeObserversContact: ${viewModel.getMessages().size}")
             listAdapter.submitList(viewModel.getMessages())
+            scrollToPosAfterDelay(0)
             viewModel.sendUnsentMessages()
         })
 
@@ -102,24 +102,10 @@ class ContactMeFragment(
         contact_iv_send_ic.setOnClickListener {
             contact_et_send.text?.toString()?.trim()?.let {
                 if (it != "") {
-                    val mMessage = MessageModel(
-                        getOrder(),
-                        MessageModel.WHO_HIM,
-                        it,
-                        MessageModel.STATUS_NOT_SENT
-                    )
                     contact_et_send.setText("")
-                    viewModel.setStateEvent(ContactsStateEvent.SendMessage(mMessage))
+                    viewModel.setStateEvent(SendMessage(it))
                 }
             }
-        }
-    }
-
-    private fun getOrder(): Int {
-        return if (viewModel.getMessages().isEmpty()) {
-            1
-        } else {
-            viewModel.getMessages()[0].order + 1
         }
     }
 

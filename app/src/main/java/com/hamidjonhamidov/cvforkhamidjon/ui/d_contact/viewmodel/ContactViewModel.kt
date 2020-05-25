@@ -5,6 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.contact.MessageModel
+import com.hamidjonhamidov.cvforkhamidjon.models.offline.contact.MessageModel.Companion.STATUS_NOT_SENT
+import com.hamidjonhamidov.cvforkhamidjon.models.offline.contact.MessageModel.Companion.WHO_HIM
 import com.hamidjonhamidov.cvforkhamidjon.repository.contacs.ContactsRepository
 import com.hamidjonhamidov.cvforkhamidjon.repository.contacs.MessageResponse
 import com.hamidjonhamidov.cvforkhamidjon.ui.d_contact.MessageNotifyModel
@@ -12,6 +14,7 @@ import com.hamidjonhamidov.cvforkhamidjon.ui.d_contact.viewmodel.state.ContactsS
 import com.hamidjonhamidov.cvforkhamidjon.ui.d_contact.viewmodel.state.ContactsStateEvent.*
 import com.hamidjonhamidov.cvforkhamidjon.ui.d_contact.viewmodel.state.ContactsViewState
 import com.hamidjonhamidov.cvforkhamidjon.util.NetworkConnection
+import com.hamidjonhamidov.cvforkhamidjon.util.TokenStoreManager
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.flow.Flow
@@ -27,7 +30,8 @@ class ContactViewModel
 @Inject
 constructor(
     private val contactsRepository: ContactsRepository,
-    private val networkConnection: NetworkConnection
+    private val networkConnection: NetworkConnection,
+    private val tokenStoreManager: TokenStoreManager
 ) : ViewModel() {
 
     private val TAG = "AppDebug"
@@ -93,28 +97,30 @@ constructor(
                 }
             }
 
-            is GetNotifications -> {
-                viewModelScope.launch {
-                    val notifications = contactsRepository.getNotificatins()
-                    withContext(Dispatchers.Main) { setNotifications(notifications) }
-                }
-            }
-
-            is SaveNotification -> {
-                viewModelScope.launch {
-                    contactsRepository.saveNotification(contactsStateEvent.notification)
-                }
-            }
-
             is SendMessage -> {
-                launchJob(contactsStateEvent.message) {
+                val message = buildMessage(contactsStateEvent.messageStr)
+                launchJob(message) {
                     contactsRepository.sendMessage(
-                        contactsStateEvent.message,
-                        networkConnection.isConectedToInternet()
+                        message,
+                        networkConnection.isConectedToInternet(),
+                        tokenStoreManager.getToken()?:""
                     )
                 }
             }
         }
+    }
+
+    private fun buildMessage(mesg: String): MessageModel {
+        val lastOrder = tokenStoreManager.getLasOrderNum()
+
+        val msg = MessageModel(
+            lastOrder,
+            WHO_HIM,
+            mesg,
+            STATUS_NOT_SENT
+        )
+        tokenStoreManager.saveLastOrderNumber(lastOrder+1)
+        return msg
     }
 
     private fun launchJob(message: MessageModel, jobFunc: () -> Flow<MessageResponse>) {
@@ -138,10 +144,11 @@ constructor(
                     continue
 
                 val messsageModel = getMessages()[i]
-                if (messsageModel.status == MessageModel.STATUS_NOT_SENT) {
+                if (messsageModel.status == STATUS_NOT_SENT && messsageModel.whoSent== WHO_HIM) {
                     contactsRepository.sendMessage(
                         messsageModel,
-                        networkConnection.isConectedToInternet()
+                        networkConnection.isConectedToInternet(),
+                        tokenStoreManager.getToken()?:""
                     ).onEach {
                         offerToDataChannel(it)
                     }

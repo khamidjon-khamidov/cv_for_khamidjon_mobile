@@ -8,7 +8,6 @@ import com.hamidjonhamidov.cvforkhamidjon.data_requests.persistence.contact.Cont
 import com.hamidjonhamidov.cvforkhamidjon.data_requests.persistence.main.*
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.achievements.AchievementModel
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.contact.MessageModel
-import com.hamidjonhamidov.cvforkhamidjon.models.offline.contact.NotificationsModel
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.*
 
 @Database(
@@ -18,7 +17,6 @@ import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.*
         AchievementModel::class,
         ProjectModel::class,
         PostModel::class,
-        NotificationsModel::class,
         MessageModel::class
     ],
     version = 1

@@ -12,7 +12,7 @@ data class MessageModel(
     @PrimaryKey
     var order: Int = 0,
 
-    var toWhom: Boolean = WHO_HIM,
+    var whoSent: Boolean = WHO_HIM,
 
     var msg: String = "",
 
@@ -34,7 +34,7 @@ data class MessageModel(
         other as MessageModel
 
         if (order != other.order) return false
-        if (toWhom != other.toWhom) return false
+        if (whoSent != other.whoSent) return false
         if (msg != other.msg) return false
         if (status != other.status) return false
 
@@ -43,7 +43,7 @@ data class MessageModel(
 
     override fun hashCode(): Int {
         var result = order
-        result = 31 * result + toWhom.hashCode()
+        result = 31 * result + whoSent.hashCode()
         result = 31 * result + msg.hashCode()
         result = 31 * result + status.hashCode()
         return result

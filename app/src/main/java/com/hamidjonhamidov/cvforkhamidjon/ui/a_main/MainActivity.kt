@@ -20,9 +20,6 @@ import com.hamidjonhamidov.cvforkhamidjon.ui.b_achievments.AchievmentsActivity
 import com.hamidjonhamidov.cvforkhamidjon.ui.a_main.viewmodel.MainViewModel
 import com.hamidjonhamidov.cvforkhamidjon.ui.c_source_code.SourceCodeActivity
 import com.hamidjonhamidov.cvforkhamidjon.ui.d_contact.ContactActivity
-import com.hamidjonhamidov.cvforkhamidjon.ui.d_contact.ContactActivity.Companion.CONTACT_BUNDLE
-import com.hamidjonhamidov.cvforkhamidjon.ui.d_contact.ContactActivity.Companion.TO_CONTACTME
-import com.hamidjonhamidov.cvforkhamidjon.ui.d_contact.ContactActivity.Companion.TO_NOTIFICATIONS
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -98,14 +95,6 @@ class MainActivity : AppCompatActivity() {
 
                 R.id.mi_contact_me -> {
                     val mIntent = Intent(this, ContactActivity::class.java)
-                    mIntent.putExtra(CONTACT_BUNDLE, TO_CONTACTME)
-                    startActivity(mIntent)
-                    true
-                }
-
-                R.id.mi_notifications -> {
-                    val mIntent = Intent(this, ContactActivity::class.java)
-                    mIntent.putExtra(CONTACT_BUNDLE, TO_NOTIFICATIONS)
                     startActivity(mIntent)
                     true
                 }

@@ -51,11 +51,6 @@
                 android:title="@string/menu_title_contact" />
 
             <item
-                android:id="@+id/mi_notifications"
-                android:icon="@drawable/notification"
-                android:title="@string/notifications" />
-
-            <item
                 android:id="@+id/mi_exit"
                 android:icon="@drawable/exit"
                 android:title="@string/exit" />

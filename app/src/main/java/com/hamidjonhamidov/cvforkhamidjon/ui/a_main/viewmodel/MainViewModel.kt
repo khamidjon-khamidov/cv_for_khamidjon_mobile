@@ -9,6 +9,7 @@ import com.hamidjonhamidov.cvforkhamidjon.util.*
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_ALREADY_IN_PROGRESS
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.NETWORK_CACHE_SUCCESS_TITLE
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NOT_ALLOWED
+import com.hamidjonhamidov.cvforkhamidjon.util.constants.PERSONAL_INFO
 import com.hamidjonhamidov.cvforkhamidjon.util.shared_prefs.RefreshLimitController
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
@@ -170,6 +171,9 @@ constructor(
         }
 
         dataState.viewState.homeFragmentView.aboutMe?.let {
+            if(it.phone.isNotEmpty()){
+                PERSONAL_INFO.PHONE_NUM = it.phone
+            }
             setAboutMe(it)
         }
 
