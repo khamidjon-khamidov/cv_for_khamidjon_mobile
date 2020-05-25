@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "783521924267",
+    "firebase_url": "https://cvforkhamidjon.firebaseio.com",
+    "project_id": "cvforkhamidjon",
+    "storage_bucket": "cvforkhamidjon.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:783521924267:android:210f663d89112c63a0a3ee",
+        "android_client_info": {
+          "package_name": "com.hamidjonhamidov.cvforkhamidjon"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "783521924267-mkj3da69ik061v8egh96jgmn25vo9pc3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXhDEFZ0hourgjOxp0YLozncxW_FQ_zNs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "783521924267-mkj3da69ik061v8egh96jgmn25vo9pc3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
