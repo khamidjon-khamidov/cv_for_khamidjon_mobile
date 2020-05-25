@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.main.b_aboutme.AboutMeFragment">
+    tools:context=".ui.a_main.b_aboutme.AboutMeFragment">
 
     <LinearLayout
         android:layout_width="match_parent"

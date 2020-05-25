@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:id="@+id/myskills_fragment"
     android:layout_height="match_parent"
-    tools:context=".ui.main.c_myskills.MySkillsFragment">
+    tools:context=".ui.a_main.c_myskills.MySkillsFragment">
 
 
     <androidx.recyclerview.widget.RecyclerView

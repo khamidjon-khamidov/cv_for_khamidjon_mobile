@@ -7,9 +7,9 @@ import com.hamidjonhamidov.cvforkhamidjon.models.api.achievments.AchievementRemo
 import com.hamidjonhamidov.cvforkhamidjon.models.api.achievments.convertToAchievmentModel
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.achievements.AchievementModel
 import com.hamidjonhamidov.cvforkhamidjon.repository.NetworkApiCall
-import com.hamidjonhamidov.cvforkhamidjon.ui.achievments.viewmodel.state.AchievementsStateEvent
-import com.hamidjonhamidov.cvforkhamidjon.ui.achievments.viewmodel.state.AchievementsViewState
-import com.hamidjonhamidov.cvforkhamidjon.ui.achievments.viewmodel.state.AchievementsViewState.AchievementsFragmentView
+import com.hamidjonhamidov.cvforkhamidjon.ui.b_achievments.viewmodel.state.AchievementsStateEvent
+import com.hamidjonhamidov.cvforkhamidjon.ui.b_achievments.viewmodel.state.AchievementsViewState
+import com.hamidjonhamidov.cvforkhamidjon.ui.b_achievments.viewmodel.state.AchievementsViewState.AchievementsFragmentView
 import com.hamidjonhamidov.cvforkhamidjon.util.ApiResponseHandler
 import com.hamidjonhamidov.cvforkhamidjon.util.ApiResult
 import com.hamidjonhamidov.cvforkhamidjon.util.DataState

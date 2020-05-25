@@ -1,7 +1,7 @@
 package com.hamidjonhamidov.cvforkhamidjon.util.data_manager
 
-import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainJobsEvent
-import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainJobsEvent.*
+import com.hamidjonhamidov.cvforkhamidjon.ui.a_main.viewmodel.state.MainJobsEvent
+import com.hamidjonhamidov.cvforkhamidjon.ui.a_main.viewmodel.state.MainJobsEvent.*
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -18,20 +18,20 @@ class JobManagerTest{
         SUT = JobManager()
     }
 
-    // add job -> new jobs, check job is active
-    @Test
-    fun addJob_addNewJobs_checkIfActive() {
-        // arrange
-
-        // act
-        SUT.addJob(GetAboutMe())
-        SUT.addJob(GetAchievements())
-
-        // assert
-        assertEquals(SUT.isJobActive(GetAchievements()), true)
-        assertEquals(SUT.isJobActive(GetAboutMe()), true)
-
-    }
+//    // add job -> new jobs, check job is active
+//    @Test
+//    fun addJob_addNewJobs_checkIfActive() {
+//        // arrange
+//
+//        // act
+//        SUT.addJob(GetAboutMe())
+//        SUT.addJob(GetAchievements())
+//
+//        // assert
+//        assertEquals(SUT.isJobActive(GetAchievements()), true)
+//        assertEquals(SUT.isJobActive(GetAboutMe()), true)
+//
+//    }
 
     // add job -> 2 same type of jobs, second adding is false
     @Test

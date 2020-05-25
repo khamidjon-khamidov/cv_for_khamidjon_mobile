@@ -4,10 +4,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
 import androidx.lifecycle.ViewModelProvider
 import com.hamidjonhamidov.cvforkhamidjon.di.achievements_subcomponent.AchievmentsScope
-import com.hamidjonhamidov.cvforkhamidjon.ui.achievments.a_android.AndroidFragment
-import com.hamidjonhamidov.cvforkhamidjon.ui.achievments.b_algorithms.AlgorithmsFragment
-import com.hamidjonhamidov.cvforkhamidjon.ui.achievments.c_others.OthersFragment
-import com.hamidjonhamidov.cvforkhamidjon.ui.achievments.d_detail.DetailsFragment
+import com.hamidjonhamidov.cvforkhamidjon.ui.b_achievments.a_android.AndroidFragment
+import com.hamidjonhamidov.cvforkhamidjon.ui.b_achievments.b_algorithms.AlgorithmsFragment
+import com.hamidjonhamidov.cvforkhamidjon.ui.b_achievments.c_others.OthersFragment
+import com.hamidjonhamidov.cvforkhamidjon.ui.b_achievments.d_detail.DetailsFragment
 import com.hamidjonhamidov.cvforkhamidjon.util.glide.GlideManager
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview

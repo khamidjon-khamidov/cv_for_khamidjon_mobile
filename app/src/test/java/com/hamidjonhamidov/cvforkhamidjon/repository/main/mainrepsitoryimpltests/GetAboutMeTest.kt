@@ -7,11 +7,10 @@ import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.AboutMeModel
 import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImpl
 import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImplTestConstants.ABOUTME_MODEL
 import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImplTestConstants.ABOUTME_REMOTE_MODEL
-import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImplTestConstants.GETABOUTME
 import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImplTestConstants.GETHOME
-import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainJobsEvent
-import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainStateEvent
-import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainViewDestEvent
+import com.hamidjonhamidov.cvforkhamidjon.ui.a_main.viewmodel.state.MainJobsEvent
+import com.hamidjonhamidov.cvforkhamidjon.ui.a_main.viewmodel.state.MainStateEvent
+import com.hamidjonhamidov.cvforkhamidjon.ui.a_main.viewmodel.state.MainViewDestEvent
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NETWORK_ERROR_CACHE_EMPTY
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NETWORK_ERROR_CACHE_SUCCESS

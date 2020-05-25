@@ -1,7 +1,7 @@
 package com.hamidjonhamidov.cvforkhamidjon.di.main_subcomponent
 
 import com.hamidjonhamidov.cvforkhamidjon.fragment_builders.main.MainNavHostFragment
-import com.hamidjonhamidov.cvforkhamidjon.ui.main.MainActivity
+import com.hamidjonhamidov.cvforkhamidjon.ui.a_main.MainActivity
 import dagger.Subcomponent
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview

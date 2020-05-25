@@ -1,7 +1,7 @@
 package com.hamidjonhamidov.cvforkhamidjon.util.data_manager
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainViewDestEvent
+import com.hamidjonhamidov.cvforkhamidjon.ui.a_main.viewmodel.state.MainViewDestEvent
 import com.hamidjonhamidov.cvforkhamidjon.util.Message
 import com.hamidjonhamidov.cvforkhamidjon.util.UIType
 import kotlinx.coroutines.delay

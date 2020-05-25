@@ -5,6 +5,7 @@ import android.preference.PreferenceManager
 import androidx.room.Room
 import com.bumptech.glide.Glide
 import com.hamidjonhamidov.cvforkhamidjon.data_requests.persistence.AppDatabase
+import com.hamidjonhamidov.cvforkhamidjon.util.TokenStoreManager
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.DATABASE_CONSTANTS
 import com.hamidjonhamidov.cvforkhamidjon.util.glide.GlideManager
 import com.hamidjonhamidov.cvforkhamidjon.util.glide.GlideRequestManager
@@ -24,6 +25,12 @@ object AppModule{
         GlideRequestManager(
             Glide.with(application)
         )
+
+    @JvmStatic
+    @Singleton
+    @Provides
+    fun provideTokenStoreManager(app: Application) =
+        TokenStoreManager(app)
 
     @JvmStatic
     @Singleton

@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/algorithmsFragment"
-        android:name="com.hamidjonhamidov.cvforkhamidjon.ui.achievments.b_algorithms.AlgorithmsFragment"
+        android:name="com.hamidjonhamidov.cvforkhamidjon.ui.b_achievments.b_algorithms.AlgorithmsFragment"
         android:label="Algorithms"
         tools:layout="@layout/fragment_algorithms" >
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/detailsFragment2"
-        android:name="com.hamidjonhamidov.cvforkhamidjon.ui.achievments.d_detail.DetailsFragment"
+        android:name="com.hamidjonhamidov.cvforkhamidjon.ui.b_achievments.d_detail.DetailsFragment"
         android:label="Details"
         tools:layout="@layout/fragment_details" />
 </navigation>

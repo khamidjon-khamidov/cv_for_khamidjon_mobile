@@ -7,10 +7,9 @@ import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.PostModel
 import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImpl
 import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImplTestConstants.POST_MODEL_LIST
 import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImplTestConstants.POST_REMOTE_LIST
-import com.hamidjonhamidov.cvforkhamidjon.repository.main.MainRepositoryImplTestConstants.PROJECT_MODEL_LIST
-import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainJobsEvent
-import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainStateEvent
-import com.hamidjonhamidov.cvforkhamidjon.ui.main.viewmodel.state.MainViewDestEvent
+import com.hamidjonhamidov.cvforkhamidjon.ui.a_main.viewmodel.state.MainJobsEvent
+import com.hamidjonhamidov.cvforkhamidjon.ui.a_main.viewmodel.state.MainStateEvent
+import com.hamidjonhamidov.cvforkhamidjon.ui.a_main.viewmodel.state.MainViewDestEvent
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NETWORK_ERROR_CACHE_EMPTY
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NETWORK_ERROR_CACHE_SUCCESS
@@ -27,7 +26,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
