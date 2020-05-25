@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:exitFadeDuration="500"
+    android:enterFadeDuration="500">
+
+    <item
+        android:drawable="@drawable/selected_state"
+        android:state_pressed="true"/>
+
+</selector>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginStart="7dp"
+    android:layout_marginEnd="7dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="10dp"
+    app:cardBackgroundColor="#F4F4F4"
+    app:cardCornerRadius="7dp"
+    android:animateLayoutChanges="true"
+    android:background="?attr/selectableItemBackground"
+    app:strokeColor="@color/colorPrimary"
+    app:strokeWidth="0.2dp"
+    android:elevation="7dp">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true">
+
+        <TextView
+            android:id="@+id/skills_tv_skill_item_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:gravity="center_horizontal"
+            android:paddingBottom="10dp"
+            android:textSize="24sp"
+            android:textColor="@color/red"
+            android:text="Skill Item"
+            />
+
+        <LinearLayout
+            android:id="@+id/skills_ll_progress_cont"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/skills_tv_skill_item_title"
+            android:weightSum="100"
+            android:paddingStart="7dp"
+            android:paddingEnd="7dp"
+            android:paddingTop="7dp"
+            android:paddingBottom="15dp">
+
+            <TextView
+                android:id="@+id/skills_tv_progress_pos"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0"
+                android:background="@color/colorPrimary"/>
+
+            <TextView
+                android:id="@+id/skills_tv_progress_neg"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="100"
+                android:background="#DCDCDC"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/skills_tv_item"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/skills_ll_progress_cont"
+            android:text="@string/skill_dummy_items"
+            android:textColor="@color/colorAccent"
+            android:letterSpacing="0.0"
+            android:lineHeight="25dp"
+            android:padding="10dp"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,142 +1,89 @@
-package com.hamidjonhamidov.whoiskhamidjon.models.about_me
+package com.hamidjonhamidov.cvforkhamidjon.models.offline.main
 
 import android.os.Parcelable
-import android.util.Log
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.IgnoredOnParcel
 import kotlinx.android.parcel.Parcelize
+import kotlinx.android.parcel.RawValue
 
 @Parcelize
 @Entity(tableName = "about_me")
-class AboutMeModel(
+data class AboutMeModel(
 
-    @SerializedName("pk")
-    @Expose
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "pk") var pk: Int = -1,
+    @ColumnInfo(name = "dateOfBirth")
+    var dateOfBirth: String = "14 Sep 1998",
 
-    @SerializedName("email")
-    @Expose
-    @ColumnInfo(name = "email") var email: String = "Could'nt load",
+    @ColumnInfo(name = "address")
+    var address: String = "133B Granville Road, London",
 
-    @SerializedName("address")
-    @Expose
-    @ColumnInfo(name = "address") var address: String = "Could'nt load",
+    @ColumnInfo(name = "email")
+    var email: String = "hamidovhamid1998@mail.ru",
 
-    @SerializedName("phone_number")
-    @Expose
-    @ColumnInfo(name = "phone_number") var phone_number: String = "Could'nt load",
+    @ColumnInfo(name = "phone")
+    var phone: String = "07565 336207",
 
-    @SerializedName("tuit")
-    @Expose
-    @ColumnInfo(name = "tuit") var tuit: String = "Could'nt load",
+    @ColumnInfo(name = "education")
+    var education: @RawValue List<Education> = listOf(),
 
-    @SerializedName("south_bank")
-    @Expose
-    @ColumnInfo(name = "south_bank") var south_bank: String = "Couldn't load",
+    @ColumnInfo(name = "pictureLinke") var pictureLink: String = "",
 
-    @SerializedName("profile_image_url")
-    @Expose
-    @ColumnInfo(name = "profile_image_url") var profile_image_url: String = "Couldn't load"
+    @ColumnInfo(name = "description") var description: String = "",
 
+    @ColumnInfo(name = "cvLink") var cvLink: String = ""
 
 ) : Parcelable {
 
+    @IgnoredOnParcel
+    @PrimaryKey
+    @ColumnInfo(name = "pk") var pk: Int = 1
+
     override fun equals(other: Any?): Boolean {
+        if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
         other as AboutMeModel
 
-        if (pk == other.pk &&
-            email == other.email &&
-            address == other.address &&
-            phone_number == other.phone_number &&
-            tuit == other.tuit &&
-            south_bank == other.south_bank &&
-            profile_image_url == other.profile_image_url
-        )
-            return true
+        if (dateOfBirth != other.dateOfBirth) return false
+        if (address != other.address) return false
+        if (email != other.email) return false
+        if (phone != other.phone) return false
+        if (education != other.education) return false
+        if (pictureLink != other.pictureLink) return false
+        if (description != other.description) return false
 
-        return false
-    }
-
-    private fun convertUniStrToArrayList(someStr: String): ArrayList<String> {
-
-        if (someStr.isEmpty()) return ArrayList()
-
-        var str = someStr
-        str = str.removeRange(0, 1)
-        str = str.removeRange(str.length - 1, str.length)
-
-
-
-        return str.trim().splitToSequence(',')
-            .filter { it.isNotEmpty() }
-            .toCollection(ArrayList())
-    }
-
-    fun convertStrToSubject(listInString: String): Subject {
-        val list = convertUniStrToArrayList(listInString)
-        var subjectOr = ""
-        var scoreOr = ""
-
-        var i = 0
-        val TAG = "AppDebug"
-        Log.d(TAG, "AboutMeModel: convertStrToSubject: item = $list")
-        for (item in list) {
-            Log.d(TAG, "AboutMeModel: convertStrToSubject: item = $item")
-            val subject = item.substring(0, item.lastIndexOf("-")).trim()
-            val score = item.substring(item.lastIndexOf("-") + 1, item.length).trim()
-
-            i++
-            subjectOr = "$subjectOr\n$i. $subject\n"
-            scoreOr = "$scoreOr\n$score\n"
-
-        }
-
-        Log.d(TAG, "AboutMeModel: convertStrToSubject: subjectOr = $subjectOr")
-        Log.d(TAG, "AboutMeModel: convertStrToSubject: scoreOr = $scoreOr")
-        return Subject(subjectOr, scoreOr)
-    }
-
-
-    override fun toString(): String {
-        return """
-            pk=$pk, email=$email, address=$address, phoneNumber=$phone_number, tuit=$tuit, southBank=$south_bank, profile_image_url=$profile_image_url
-        """.trimIndent()
+        return true
     }
 
     override fun hashCode(): Int {
-        var result = pk
-        result = 31 * result + email.hashCode()
+        var result = dateOfBirth.hashCode()
         result = 31 * result + address.hashCode()
-        result = 31 * result + phone_number.hashCode()
-        result = 31 * result + tuit.hashCode()
-        result = 31 * result + south_bank.hashCode()
-        result = 31 * result + profile_image_url.hashCode()
+        result = 31 * result + email.hashCode()
+        result = 31 * result + phone.hashCode()
+        result = 31 * result + education.hashCode()
+        result = 31 * result + pictureLink.hashCode()
+        result = 31 * result + description.hashCode()
         return result
     }
+
+    override fun toString(): String {
+        return "AboutMeInfo(dateOfBirth='$dateOfBirth', address='$address', email='$email', phone='$phone', education=$education, pictureLink='$pictureLink', description='$description')"
+    }
+
+
 }
+data class Education(
+    @SerializedName("name")
+    @Expose
+    val name: String,
 
-data class Subject(var subject: String = "", var score: String = "")
-
-
-// sun to phonebox
-// boys to boys
-// add another picture (star)
-
-
-
-
-
-
-
-
-
-
+    @SerializedName("link")
+    @Expose
+    val link: String
+)
 
 
 

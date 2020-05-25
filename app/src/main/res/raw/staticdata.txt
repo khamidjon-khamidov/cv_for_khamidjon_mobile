@@ -1,0 +1,37 @@
+package com.hamidjonhamidov.cvforkhamidjon.ui.c_source_code
+
+import com.hamidjonhamidov.cvforkhamidjon.R
+import com.hamidjonhamidov.cvforkhamidjon.ui.c_source_code.custom_treeview.PathFile
+
+object StaticData {
+
+    val leafFileList = listOf(
+        PathFile(listOf("whoiskhamidjon", "di", "blog_posts", "BlogFragmentBuildersModule"), R.raw.appcomponent)
+
+
+    )
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

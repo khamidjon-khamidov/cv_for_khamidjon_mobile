@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingTop="10dp"
+    android:paddingBottom="30dp"
+    android:paddingStart="30dp"
+    android:paddingEnd="30dp"
+    android:background="@android:color/transparent">
+
+
+       <androidx.constraintlayout.widget.ConstraintLayout
+           android:id="@+id/post_card_front"
+           android:layout_width="match_parent"
+           android:layout_height="300dp"
+           android:alpha="1"
+           android:background="#F4F4F4"
+           app:layout_constraintTop_toTopOf="parent"
+           app:layout_constraintLeft_toLeftOf="parent"
+           app:layout_constraintRight_toRightOf="parent"
+           app:layout_constraintBottom_toBottomOf="parent">
+
+           <ImageView
+               android:id="@+id/post_img_front"
+               android:layout_width="match_parent"
+               android:background="@color/white"
+               android:layout_height="match_parent"
+               android:scaleType="centerCrop"
+               android:src="@drawable/hamidjon"/>
+
+           <TextView
+               android:id="@+id/post_tv__title_front"
+               android:layout_width="0dp"
+               android:layout_height="wrap_content"
+               app:layout_constraintLeft_toLeftOf="parent"
+               app:layout_constraintBottom_toBottomOf="parent"
+               android:text="This is dummy description"
+               android:padding="5dp"
+               android:gravity="center"
+               android:background="#92000000"
+               app:layout_constraintRight_toLeftOf="@id/post_btn_rotate_front"
+               android:textColor="@color/colorPrimary"
+               android:textSize="18sp"/>
+
+           <ImageButton
+               android:id="@+id/post_btn_rotate_front"
+               android:layout_width="30dp"
+               android:layout_height="0dp"
+               android:src="@drawable/ic_3d_rotation_black_24dp"
+               app:layout_constraintTop_toTopOf="@id/post_tv__title_front"
+               app:layout_constraintLeft_toRightOf="@id/post_tv__title_front"
+               app:layout_constraintRight_toRightOf="parent"
+               app:layout_constraintBottom_toBottomOf="parent"
+               android:background="@drawable/custom_rotate_btn"/>
+
+
+       </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+       <androidx.constraintlayout.widget.ConstraintLayout
+           android:id="@+id/post_card_back"
+           android:layout_width="match_parent"
+           android:layout_height="300dp"
+           android:background="#F4F4F4"
+           app:layout_constraintTop_toTopOf="parent"
+           app:layout_constraintLeft_toLeftOf="parent"
+           app:layout_constraintRight_toRightOf="parent"
+           app:layout_constraintBottom_toBottomOf="parent"
+           android:alpha="0">
+
+           <ImageView
+               android:id="@+id/post_img_back"
+               android:layout_width="match_parent"
+               android:background="@color/white"
+               android:layout_height="match_parent"
+               android:scaleType="centerCrop"
+               android:src="@drawable/sorry"/>
+
+           <TextView
+               android:id="@+id/post_tv__title_back"
+               android:layout_width="0dp"
+               android:layout_height="wrap_content"
+               app:layout_constraintLeft_toLeftOf="parent"
+               app:layout_constraintBottom_toBottomOf="parent"
+               android:text="Sorry, data unavailable or finished!"
+               android:padding="5dp"
+               android:background="#92000000"
+               app:layout_constraintRight_toLeftOf="@id/post_btn_rotate_back"
+               android:textColor="@color/colorPrimary"
+               android:gravity="center"
+               android:textSize="18sp"/>
+
+           <ImageButton
+               android:id="@+id/post_btn_rotate_back"
+               android:layout_width="30dp"
+               android:layout_height="0dp"
+               android:src="@drawable/ic_3d_rotation_black_24dp"
+               app:layout_constraintTop_toTopOf="@id/post_tv__title_back"
+               app:layout_constraintLeft_toRightOf="@id/post_tv__title_back"
+               app:layout_constraintRight_toRightOf="parent"
+               app:layout_constraintBottom_toBottomOf="parent"
+               android:background="@drawable/custom_rotate_btn"/>
+
+
+       </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

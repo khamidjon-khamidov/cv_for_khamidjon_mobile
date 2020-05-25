@@ -1,0 +1,22 @@
+<selector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+    <item
+        android:drawable="@color/project_color"
+        android:state_pressed="true"/>
+
+    <item android:drawable="@color/project_color"
+        android:state_enabled="true"/>
+
+
+
+<!--    <item-->
+<!--        android:drawable="YOUR IMAGE OR COLOR"-->
+
+<!--        android:state_selected="true"/>-->
+<!--    <item-->
+<!--        android:drawable="YOUR IMAGE OR COLOR"-->
+
+<!--        android:state_focused="true"/>-->
+
+</selector>
