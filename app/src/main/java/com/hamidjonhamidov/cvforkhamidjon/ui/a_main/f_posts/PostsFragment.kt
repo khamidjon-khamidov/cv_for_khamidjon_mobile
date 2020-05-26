@@ -25,7 +25,12 @@ class PostsFragment(
     viewModelProvider: ViewModelProvider.Factory,
     val glideManager: GlideManager,
     val postsStateEvent: MainStateEvent
-) : BaseMainFragment<PostModel>(R.layout.fragment_posts, R.menu.only_refresh_menu, viewModelProvider, postsStateEvent) {
+) : BaseMainFragment<PostModel>(
+    R.layout.fragment_posts,
+    R.menu.only_refresh_menu,
+    viewModelProvider,
+    postsStateEvent
+) {
 
     private val TAG = "AppDebug"
 
@@ -36,7 +41,6 @@ class PostsFragment(
         viewModel.viewState.observe(viewLifecycleOwner, Observer { viewState ->
             viewState?.postsFragmentView?.let {
                 it.doublePosts?.let { posts ->
-                    Log.d(TAG, "PostsFragment: subscribeDataObservers: ${posts[0].postModel2}")
                     updateRecylerView(posts)
                 }
             }
@@ -44,7 +48,7 @@ class PostsFragment(
     }
 
     override fun initData() {
-        posts_recycler_view.apply{
+        posts_recycler_view.apply {
             layoutManager = LinearLayoutManager(this@PostsFragment.context)
             listAdapter = PostAdapter(null, requireContext(), glideManager)
             adapter = listAdapter
@@ -54,20 +58,25 @@ class PostsFragment(
             !viewModel.jobManger.isJobActive(postsStateEvent.responsibleJob)
         ) {
             viewModel.setStateEvent(postsStateEvent)
-        } else {
-            updateRecylerView(viewModel.getCurrentViewStateOrNew().postsFragmentView.doublePosts!!)
         }
 
+        updateRecylerView(viewModel.getCurrentViewStateOrNew().postsFragmentView.doublePosts)
     }
 
     override fun updateView(myModel: PostModel?) {
 
     }
 
-    override fun updateView(modelList: List<PostModel>) {}
+    override fun updateView(modelList: List<PostModel>?) {}
 
-    fun updateRecylerView(doubleList: List<DoublePostModel>){
-        listAdapter.submitList(doubleList)
+    fun updateRecylerView(doubleList: List<DoublePostModel>?) {
+        doubleList?.let {
+            listAdapter.submitList(doubleList)
+        }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d(TAG, "PostsFragment: onDestroy: ")
+    }
 }

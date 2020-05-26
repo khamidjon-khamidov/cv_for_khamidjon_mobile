@@ -5,8 +5,9 @@ import com.hamidjonhamidov.cvforkhamidjon.util.UIType
 
 object NetworkConstants {
 
-    const val NETWORK_TIMEOUT = 5000L
-    var NETWORK_DELAY = 0L
+    const val NETWORK_TIMEOUT = 12000L
+    val NETWORK_DELAY = 0L
+    val PROCESS_DELAY = 9000L
 
     // network errors
     const val NETWORK_ERROR_TIMEOUT = "Network Timeout"

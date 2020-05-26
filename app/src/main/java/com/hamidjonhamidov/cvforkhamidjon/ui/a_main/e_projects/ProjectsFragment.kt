@@ -1,5 +1,6 @@
 package com.hamidjonhamidov.cvforkhamidjon.ui.a_main.e_projects
 
+import android.util.Log
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,6 +32,8 @@ class ProjectsFragment(
     projectStateEvent
 ) {
 
+    private val TAG = "AppDebug"
+    
     lateinit var listAdapter: ProjectsAdapter
 
     override fun subscribeDataObservers() {
@@ -55,16 +58,18 @@ class ProjectsFragment(
             !viewModel.jobManger.isJobActive(projectStateEvent.responsibleJob)
         ) {
             viewModel.setStateEvent(projectStateEvent)
-        } else {
-            updateView(viewModel.getCurrentViewStateOrNew().projectsFragmentView.projects!!)
         }
+
+        updateView(viewModel.getCurrentViewStateOrNew().projectsFragmentView.projects)
 
     }
 
     override fun updateView(myModel: ProjectModel?) {}
 
-    override fun updateView(modelList: List<ProjectModel>) {
-        listAdapter.submitList(modelList)
+    override fun updateView(modelList: List<ProjectModel>?) {
+        modelList?.let{
+            listAdapter.submitList(modelList)
+        }
     }
 
     override fun onSourceCodeClick(position: Int) {
@@ -83,5 +88,9 @@ class ProjectsFragment(
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d(TAG, "ProjectsFragment: onDestroy: ")
+    }
 
 }

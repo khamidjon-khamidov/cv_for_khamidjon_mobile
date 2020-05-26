@@ -25,7 +25,7 @@
 
     <fragment
         android:id="@+id/aboutAppFragment"
-        android:name="com.hamidjonhamidov.cvforkhamidjon.ui.a_main.f_aboutapp.AboutAppFragment"
+        android:name="com.hamidjonhamidov.cvforkhamidjon.ui.a_main.g_aboutapp.AboutAppFragment"
         android:label="App Details"
         tools:layout="@layout/fragment_about_app" />
 

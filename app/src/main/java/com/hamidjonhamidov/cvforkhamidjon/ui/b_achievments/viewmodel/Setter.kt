@@ -15,30 +15,6 @@ fun AchievementsViewModel.setAchievments(achievments: List<AchievementModel>){
     setViewState(update)
 }
 
-@FlowPreview
-@ExperimentalCoroutinesApi
-@InternalCoroutinesApi
-fun AchievementsViewModel.setAndroidPos(pos: Int){
-    viewState.value?.achievementsFragmentView?.androidPos = pos
-}
-
-@FlowPreview
-@ExperimentalCoroutinesApi
-@InternalCoroutinesApi
-fun AchievementsViewModel.setAlgoPos(pos: Int) {
-    viewState.value?.achievementsFragmentView?.algoPos = pos
-}
-
-@FlowPreview
-@ExperimentalCoroutinesApi
-@InternalCoroutinesApi
-fun AchievementsViewModel.setOthersPos(pos: Int){
-    viewState.value?.achievementsFragmentView?.othersPos = pos
-}
-
-
-
-
 
 
 

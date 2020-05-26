@@ -1,5 +1,6 @@
 package com.hamidjonhamidov.cvforkhamidjon.ui.a_main.b_aboutme
 
+import android.util.Log
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 
@@ -33,6 +34,7 @@ class AboutMeFragment(
     aboutMeStateEvent
 ) {
 
+    private val TAG = "AppDebug"
 
     override fun subscribeDataObservers() {
         // observe data in about me
@@ -50,9 +52,9 @@ class AboutMeFragment(
             !viewModel.jobManger.isJobActive(aboutMeStateEvent.responsibleJob)
         ) {
             viewModel.setStateEvent(aboutMeStateEvent)
-        } else {
-            updateView(viewModel.getCurrentViewStateOrNew().homeFragmentView.aboutMe)
         }
+
+        updateView(viewModel.getCurrentViewStateOrNew().homeFragmentView.aboutMe)
 
         aboutme_tv_experience.text = DateUtil.getDifferenceWithCurrentDate()
 
@@ -90,14 +92,14 @@ class AboutMeFragment(
             }
         }
 
-        myModel?.phone?.let { phone->
+        myModel?.phone?.let { phone ->
             aboutme_tv_phone.setOnClickListener {
                 activity?.copyToClipboard(phone)
                 activity?.showToast("Copied to Clipboard")
             }
         }
 
-        myModel?.email?.let { email->
+        myModel?.email?.let { email ->
             aboutme_tv_email.setOnClickListener {
                 activity?.copyToClipboard(email)
                 activity?.showToast("Copied to Clipboard")
@@ -105,7 +107,10 @@ class AboutMeFragment(
         }
     }
 
-    override fun updateView(modelList: List<AboutMeModel>) {
+    override fun updateView(modelList: List<AboutMeModel>?) {}
 
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d(TAG, "AboutMeFragment: onDestroy: ")
     }
 }

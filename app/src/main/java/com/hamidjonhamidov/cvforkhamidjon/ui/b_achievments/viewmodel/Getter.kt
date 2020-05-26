@@ -38,20 +38,7 @@ fun AchievementsViewModel.getOthers(): List<Honor>{
 @FlowPreview
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
-fun AchievementsViewModel.getAndroidPos(pos: Int): Int{
-    return viewState.value?.achievementsFragmentView?.androidPos ?: -1
+fun AchievementsViewModel.getAchievments(): List<AchievementModel>?{
+    return viewState.value?.achievementsFragmentView?.achievements
 }
 
-@FlowPreview
-@ExperimentalCoroutinesApi
-@InternalCoroutinesApi
-fun AchievementsViewModel.getAlgoPos(pos: Int): Int{
-    return viewState.value?.achievementsFragmentView?.algoPos ?: -1
-}
-
-@FlowPreview
-@ExperimentalCoroutinesApi
-@InternalCoroutinesApi
-fun AchievementsViewModel.getOthersPos(pos: Int): Int{
-    return viewState.value?.achievementsFragmentView?.othersPos ?: -1
-}

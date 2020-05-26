@@ -18,12 +18,10 @@ import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAG
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NETWORK_SUCCESS_CACHE_SUCCESSS
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NO_INTERNET_CACHE_SUCCESS
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSSAGE_NETWORK_TIMEOUT_CACHE_SUCCESS
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
+import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.PROCESS_DELAY
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @MainActivityScope
@@ -42,6 +40,7 @@ constructor(
         isNetworkAllowed: Boolean
     ): Flow<DataState<MainViewState, MainStateEvent>> = flow {
 
+        delay(PROCESS_DELAY)
         // set network response to network error no internet available as a default
         var response: ApiResult<List<AboutMeRemoteModel>?> =
             ApiResult.GenericError(
@@ -154,6 +153,8 @@ constructor(
         isNetworkAllowed: Boolean
     ): Flow<DataState<MainViewState, MainStateEvent>> = flow {
 
+        delay(PROCESS_DELAY)
+
         // set remote response to network error no internet available as default
         var response: ApiResult<List<SkillRemoteModel>?> =
             ApiResult.GenericError(
@@ -264,6 +265,8 @@ constructor(
         isNetworkAvailable: Boolean,
         isNetworkAllowed: Boolean
     ): Flow<DataState<MainViewState, MainStateEvent>> = flow {
+
+        delay(PROCESS_DELAY)
 
         // set remote response to network error no internet available as default
         var response: ApiResult<List<ProjectRemoteModel>?> =
@@ -376,6 +379,7 @@ constructor(
         isNetworkAllowed: Boolean
     ): Flow<DataState<MainViewState, MainStateEvent>> = flow {
 
+        delay(PROCESS_DELAY)
 
         // set remote response to network error no internet available as default
         var response: ApiResult<List<PostRemoteModel>?> =
@@ -481,8 +485,6 @@ constructor(
 
         emit(result)
     }
-
-
 }
 
 

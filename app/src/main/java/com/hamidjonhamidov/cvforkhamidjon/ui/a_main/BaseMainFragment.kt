@@ -1,6 +1,7 @@
 package com.hamidjonhamidov.cvforkhamidjon.ui.a_main
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -20,7 +21,10 @@ import com.hamidjonhamidov.cvforkhamidjon.ui.showMyDialog
 import com.hamidjonhamidov.cvforkhamidjon.ui.showProgressBar
 import com.hamidjonhamidov.cvforkhamidjon.ui.showToast
 import com.hamidjonhamidov.cvforkhamidjon.util.UIType
+import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_ALREADY_IN_PROGRESS
+import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_NOT_ALLOWED
+import com.hamidjonhamidov.cvforkhamidjon.util.data_manager.BoolWrapper
 import com.hamidjonhamidov.cvforkhamidjon.util.data_manager.InboxManager
 import com.hamidjonhamidov.cvforkhamidjon.util.data_manager.UIMessage
 import kotlinx.coroutines.*
@@ -41,17 +45,20 @@ abstract class BaseMainFragment<Model>(
         viewModelFactory
     }
 
-    val progressBarObserver = Observer<Boolean> {
-        activity?.showProgressBar(it)
+    // this assigns progress bar state after that
+    val progressBarObserver = Observer<BoolWrapper> {
+        requireActivity().showProgressBar(it.state)
     }
 
+    // when new message comes it checks the message then decides if it is suitable to set progressbar
     val messageObserverForProgressBar = Observer<UIMessage> {
-        if (!(it.equals(MESSAGE_ALREADY_IN_PROGRESS))) {
+        if (!(it.message == MESSAGE_ALREADY_IN_PROGRESS || it.message == MESSAGE_NOT_ALLOWED)
+        ) {
             viewModel.inboxManager.setProgressBarStateAndNotify(stateEvent.destinationView, false)
         }
     }
 
-
+    // this only poroccesses new messages
     val newMessageObserver = Observer<UIMessage> {
         if (inboxManager.getInboxSize(stateEvent.destinationView) > 0)
             processNextMessage()
@@ -67,6 +74,16 @@ abstract class BaseMainFragment<Model>(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+//        lifecycleScope.launch {
+//            while (true) {
+//                delay(1000)
+//                Log.d(
+//                    TAG,
+//                    "BaseMainFragment: onViewCreated:${stateEvent.destinationView.javaClass.simpleName} ${inboxManager.getProgressBarState(stateEvent.destinationView)}"
+//                )
+//            }
+//        }
 
         setHasOptionsMenu(true)
 
@@ -84,10 +101,10 @@ abstract class BaseMainFragment<Model>(
         }
     }
 
-    override fun onPause() {
-        super.onPause()
-        activity?.showProgressBar(false)
-    }
+//    override fun onPause() {
+//        super.onPause()
+//        activity?.showProgressBar(false)
+//    }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(menuId, menu)
@@ -115,7 +132,7 @@ abstract class BaseMainFragment<Model>(
             .observe(viewLifecycleOwner, messageObserverForProgressBar)
     }
 
-    fun subscribeNewMessageObserver(){
+    fun subscribeNewMessageObserver() {
         messageNotifierLiveData.observe(viewLifecycleOwner, newMessageObserver)
     }
 
@@ -125,7 +142,7 @@ abstract class BaseMainFragment<Model>(
             return
         }
 
-        if(viewModel.inboxManager.isMessageInInboxInProcess(stateEvent.destinationView)){
+        if (viewModel.inboxManager.isMessageInInboxInProcess(stateEvent.destinationView)) {
             return
         }
 
@@ -170,6 +187,10 @@ abstract class BaseMainFragment<Model>(
 
     abstract fun updateView(myModel: Model?)
 
-    abstract fun updateView(modelList: List<Model>)
+    abstract fun updateView(modelList: List<Model>?)
 
+    override fun onStop() {
+        super.onStop()
+        Log.d(TAG, "BaseMainFragment: onStop: ")
+    }
 }

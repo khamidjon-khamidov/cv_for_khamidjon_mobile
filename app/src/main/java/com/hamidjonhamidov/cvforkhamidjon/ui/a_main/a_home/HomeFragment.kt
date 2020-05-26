@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import androidx.lifecycle.Observer
@@ -16,6 +17,7 @@ import com.hamidjonhamidov.cvforkhamidjon.R
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.AboutMeModel
 import com.hamidjonhamidov.cvforkhamidjon.ui.*
 import com.hamidjonhamidov.cvforkhamidjon.ui.a_main.BaseMainFragment
+import com.hamidjonhamidov.cvforkhamidjon.ui.a_main.viewmodel.getAboutMe
 import com.hamidjonhamidov.cvforkhamidjon.ui.a_main.viewmodel.getCurrentViewStateOrNew
 import com.hamidjonhamidov.cvforkhamidjon.ui.a_main.viewmodel.state.MainStateEvent
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.GeneralConstants.FACEBOOK_LINK
@@ -45,14 +47,13 @@ class HomeFragment(
     }
 
     override fun initData() {
-        if (viewModel.getCurrentViewStateOrNew().homeFragmentView.aboutMe == null &&
+        if (viewModel.getAboutMe() == null &&
             !viewModel.jobManger.isJobActive(homeStateEvent.responsibleJob)
         ) {
-
             viewModel.setStateEvent(homeStateEvent)
-        } else {
-            updateView(viewModel.getCurrentViewStateOrNew().homeFragmentView.aboutMe)
         }
+
+        updateView(viewModel.getCurrentViewStateOrNew().homeFragmentView.aboutMe)
     }
 
 
@@ -87,11 +88,11 @@ class HomeFragment(
     }
 
     override fun updateView(myModel: AboutMeModel?) {
-        if(myModel==null) return
-        activity?.showProgressBar(false)
-        requestManager
-            .setImage(myModel.pictureLink, home_iv_me)
-        home_tv_des.text = myModel.description
+        myModel?.let {
+            requestManager
+                .setImage(it.pictureLink, home_iv_me)
+            home_tv_des.text = it.description
+        }
     }
 
     fun requestDownload(uRl: String) {
@@ -163,7 +164,12 @@ class HomeFragment(
         }
     }
 
-    override fun updateView(modelList: List<AboutMeModel>) {}
+    override fun updateView(modelList: List<AboutMeModel>?) {}
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d(TAG, "HomeFragment: onDestroy: ")
+    }
 }
 
 

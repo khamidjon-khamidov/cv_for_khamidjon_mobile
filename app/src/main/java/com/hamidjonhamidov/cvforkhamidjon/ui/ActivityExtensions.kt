@@ -8,6 +8,7 @@ import android.content.Context.CLIPBOARD_SERVICE
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
@@ -45,6 +46,7 @@ fun Activity.copyToClipboard(text: String){
 }
 
 fun Activity.showProgressBar(isShow: Boolean) {
+    Log.d(TAG, "requier: showProgressBar: ${isShow}")
     progress_bar?.visibility = if (isShow) View.VISIBLE else View.GONE
 }
 

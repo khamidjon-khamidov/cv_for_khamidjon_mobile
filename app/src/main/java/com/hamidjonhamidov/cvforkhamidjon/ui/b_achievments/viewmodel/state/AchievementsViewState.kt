@@ -13,9 +13,6 @@ data class AchievementsViewState(
 
     @Parcelize
     data class AchievementsFragmentView(
-        var achievements: List<AchievementModel>? = null,
-        var androidPos: Int = -1,
-        var algoPos: Int = -1,
-        var othersPos: Int = -1
+        var achievements: List<AchievementModel>? = null
     ): Parcelable
 }

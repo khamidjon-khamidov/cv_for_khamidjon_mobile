@@ -15,13 +15,19 @@ import com.hamidjonhamidov.cvforkhamidjon.MyApplication
 import com.hamidjonhamidov.cvforkhamidjon.R
 import com.hamidjonhamidov.cvforkhamidjon.di.achievements_subcomponent.AchievementsComponent
 import com.hamidjonhamidov.cvforkhamidjon.ui.b_achievments.viewmodel.AchievementsViewModel
+import com.hamidjonhamidov.cvforkhamidjon.ui.b_achievments.viewmodel.getAchievments
+import com.hamidjonhamidov.cvforkhamidjon.ui.b_achievments.viewmodel.state.AchievementJobsEvent
+import com.hamidjonhamidov.cvforkhamidjon.ui.b_achievments.viewmodel.state.AchievementJobsEvent.GetAchievements
+import com.hamidjonhamidov.cvforkhamidjon.ui.b_achievments.viewmodel.state.AchievementsStateEvent
 import com.hamidjonhamidov.cvforkhamidjon.ui.b_achievments.viewmodel.state.AchievementsViewDestEvent
 import com.hamidjonhamidov.cvforkhamidjon.ui.delayInBackgLaunchInMain
 import com.hamidjonhamidov.cvforkhamidjon.ui.showMyDialog
 import com.hamidjonhamidov.cvforkhamidjon.ui.showProgressBar
 import com.hamidjonhamidov.cvforkhamidjon.ui.showToast
 import com.hamidjonhamidov.cvforkhamidjon.util.UIType
+import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.NetworkConstants.MESSAGE_ALREADY_IN_PROGRESS
+import com.hamidjonhamidov.cvforkhamidjon.util.data_manager.BoolWrapper
 import com.hamidjonhamidov.cvforkhamidjon.util.data_manager.InboxManager
 import com.hamidjonhamidov.cvforkhamidjon.util.data_manager.UIMessage
 import com.hamidjonhamidov.cvforkhamidjon.util.setupWithMyNavController
@@ -50,8 +56,27 @@ class AchievmentsActivity : BaseActivity() {
         viewModelFactory
     }
 
-    val progressBarObserver = Observer<Boolean> {
-        showProgressBar(it)
+    val progressBarObserver = Observer<BoolWrapper> {
+        showProgressBar(it.state)
+    }
+
+    val messageObserverForProgressBar = Observer<UIMessage> {
+        if (!(it.message == MESSAGE_ALREADY_IN_PROGRESS || it.message == NetworkConstants.MESSAGE_NOT_ALLOWED)) {
+            viewModel.inboxManager.setProgressBarStateAndNotify(stateEvent.destinationView, false)
+        }
+    }
+
+    val newMessageObserver = Observer<UIMessage> {
+        if (inboxManager.getInboxSize(stateEvent.destinationView) > 0)
+            processNextMessage()
+    }
+
+    val messageNotifierLiveData: LiveData<UIMessage> by lazy {
+        viewModel.inboxManager.getMessagesNotifer(stateEvent.destinationView)
+    }
+
+    val inboxManager: InboxManager<AchievementsViewDestEvent> by lazy {
+        viewModel.inboxManager
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,7 +94,6 @@ class AchievmentsActivity : BaseActivity() {
         if (savedInstanceState == null) {
             setupBottomNavigationBar()
         }
-
         shouldRefresh()
         addProgressBarObservers()
     }
@@ -95,25 +119,6 @@ class AchievmentsActivity : BaseActivity() {
         }
     }
 
-    val messageObserverForProgressBar = Observer<UIMessage> {
-        if (!(it.equals(MESSAGE_ALREADY_IN_PROGRESS))) {
-            viewModel.inboxManager.setProgressBarStateAndNotify(stateEvent.destinationView, false)
-        }
-    }
-
-    val newMessageObserver = Observer<UIMessage> {
-        if (inboxManager.getInboxSize(stateEvent.destinationView) > 0)
-            processNextMessage()
-    }
-
-    val messageNotifierLiveData: LiveData<UIMessage> by lazy {
-        viewModel.inboxManager.getMessagesNotifer(stateEvent.destinationView)
-    }
-
-    val inboxManager: InboxManager<AchievementsViewDestEvent> by lazy {
-        viewModel.inboxManager
-    }
-
     override fun onResume() {
         super.onResume()
         showProgressBar(inboxManager.getProgressBarState(stateEvent.destinationView))
@@ -130,7 +135,9 @@ class AchievmentsActivity : BaseActivity() {
     }
 
     fun shouldRefresh() {
-        if (viewModel.viewState.value?.achievementsFragmentView?.achievements == null) {
+        if (viewModel.getAchievments() == null
+            && !viewModel.jobManger.isJobActive(GetAchievements())) {
+
             viewModel.setStateEvent(stateEvent)
         }
     }
@@ -179,7 +186,7 @@ class AchievmentsActivity : BaseActivity() {
                     viewModel.inboxManager.removeMessageFromInbox(stateEvent.destinationView)
 
                     // wait for a second to proccess next message
-                    delayInBackgLaunchInMain(lifecycleScope, 500) {
+                    delayInBackgLaunchInMain(lifecycleScope, 2000) {
                         processNextMessage()
                     }
                 }
@@ -188,7 +195,7 @@ class AchievmentsActivity : BaseActivity() {
             is UIType.Toast -> {
                 showToast(newMessage.message.description)
                 viewModel.inboxManager.removeMessageFromInbox(stateEvent.destinationView)
-                delayInBackgLaunchInMain(lifecycleScope, 500) {
+                delayInBackgLaunchInMain(lifecycleScope, 2000) {
                     processNextMessage()
                 }
             }
