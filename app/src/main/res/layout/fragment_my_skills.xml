@@ -14,10 +14,11 @@
         android:layout_height="match_parent" />
 
     <ImageView
-        android:id="@+id/no_data"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:visibility="gone"
+        android:id="@+id/no_iv_data"
+        android:layout_width="170dp"
+        android:layout_height="170dp"
+        android:visibility="visible"
+        android:alpha="0.7"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"

@@ -7,7 +7,7 @@ object NetworkConstants {
 
     const val NETWORK_TIMEOUT = 12000L
     val NETWORK_DELAY = 0L
-    val PROCESS_DELAY = 9000L
+    val PROCESS_DELAY = 0L
 
     // network errors
     const val NETWORK_ERROR_TIMEOUT = "Network Timeout"

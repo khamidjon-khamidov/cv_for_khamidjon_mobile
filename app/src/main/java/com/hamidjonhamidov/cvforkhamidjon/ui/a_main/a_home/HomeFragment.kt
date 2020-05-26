@@ -13,6 +13,8 @@ import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.daimajia.androidanimations.library.Techniques
+import com.daimajia.androidanimations.library.YoYo
 import com.hamidjonhamidov.cvforkhamidjon.R
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.AboutMeModel
 import com.hamidjonhamidov.cvforkhamidjon.ui.*
@@ -28,6 +30,7 @@ import com.hamidjonhamidov.cvforkhamidjon.util.constants.GeneralConstants.WEBSIT
 import com.hamidjonhamidov.cvforkhamidjon.util.constants.GeneralConstants.WRITE_TO_EXTERNAL_STORAGE_CODE
 import com.hamidjonhamidov.cvforkhamidjon.util.glide.GlideManager
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.fragment_my_skills.*
 import kotlinx.coroutines.*
 
 @FlowPreview
@@ -37,7 +40,12 @@ class HomeFragment(
     viewModelFactory: ViewModelProvider.Factory,
     private val requestManager: GlideManager,
     val homeStateEvent: MainStateEvent
-) : BaseMainFragment<AboutMeModel>(R.layout.fragment_home, R.menu.home_menu, viewModelFactory, homeStateEvent) {
+) : BaseMainFragment<AboutMeModel>(
+    R.layout.fragment_home,
+    R.menu.home_menu,
+    viewModelFactory,
+    homeStateEvent
+) {
 
     private val TAG = "AppDebug"
 
@@ -54,6 +62,27 @@ class HomeFragment(
         }
 
         updateView(viewModel.getCurrentViewStateOrNew().homeFragmentView.aboutMe)
+
+        home_iv_android.setOnClickListener {
+            YoYo.with(Techniques.StandUp)
+                .duration(1000)
+                .repeat(2)
+                .playOn(home_iv_android)
+        }
+
+        home_iv_algorithms.setOnClickListener {
+            YoYo.with(Techniques.StandUp)
+                .duration(1000)
+                .repeat(2)
+                .playOn(home_iv_algorithms)
+        }
+
+        home_iv_web.setOnClickListener {
+            YoYo.with(Techniques.StandUp)
+                .duration(1000)
+                .repeat(2)
+                .playOn(home_iv_web)
+        }
     }
 
 
@@ -97,7 +126,8 @@ class HomeFragment(
 
     fun requestDownload(uRl: String) {
 
-        val mgr = requireActivity().getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+        val mgr =
+            requireActivity().getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
 
         val downloadUri = Uri.parse(uRl);
         val request = DownloadManager.Request(downloadUri);

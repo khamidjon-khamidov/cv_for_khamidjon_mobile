@@ -28,7 +28,6 @@ import kotlinx.android.synthetic.main.activity_contact.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.InternalCoroutinesApi
-import java.lang.String
 import javax.inject.Inject
 
 

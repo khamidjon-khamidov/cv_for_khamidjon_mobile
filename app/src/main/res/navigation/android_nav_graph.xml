@@ -9,7 +9,7 @@
         android:id="@+id/androidFragment"
         android:name="com.hamidjonhamidov.cvforkhamidjon.ui.b_achievments.a_android.AndroidFragment"
         android:label="Android"
-        tools:layout="@layout/fragment_android_fragment" >
+        tools:layout="@layout/fragment_android" >
         <action
             android:id="@+id/action_androidFragment_to_detailsFragment"
             app:destination="@id/detailsFragment"

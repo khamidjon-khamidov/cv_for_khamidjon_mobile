@@ -1,9 +1,12 @@
 package com.hamidjonhamidov.cvforkhamidjon.ui.a_main.c_myskills
 
 import android.util.Log
+import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.daimajia.androidanimations.library.Techniques
+import com.daimajia.androidanimations.library.YoYo
 
 import com.hamidjonhamidov.cvforkhamidjon.R
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.SkillModel
@@ -49,6 +52,13 @@ class MySkillsFragment(
             adapter = listAdapter
         }
 
+        no_iv_data.setOnClickListener {
+            YoYo.with(Techniques.Shake)
+                .duration(1000)
+                .repeat(2)
+                .playOn(no_iv_data)
+        }
+
         if (viewModel.getSkills()==null &&
             !viewModel.jobManger.isJobActive(skillStateEvent.responsibleJob)
         ) {
@@ -64,6 +74,7 @@ class MySkillsFragment(
 
     override fun updateView(modelList: List<SkillModel>?) {
         modelList?.let {
+            no_iv_data.visibility = View.GONE
             listAdapter.submitList(modelList)
         }
     }

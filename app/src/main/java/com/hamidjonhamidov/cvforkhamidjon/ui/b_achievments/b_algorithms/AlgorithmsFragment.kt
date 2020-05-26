@@ -9,6 +9,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.daimajia.androidanimations.library.Techniques
+import com.daimajia.androidanimations.library.YoYo
 import com.hamidjonhamidov.cvforkhamidjon.R
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.achievements.AchievementModel
 import com.hamidjonhamidov.cvforkhamidjon.ui.b_achievments.AchievmentsActivity
@@ -21,6 +23,9 @@ import com.hamidjonhamidov.cvforkhamidjon.util.glide.GlideManager
 import com.hamidjonhamidov.cvforkhamidjon.util.recycler.AchievementAdapter
 import com.hamidjonhamidov.cvforkhamidjon.util.recycler.AchievementListener
 import kotlinx.android.synthetic.main.fragment_algorithms.*
+import kotlinx.android.synthetic.main.fragment_algorithms.no_iv_data
+import kotlinx.android.synthetic.main.fragment_my_skills.*
+import kotlinx.android.synthetic.main.fragment_others.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.InternalCoroutinesApi
@@ -51,6 +56,13 @@ class AlgorithmsFragment(
             listAdapter = AchievementAdapter(this@AlgorithmsFragment, glideManager)
             adapter = listAdapter
         }
+
+        no_iv_data.setOnClickListener {
+            YoYo.with(Techniques.Shake)
+                .duration(1000)
+                .repeat(2)
+                .playOn(no_iv_data)
+        }
     }
 
     fun subscribeObservers() {
@@ -63,8 +75,11 @@ class AlgorithmsFragment(
         })
     }
 
-    private fun updateView(achievementModel: AchievementModel) {
-        listAdapter.submitList(achievementModel.honorsList)
+    private fun updateView(achievementModel: AchievementModel?) {
+        achievementModel?.honorsList?.let {
+            no_iv_data.visibility = View.GONE
+            listAdapter.submitList(it)
+        }
     }
 
     override fun onResume() {

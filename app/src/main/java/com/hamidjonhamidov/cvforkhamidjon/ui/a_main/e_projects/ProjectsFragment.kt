@@ -1,9 +1,12 @@
 package com.hamidjonhamidov.cvforkhamidjon.ui.a_main.e_projects
 
 import android.util.Log
+import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.daimajia.androidanimations.library.Techniques
+import com.daimajia.androidanimations.library.YoYo
 
 import com.hamidjonhamidov.cvforkhamidjon.R
 import com.hamidjonhamidov.cvforkhamidjon.models.offline.main.ProjectModel
@@ -14,7 +17,9 @@ import com.hamidjonhamidov.cvforkhamidjon.ui.a_main.viewmodel.state.MainStateEve
 import com.hamidjonhamidov.cvforkhamidjon.ui.showToast
 import com.hamidjonhamidov.cvforkhamidjon.util.recycler.ProjectItemListener
 import com.hamidjonhamidov.cvforkhamidjon.util.recycler.ProjectsAdapter
+import kotlinx.android.synthetic.main.fragment_my_skills.*
 import kotlinx.android.synthetic.main.fragment_projects.*
+import kotlinx.android.synthetic.main.fragment_projects.no_iv_data
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.InternalCoroutinesApi
@@ -54,6 +59,13 @@ class ProjectsFragment(
             adapter = listAdapter
         }
 
+        no_iv_data.setOnClickListener {
+            YoYo.with(Techniques.Shake)
+                .duration(1000)
+                .repeat(2)
+                .playOn(no_iv_data)
+        }
+
         if (viewModel.getCurrentViewStateOrNew().projectsFragmentView.projects == null &&
             !viewModel.jobManger.isJobActive(projectStateEvent.responsibleJob)
         ) {
@@ -68,6 +80,7 @@ class ProjectsFragment(
 
     override fun updateView(modelList: List<ProjectModel>?) {
         modelList?.let{
+            no_iv_data.visibility = View.GONE
             listAdapter.submitList(modelList)
         }
     }
